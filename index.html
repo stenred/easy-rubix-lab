@@ -1,0 +1,1084 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>CUBE 3×3 — Field Guide</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito:wght@600;700;800;900&family=JetBrains+Mono:wght@500;700&display=swap">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<style>
+:root{color-scheme:dark;--bg:#0b0c09;--ink:#ece9df;--acid:#d7ff3a;--sig:#ff4a2b;--dim:#8a8a7c;--line:#26281f;--disp:"Big Shoulders Display","Arial Narrow",Impact,sans-serif;--mono:"JetBrains Mono",ui-monospace,Menlo,monospace;--body:Inter,system-ui,sans-serif;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:light){:root{color-scheme:light;--bg:#f1efe6;--ink:#14150f;--acid:#3f5e00;--sig:#d12a0f;--dim:#66665a;--line:#d6d3c4}}
+html{scroll-behavior:smooth;scroll-padding-top:24px}
+*,*::before,*::after{box-sizing:inherit}
+body{margin:0;background:var(--bg);color:var(--ink);font:400 17px/1.55 var(--body)}
+body[data-l=vi] .en,body[data-l=en] .vi{display:none}
+button,input,select{font:inherit;color:inherit}
+button{cursor:pointer}
+:focus-visible{outline:2px solid var(--acid);outline-offset:3px}
+.sim{display:grid;grid-template-columns:minmax(0,1.6fr) minmax(280px,1fr);border:1px solid var(--line)}
+#stage{position:relative;min-height:min(74vh,640px);border-right:1px solid var(--line);background:linear-gradient(var(--line) 1px,transparent 1px) 0 0/100% 48px,linear-gradient(90deg,var(--line) 1px,transparent 1px) 0 0/48px 100%}
+#gl{position:absolute;inset:0;width:100%;height:100%;touch-action:none;cursor:grab}
+#gl:active{cursor:grabbing}
+#hud{padding:22px;display:flex;flex-direction:column;gap:10px}
+#pend{font:900 clamp(2.6rem,5vw,4.2rem)/1 var(--disp);min-height:1.15em;color:var(--sig);word-spacing:.18em;overflow-wrap:anywhere}
+#pend:empty::before{content:attr(data-ph);font:500 12px var(--mono);letter-spacing:.06em;color:var(--dim);word-spacing:0}
+#hud .ctl{margin-top:auto}
+.nt{font:800 1.6rem var(--disp);text-transform:uppercase;margin:56px 0 8px}
+#mvList{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:0 32px}
+#mvList .mv{grid-template-columns:2.6rem 1fr}#mvList .mv small{grid-column:1/-1}
+#hudLabel{font:700 12px var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--acid)}
+#hudSteps{font:700 18px/1.7 var(--mono);min-height:2em;word-spacing:.1em}
+.tok{padding:0 .25em;border-radius:2px}.tok.done{color:var(--dim)}.tok.next{background:var(--acid);color:var(--bg)}
+.ctl{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px;align-items:center}
+.btn{min-height:44px;min-width:44px;padding:0 18px;background:transparent;border:1px solid var(--ink);font:700 13px var(--mono);letter-spacing:.08em;text-transform:uppercase;transition:background .15s,color .15s,transform .15s}
+.btn:hover{background:var(--ink);color:var(--bg)}.btn:active{transform:translateY(2px)}
+.btn.go{background:var(--acid);border-color:var(--acid);color:var(--bg)}.btn.go:hover{background:var(--ink);border-color:var(--ink)}
+select.btn{padding:0 10px}
+main{max-width:1240px;margin:0 auto;padding:0 clamp(20px,4vw,64px) 120px}
+header{display:flex;justify-content:space-between;align-items:center;padding:20px 0;border-bottom:1px solid var(--line)}
+.brand{font:900 26px var(--disp);letter-spacing:.04em}.brand b{color:var(--acid)}
+nav{display:flex;gap:4px;align-items:center;flex-wrap:wrap}
+nav a{font:700 12px var(--mono);letter-spacing:.1em;color:var(--dim);text-decoration:none;padding:12px 8px;transition:color .15s}
+nav a:hover{color:var(--acid)}
+h1{font:900 clamp(5rem,14.5vw,13rem)/.8 var(--disp);margin:clamp(48px,9vw,120px) 0 28px;text-transform:uppercase;letter-spacing:-.01em}
+h1 span{display:block}h1 .o{-webkit-text-stroke:2px var(--ink);color:transparent;padding-left:.35em}h1 .a{color:var(--acid)}
+.lead{max-width:34ch;font-size:19px;color:var(--ink)}
+section{padding-top:clamp(72px,10vw,140px)}
+.num{font:900 clamp(6rem,12vw,10rem)/.75 var(--disp);-webkit-text-stroke:1.5px var(--dim);color:transparent;margin:0 0 8px -.04em}
+h2{font:900 clamp(2.4rem,5vw,4rem)/.9 var(--disp);text-transform:uppercase;margin:0 0 20px}
+p.sub{max-width:52ch;color:var(--dim);margin:0 0 32px}
+.mv{display:grid;grid-template-columns:3.2rem auto 1fr;gap:6px 18px;align-items:center;padding:10px 0;border-top:1px solid var(--line)}
+.mv>i{font:900 2.6rem/1 var(--disp);font-style:normal;color:var(--acid)}
+.keys{display:flex;gap:6px}.key{min-width:44px;min-height:44px;background:transparent;border:1px solid var(--dim);font:700 15px var(--mono);transition:all .12s}
+.key:hover{border-color:var(--acid);color:var(--acid)}.key:active{background:var(--acid);color:var(--bg);transform:translateY(2px)}
+.mv small{color:var(--dim);font-size:14px}
+.tabs{display:flex;flex-wrap:wrap;gap:0;border-bottom:1px solid var(--ink);margin-bottom:28px}
+.tab{background:none;border:0;border-bottom:4px solid transparent;padding:10px 18px 8px 0;margin-right:10px;min-height:44px;font:900 1.7rem var(--disp);text-transform:uppercase;color:var(--dim);transition:color .15s}
+.tab[aria-selected=true]{color:var(--ink);border-color:var(--acid)}.tab:hover{color:var(--ink)}
+.lv{font:700 12px var(--mono);color:var(--sig);letter-spacing:.12em;text-transform:uppercase}
+.step{display:grid;grid-template-columns:2.6rem 1fr;gap:0 14px;padding:18px 0;border-top:1px solid var(--line)}
+.step.ok h3{color:var(--dim);text-decoration:line-through}
+.step h3{margin:0;font:800 1.45rem/1.1 var(--disp);text-transform:uppercase}
+.chk{width:44px;height:44px;margin:-8px 0 0 -10px;accent-color:var(--acid)}
+.step p{margin:4px 0 10px;color:var(--dim);font-size:15.5px}
+.alg{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin:4px 0}
+.alg code{font:700 14px var(--mono);color:var(--acid);overflow-wrap:anywhere}
+.play{min-height:44px;padding:0 14px;background:transparent;border:1px solid var(--acid);color:var(--acid);font:700 12px var(--mono);letter-spacing:.1em;transition:all .15s}
+.play:hover{background:var(--acid);color:var(--bg)}
+.bar{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:12px}
+.bar input{flex:1;min-width:140px;min-height:44px;padding:0 12px;background:transparent;border:1px solid var(--dim)}
+.chip[aria-pressed=true]{background:var(--ink);color:var(--bg)}
+.row{display:grid;grid-template-columns:5.5rem 1fr auto;gap:4px 14px;align-items:center;padding:12px 0;border-top:1px solid var(--line)}
+.row b{font:800 1.3rem var(--disp);text-transform:uppercase}.row .t{font:700 11px var(--mono);color:var(--sig);letter-spacing:.1em}
+.row .alg{grid-column:2}.row small{color:var(--dim)}
+#pad{margin-top:12px;padding:28px 0 20px;border:1px solid var(--line);text-align:center;user-select:none;touch-action:manipulation;cursor:pointer;transition:border-color .15s,background .15s}
+#pad[data-s=holding]{border-color:var(--sig)}#pad[data-s=ready]{border-color:var(--acid);background:color-mix(in srgb,var(--acid) 12%,transparent)}
+#time{font:900 clamp(5rem,13vw,9rem)/.9 var(--disp);font-variant-numeric:tabular-nums}
+#pad[data-s=holding] #time{color:var(--sig)}#pad[data-s=ready] #time{color:var(--acid)}
+#scr{font:700 clamp(15px,2vw,19px) var(--mono);padding:0 16px;overflow-wrap:anywhere}
+#hint{color:var(--dim);font-size:13px;margin-top:6px}
+.stats{display:flex;gap:28px;flex-wrap:wrap;margin:22px 0 10px}
+.stats div{font:700 11px var(--mono);color:var(--dim);letter-spacing:.12em;text-transform:uppercase}.stats b{display:block;font:900 2.3rem/1 var(--disp);color:var(--ink);letter-spacing:0}
+#hist{font:500 14px var(--mono);color:var(--dim);overflow-wrap:anywhere}
+footer{margin-top:120px;padding-top:20px;border-top:1px solid var(--line);color:var(--dim);font-size:14px}
+#nogl{display:none;position:absolute;inset:0;place-items:center;text-align:center;padding:24px;color:var(--dim)}
+@media (max-width:900px){.sim{grid-template-columns:1fr}#stage{min-height:52vh;border-right:0;border-bottom:1px solid var(--line)}
+.mv{grid-template-columns:2.4rem 1fr}.mv small{grid-column:1/-1}.row{grid-template-columns:4.5rem 1fr}.row .go,.row .play{grid-column:2}}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{transition:none!important}}
+:root{--bg:#302e2b;--panel:#262421;--card:#34322f;--ink:#fff;--dim:#a7a6a2;--line:#3d3b38;--acid:#81b64c;--sig:#fa412d;--shade:#45753c;--disp:Nunito,system-ui,sans-serif;--body:Nunito,system-ui,sans-serif}
+@media (prefers-color-scheme:light){:root{--bg:#edece9;--panel:#fff;--card:#f4f3f0;--ink:#262421;--dim:#6b6a67;--line:#dcdad6;--acid:#5b8a2b;--sig:#d92d1a;--shade:#3f6b1d}}
+body{font:600 16px/1.6 var(--body);background:var(--bg)}
+header{background:var(--panel);border:0;border-radius:16px;padding:10px 18px;margin-top:16px}
+.brand{font:900 22px var(--disp);letter-spacing:0}.brand b{color:var(--acid)}
+nav a{font:800 14px var(--body);letter-spacing:0;border-radius:999px;padding:10px 14px}
+nav a:hover{background:var(--card);color:var(--ink)}
+h1{font:900 clamp(3.2rem,9vw,7rem)/.98 var(--disp);letter-spacing:-.03em;text-transform:none;margin:clamp(36px,6vw,72px) 0 20px}
+h1 .o{-webkit-text-stroke:0;color:var(--ink);padding:0}
+.lead{font-size:20px;font-weight:700;color:var(--dim)}
+section{margin-top:24px;padding:clamp(20px,3.5vw,44px);background:var(--panel);border-radius:20px}
+.num{font:800 13px var(--body);-webkit-text-stroke:0;color:#fff;background:var(--acid);display:inline-block;padding:4px 14px;border-radius:999px;margin:0 0 14px}
+h2{font:900 clamp(1.9rem,4vw,2.9rem)/1.05 var(--disp);text-transform:none;letter-spacing:-.02em}
+p.sub{color:var(--dim);font-weight:600}
+.btn{border:0;border-radius:12px;background:var(--card);color:var(--ink);font:800 14px var(--body);letter-spacing:0;text-transform:none;box-shadow:0 3px 0 rgba(0,0,0,.28)}
+.btn:hover{background:var(--line);color:var(--ink)}
+.btn:active{transform:translateY(3px);box-shadow:none}
+.btn.go{background:var(--acid);color:#fff;box-shadow:0 4px 0 var(--shade)}
+.btn.go:hover{background:var(--acid);filter:brightness(1.1)}
+.btn.go:active{box-shadow:none}
+.chip{border-radius:999px}.chip[aria-pressed=true]{background:var(--acid);color:#fff}
+.sim{border:0;border-radius:16px;overflow:hidden;background:var(--bg)}
+#stage{border-right:0;background:repeating-conic-gradient(var(--panel) 0 25%,var(--bg) 0 50%) 0 0/84px 84px}
+#hud{background:var(--card)}
+#hudLabel{font:800 12px var(--body);letter-spacing:.06em;color:var(--acid)}
+#hudSteps{font:700 17px/1.8 var(--mono)}
+.tok{border-radius:6px}.tok.next{background:var(--acid);color:#fff}
+#pend{font:900 clamp(2.4rem,5vw,3.8rem)/1.05 var(--disp);color:var(--acid);word-spacing:.12em}
+#pend:empty::before{font:700 12px var(--body);letter-spacing:.04em}
+.nt{font:900 1.5rem var(--disp);text-transform:none}
+.mv{border-top:0;padding:8px 0}.mv>i{font:900 2.2rem/1 var(--disp);color:var(--acid)}
+.key{border:0;border-radius:10px;background:var(--card);color:var(--ink);box-shadow:0 3px 0 rgba(0,0,0,.28);font:800 15px var(--mono)}
+.key:hover{background:var(--line);color:var(--ink)}.key:active{background:var(--acid);color:#fff;box-shadow:none;transform:translateY(3px)}
+.tabs{border:0;margin-bottom:20px}
+.tab{border:0;border-radius:999px;background:var(--card);padding:0 20px;margin:0 8px 8px 0;font:800 1rem var(--body);text-transform:none;color:var(--dim)}
+.tab:hover{color:var(--ink)}.tab[aria-selected=true]{background:var(--acid);color:#fff;box-shadow:0 3px 0 var(--shade)}
+.lv{font:800 12px var(--body);letter-spacing:.06em;color:var(--acid)}
+.step,.row{border:0;border-radius:14px;background:var(--card);padding:16px 18px;margin-bottom:10px}
+.step{grid-template-columns:3rem 1fr}.chk{margin:0}
+.step h3,.row b{font:800 1.15rem/1.2 var(--disp);text-transform:none}
+.alg code{color:var(--ink);background:var(--bg);padding:4px 10px;border-radius:8px;font:700 14px var(--mono)}
+.play{border:0;border-radius:999px;background:var(--acid);color:#fff;font:800 12px var(--body);letter-spacing:.04em;box-shadow:0 3px 0 var(--shade);padding:0 18px}
+.play:hover{background:var(--acid);color:#fff;filter:brightness(1.1)}.play:active{transform:translateY(3px);box-shadow:none}
+.row .t{font:800 11px var(--body);color:var(--acid);letter-spacing:.06em}
+.bar input{border:0;border-radius:999px;background:var(--card);padding:0 20px}
+#pad{border:2px solid transparent;border-radius:20px;background:var(--card)}
+#time{font:900 clamp(4.5rem,13vw,8rem)/1 var(--disp)}
+#pad[data-s=ready]{border-color:var(--acid);background:color-mix(in srgb,var(--acid) 14%,var(--card))}
+.stats b{font:900 2rem/1.1 var(--disp)}
+.stats div{font:800 11px var(--body);letter-spacing:.06em}
+footer{border:0;text-align:center}
+@media (max-width:900px){section{padding:20px 16px;border-radius:16px}}
+.cta{display:inline-flex;align-items:center;min-height:52px;padding:0 28px;text-decoration:none;font-size:16px;margin-top:8px}
+summary.btn{list-style:none;display:inline-flex;align-items:center;cursor:pointer}summary::-webkit-details-marker{display:none}
+#sim{display:none;position:fixed;inset:0;z-index:50;margin:0;padding:0;border-radius:0;background:var(--bg)}
+body.simpage{overflow:hidden}body.simpage #sim{display:block}
+#sim .sim{position:absolute;inset:0;display:block;border-radius:0}
+#sim #stage{position:absolute;inset:0;min-height:0}
+#sim #hud{position:absolute;left:50%;bottom:calc(16px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);width:min(680px,calc(100% - 24px));gap:8px;padding:16px 18px;border-radius:20px;background:color-mix(in srgb,var(--card) 92%,transparent);backdrop-filter:blur(10px)}
+#simBack{position:absolute;top:calc(14px + env(safe-area-inset-top,0px));left:14px;z-index:3}
+#sim .help,#sim .mvbox{position:absolute;z-index:3;max-width:min(440px,calc(100% - 28px))}
+#sim .help{top:calc(14px + env(safe-area-inset-top,0px));right:14px}
+#sim .mvbox{top:calc(70px + env(safe-area-inset-top,0px));left:14px;max-height:calc(100% - 330px);overflow:auto}
+#sim details[open]{background:var(--card);border-radius:16px;padding:8px}
+#sim details[open]>summary{margin-bottom:8px}
+@media (max-width:600px){#sim #hud{padding:12px 14px}#pend{font-size:2.2rem}}
+body.simpage #sim{display:grid;grid-template-columns:minmax(250px,320px) minmax(0,1fr) minmax(250px,340px);grid-template-rows:auto minmax(0,1fr);gap:14px;padding:calc(14px + env(safe-area-inset-top,0px)) 14px calc(14px + env(safe-area-inset-bottom,0px))}
+#simBack{position:static;grid-column:1;grid-row:1;justify-self:start}
+#sim .mvbox{position:static;inset:auto;grid-column:1;grid-row:2;max-width:none;max-height:none;overflow:auto}
+#sim .help{position:static;inset:auto;grid-column:3;grid-row:1/3;max-width:none;overflow:auto}
+#sim .sim{position:static;inset:auto;grid-column:2;grid-row:1/3;display:flex;flex-direction:column;gap:12px;background:none;min-height:0}
+#sim #stage{position:relative;inset:auto;flex:1;min-height:0;border-radius:18px;overflow:hidden}
+#sim #hud{position:static;transform:none;width:auto;background:var(--card);backdrop-filter:none;border-radius:18px;padding:14px 18px}
+#sim details.help[open],#sim details.mvbox[open]{background:var(--panel);border-radius:18px;padding:18px}
+#sim summary{pointer-events:none;list-style:none;font:900 1.2rem var(--disp);margin-bottom:10px}
+#sim summary::-webkit-details-marker{display:none}
+#sim .help .sub,#sim .mvbox .sub{font-size:15px;margin-bottom:12px}
+#sim #mvList{grid-template-columns:1fr}
+#sim #pend{font-size:clamp(1.8rem,3vw,2.6rem);min-height:1.2em}
+#sim #hudSteps{min-height:1.6em;max-height:7.2em;overflow:auto;position:relative}
+@media (max-width:900px){body.simpage #sim{display:flex;flex-direction:column;overflow-y:auto;gap:12px}
+#simBack{align-self:flex-start;flex:none}
+#sim .sim{flex:none}
+#sim #stage{flex:none;height:54vh}
+#sim .help{order:3}#sim .mvbox{order:4}#sim .help,#sim .mvbox{flex:none;overflow:visible}}
+
+:root{--side:232px}
+header{position:fixed;left:0;top:0;bottom:0;width:var(--side);z-index:60;margin:0;border:0;border-radius:0;background:var(--panel);display:flex;flex-direction:column;align-items:stretch;justify-content:flex-start;gap:18px;padding:22px 14px calc(18px + env(safe-area-inset-bottom,0px));overflow:auto}
+.brand{font:900 24px var(--disp);padding:0 10px;color:var(--ink);text-decoration:none}
+nav{display:flex;flex-direction:column;gap:4px;flex:1;align-items:stretch}
+nav a{display:flex;align-items:center;gap:12px;min-height:48px;padding:0 14px;border-radius:12px;font:800 16px var(--body);color:var(--dim)}
+nav a::before{content:"";width:10px;height:10px;border-radius:3px;background:currentColor;opacity:.5}
+nav a:hover{background:var(--card);color:var(--ink)}
+nav a.on{background:var(--card);color:var(--ink);box-shadow:inset 4px 0 0 var(--acid)}nav a.on::before{background:var(--acid);opacity:1}
+#lang{margin-top:auto}
+main{max-width:none;margin:0 0 0 var(--side);padding:20px clamp(16px,3vw,40px) 60px}
+main>section:not(#sim){display:none;max-width:1040px;margin:0 auto}
+body[data-view=home] #home,body[data-view=methods] #methods,body[data-view=library] #library,body[data-view=timer] #timer{display:block}
+.num{display:none}
+#sim{left:var(--side)}#simBack{display:none}#sim .mvbox{grid-row:1/3}
+.tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;margin-top:32px}
+.tile{display:block;padding:20px;border-radius:16px;background:var(--card);color:var(--ink);text-decoration:none;box-shadow:0 4px 0 rgba(0,0,0,.25);transition:transform .15s}
+.tile:hover{transform:translateY(-3px)}.tile:active{transform:translateY(2px);box-shadow:none}
+.tile b{display:block;font:900 1.4rem var(--disp);margin-bottom:4px}
+.tile small{display:block;color:var(--dim);font-size:14px;font-weight:600}
+@media (max-width:900px){
+:root{--side:0px}
+header{top:auto;width:auto;right:0;bottom:0;left:0;height:calc(62px + env(safe-area-inset-bottom,0px));flex-direction:row;align-items:center;gap:4px;padding:0 8px env(safe-area-inset-bottom,0px);overflow:visible}
+.brand{display:none}
+nav{flex-direction:row;justify-content:space-around;gap:0}
+nav a{flex-direction:column;gap:3px;min-height:52px;padding:0 6px;font-size:11px;justify-content:center;text-align:center}
+nav a::before{width:18px;height:5px}
+#lang{margin:0 0 0 4px;min-width:44px;padding:0 10px}
+#sim{bottom:calc(62px + env(safe-area-inset-bottom,0px))}
+main{margin:0;padding:14px 14px 96px}
+}
+
+nav a::before{display:none}
+.ic{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round;flex:none}
+nav a[href="#home"]{--c:var(--ink)}nav a[href="#sim"]{--c:#4fc36e}nav a[href="#methods"]{--c:#3d9bf0}nav a[href="#library"]{--c:#f5922b}nav a[href="#timer"]{--c:#f0584c}
+nav a .ic{color:var(--c);transition:transform .2s}nav a:hover .ic{transform:rotate(-8deg) scale(1.12)}
+nav a.on{box-shadow:inset 4px 0 0 var(--c)}
+nav a{transition:background .2s,color .2s}
+.brand::after{content:"";display:block;height:5px;margin-top:8px;border-radius:3px;background:linear-gradient(90deg,#ff5a4e 0 16.6%,#ff9f1c 0 33.3%,#ffd500 0 50%,#4fc36e 0 66.6%,#3d9bf0 0 83.3%,#f4f4ee 0)}
+body[data-view=methods]{--acid:#3d9bf0;--shade:#2468a8}
+body[data-view=library]{--acid:#f5922b;--shade:#b4611a}
+body[data-view=timer]{--acid:#f0584c;--shade:#a8352c}
+main>section:not(#sim){box-shadow:inset 0 5px 0 var(--acid)}
+h1 .a{background:linear-gradient(90deg,#ff5a4e,#ff9f1c,#ffd500,#4fc36e,#3d9bf0);-webkit-background-clip:text;background-clip:text;color:transparent}
+#home{position:relative;overflow:hidden}
+.stk{position:absolute;right:clamp(24px,7vw,110px);top:clamp(48px,9vw,110px);display:grid;grid-template-columns:repeat(3,clamp(48px,6vw,78px));gap:10px;transform:rotate(-8deg)}
+.stk i{aspect-ratio:1;border-radius:14px;background:var(--c);box-shadow:0 5px 0 rgba(0,0,0,.3);animation:pop 3.6s ease-in-out infinite}
+.stk i:nth-child(2){animation-delay:.15s}.stk i:nth-child(3){animation-delay:.3s}.stk i:nth-child(4){animation-delay:.45s}.stk i:nth-child(5){animation-delay:.6s}.stk i:nth-child(6){animation-delay:.75s}.stk i:nth-child(7){animation-delay:.9s}.stk i:nth-child(8){animation-delay:1.05s}.stk i:nth-child(9){animation-delay:1.2s}
+@media (max-width:1100px){.stk{display:none}}
+.ti{display:grid;place-items:center;width:48px;height:48px;border-radius:14px;background:var(--c);color:#fff;margin-bottom:14px;box-shadow:0 4px 0 rgba(0,0,0,.28);transition:transform .2s}
+.tile:hover .ti{transform:rotate(-8deg) scale(1.1)}
+.tile{border-top:4px solid var(--c)}
+.row .t{padding:2px 10px;border-radius:999px;background:color-mix(in srgb,currentColor 16%,transparent)}
+.t.OLL{color:#f5922b}.t.PLL{color:#3d9bf0}.t.Trigger{color:#4fc36e}
+.stats div:nth-child(1) b{color:#4fc36e}.stats div:nth-child(2) b{color:#3d9bf0}.stats div:nth-child(3) b{color:#f5922b}
+.step h3::first-letter{color:var(--acid)}
+footer{display:none}body[data-view=home] footer{display:block}
+@keyframes rise{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+@keyframes fade{from{opacity:0}to{opacity:1}}
+@keyframes pop{0%,100%{transform:scale(1) rotate(0)}45%{transform:scale(.8) rotate(10deg)}}
+body[data-view=home] #home,body[data-view=methods] #methods,body[data-view=library] #library,body[data-view=timer] #timer{animation:rise .45s cubic-bezier(.2,.7,.2,1) both}
+body.simpage #sim{animation:fade .35s both}
+h1 span{animation:rise .7s cubic-bezier(.2,.7,.2,1) both}h1 span:nth-child(2){animation-delay:.1s}h1 span:nth-child(3){animation-delay:.2s}
+.tile,.step,.row{animation:rise .5s cubic-bezier(.2,.7,.2,1) both}
+.tile:nth-child(2){animation-delay:.08s}.tile:nth-child(3){animation-delay:.16s}.tile:nth-child(4){animation-delay:.24s}
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important}}
+
+:root{--side:84px}
+header{padding:16px 10px calc(14px + env(safe-area-inset-bottom,0px));align-items:center;gap:14px;overflow:visible}
+.brand{padding:0;display:grid;justify-items:center}.brand .ic{width:40px;height:40px;color:#81b64c;stroke-width:2}.brand::after{width:40px}
+nav{align-items:center;width:100%}
+nav a{position:relative;justify-content:center;width:100%;padding:0;min-height:54px}
+nav a .ic{width:27px;height:27px}
+nav a>span{position:absolute;left:calc(100% + 12px);top:50%;transform:translateY(-50%);white-space:nowrap;padding:8px 14px;border-radius:10px;background:var(--ink);color:var(--bg);font:800 14px var(--body);opacity:0;pointer-events:none;transition:opacity .15s;z-index:70}
+nav a:hover>span,nav a:focus-visible>span{opacity:1}
+nav a[href="#course"]{--c:#ffd500}
+#lang{font-size:12px;padding:0;width:100%;min-width:0}
+body[data-view=course]{--acid:#e0a21b;--shade:#9b6f0a}
+body[data-view=course] #course{display:block;animation:rise .45s cubic-bezier(.2,.7,.2,1) both}
+.hero{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:clamp(24px,5vw,80px);align-items:center;min-height:min(66vh,540px)}
+.stk{display:grid;position:static;transform:rotate(-3deg);padding:14px;background:#0d0d0b;border-radius:22px;grid-template-columns:repeat(3,1fr);gap:12px;justify-self:center;width:min(100%,440px)}
+.hcopy{text-align:center}
+.hcopy h1{font:900 clamp(2.3rem,4.6vw,3.8rem)/1.08 var(--disp);letter-spacing:-.02em;margin:0 0 16px}
+.hcopy .lead{margin:0 auto 26px;max-width:34ch}
+#start{width:100%;max-width:420px;min-height:64px;font-size:20px;border-radius:14px}
+.pill{display:inline-block;padding:6px 14px;border-radius:999px;background:var(--card);font:800 13px var(--body)}
+.chips{display:flex;gap:8px;flex-wrap:wrap;margin:6px 0 16px}
+.prog{height:12px;border-radius:99px;background:var(--card);overflow:hidden}.prog i{display:block;height:100%;background:var(--acid);border-radius:99px;transition:width .4s cubic-bezier(.2,.7,.2,1)}
+.tip{display:flex;gap:12px;align-items:center;flex-wrap:wrap;justify-content:space-between;padding:14px 18px;border-radius:14px;background:color-mix(in srgb,var(--acid) 16%,var(--card));margin:0 0 16px;font-weight:700}
+.lesson{display:grid;grid-template-columns:3rem 1fr auto;gap:0 14px;align-items:center;padding:14px 18px;margin-bottom:10px;border-radius:14px;background:var(--card);animation:rise .5s cubic-bezier(.2,.7,.2,1) both}
+.lesson b{font:800 1.1rem/1.2 var(--disp)}.lesson p{margin:2px 0 0;color:var(--dim);font-size:14.5px;overflow-wrap:anywhere}
+.lesson.ok b{color:var(--dim);text-decoration:line-through}
+#wiz{position:fixed;inset:0;z-index:100;display:flex;align-items:center;justify-content:center;padding:16px;background:rgba(15,14,12,.82);animation:fade .25s both}
+#wiz[hidden]{display:none}
+.wbox{width:min(640px,100%);max-height:100%;overflow:auto;background:var(--panel);border-radius:22px;padding:22px clamp(18px,4vw,32px) 28px;animation:rise .35s cubic-bezier(.2,.7,.2,1) both}
+.wtop{display:flex;gap:12px;align-items:center;margin-bottom:22px}
+.wbar{flex:1;height:10px;border-radius:99px;background:var(--card);overflow:hidden}.wbar i{display:block;height:100%;width:0;background:var(--acid);border-radius:99px;transition:width .35s cubic-bezier(.2,.7,.2,1)}
+#wizQ{font:900 clamp(1.5rem,3vw,2rem)/1.15 var(--disp);margin:0 0 18px;text-transform:none}
+.opt{display:flex;align-items:center;gap:14px;width:100%;min-height:66px;padding:10px 18px;margin-bottom:10px;border:0;border-radius:14px;background:var(--card);color:var(--ink);text-align:left;font:800 18px/1.25 var(--body);box-shadow:0 4px 0 rgba(0,0,0,.28);transition:transform .15s,background .15s}
+.opt:hover{transform:translateY(-2px);background:var(--line)}.opt:active{transform:translateY(3px);box-shadow:none}
+.oi{display:grid;place-items:center;width:44px;height:44px;border-radius:12px;background:var(--c);color:#fff;flex:none}
+.ot{display:block}.ot small{display:block;color:var(--dim);font-weight:600;font-size:14px}
+@media (max-width:900px){
+:root{--side:0px}
+.brand{display:none}
+nav a>span{display:none!important}
+.hero{grid-template-columns:1fr;min-height:0}.stk{width:min(70%,300px)}
+.lesson{grid-template-columns:3rem 1fr}.lesson .play{grid-column:2;justify-self:start;margin-top:8px}
+}
+
+:root{--cl:minmax(250px,320px);--cr:minmax(250px,340px)}
+body.simpage #sim{grid-template-columns:var(--cl) minmax(0,1fr) var(--cr)}
+body.nohelp{--cr:0px}body.nonote{--cl:0px}
+body.coaching{--cr:minmax(250px,340px)}
+body.nohelp #sim .help,body.nonote #sim .mvbox,body.coaching #sim .help{display:none}
+#sim .help,#sim .mvbox{position:relative}
+.help .x,.mvbox .x{position:absolute;top:8px;right:8px}
+#helpOpen,#noteOpen{position:absolute;top:12px;z-index:2;display:none}
+#helpOpen{right:12px}#noteOpen{left:12px}
+body.nohelp #helpOpen,body.nonote #noteOpen{display:inline-flex;align-items:center}
+.x{width:44px;height:44px;border:0;border-radius:50%;background:transparent;color:var(--dim);font:700 26px/1 var(--body);transition:background .15s,color .15s}
+.x:hover{background:var(--card);color:var(--ink)}
+#coach{position:fixed;z-index:90;top:14px;right:14px;width:min(340px,calc(100vw - 28px));max-height:calc(100vh - 28px);overflow:auto;padding:16px 18px 18px;border-radius:18px;background:var(--panel);box-shadow:0 12px 40px rgba(0,0,0,.45);border-top:5px solid var(--acid);animation:rise .35s cubic-bezier(.2,.7,.2,1) both}
+#coach[hidden]{display:none}
+.ch{display:flex;justify-content:space-between;align-items:center}
+#cTitle{font:900 1.35rem/1.15 var(--disp);margin:4px 0 8px}
+#cText{color:var(--dim);font-size:15px;margin:0 0 12px}
+#cTasks{list-style:none;margin:0 0 14px;padding:0;display:grid;gap:8px}
+#cTasks li{display:flex;gap:10px;align-items:center;padding:10px 12px;border-radius:12px;background:var(--card);font-weight:700;font-size:14.5px}
+#cTasks li::before{content:"";width:18px;height:18px;border-radius:50%;border:2px solid var(--dim);flex:none}
+#cTasks li.ok{color:var(--acid)}#cTasks li.ok::before{background:var(--acid);border-color:var(--acid);box-shadow:inset 0 0 0 3px var(--card)}
+@media (max-width:900px){#coach{top:auto;left:10px;right:10px;width:auto;bottom:calc(72px + env(safe-area-inset-bottom,0px));max-height:46vh}}
+</style>
+</head>
+<body data-l="en">
+
+
+<main>
+<header>
+  <a class="brand" href="#home" aria-label="CUBE 3x3"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l8.5 4.5v9L12 21l-8.5-4.5v-9z"/><path d="M12 12l8.5-4.5M12 12 3.5 7.5M12 12v9"/></svg></a>
+  <nav>
+    <a href="#home"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 11.5 12 4l9 7.5"/><path d="M5.5 10v9.5h5v-5h3v5h5V10"/></svg><span class="en">Home</span><span class="vi">Trang chủ</span></a>
+    <a href="#course"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 21V4"/><path d="M5 4h12l-2.5 4L17 12H5"/></svg><span class="en">Course</span><span class="vi">Lộ trình</span></a>
+    <a href="#sim"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l8.5 4.5v9L12 21l-8.5-4.5v-9z"/><path d="M12 12l8.5-4.5M12 12 3.5 7.5M12 12v9"/></svg><span class="en">Simulator</span><span class="vi">Mô phỏng</span></a>
+    <a href="#methods"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l9 5-9 5-9-5z"/><path d="M3 12.5l9 5 9-5"/><path d="M3 17l9 5 9-5"/></svg><span class="en">Methods</span><span class="vi">Phương pháp</span></a>
+    <a href="#library"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M8.5 7l-5 5 5 5M15.5 7l5 5-5 5"/></svg><span class="en">Algorithms</span><span class="vi">Thuật toán</span></a>
+    <a href="#timer"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="13.5" r="7.5"/><path d="M12 9.5v4.2l2.8 1.8M9.5 2.5h5"/></svg><span class="en">Timer</span><span class="vi">Đồng hồ</span></a>
+    <button class="btn" id="lang" aria-label="Switch language">EN · VI</button>
+  </nav>
+</header>
+
+<section id="home">
+<div class="hero">
+<div class="stk" aria-hidden="true"><i style="--c:#d62a1e"></i><i style="--c:#f4f4ee"></i><i style="--c:#1859d6"></i><i style="--c:#ffd500"></i><i style="--c:#00a84f"></i><i style="--c:#ff7a00"></i><i style="--c:#1859d6"></i><i style="--c:#d62a1e"></i><i style="--c:#f4f4ee"></i></div>
+<div class="hcopy">
+<h1><span class="en">Learn to solve the</span><span class="vi">Học giải khối</span> <span class="a">Rubik’s Cube</span></h1>
+<p class="lead"><span class="en">Step-by-step lessons, a 3D simulator and a solver that shows every move.</span><span class="vi">Bài học từng bước, mô phỏng 3D và máy giải chỉ rõ từng nước đi.</span></p>
+<button class="btn go cta" id="start"></button>
+</div></div>
+<div class="tiles"><a class="tile" href="#sim" style="--c:#4fc36e"><span class="ti"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l8.5 4.5v9L12 21l-8.5-4.5v-9z"/><path d="M12 12l8.5-4.5M12 12 3.5 7.5M12 12v9"/></svg></span><b><span class="en">Simulator</span><span class="vi">Mô phỏng 3D</span></b><small><span class="en">Turn the cube, press Solve</span><span class="vi">Xoay khối, bấm Giải</span></small></a><a class="tile" href="#methods" style="--c:#3d9bf0"><span class="ti"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l9 5-9 5-9-5z"/><path d="M3 12.5l9 5 9-5"/><path d="M3 17l9 5 9-5"/></svg></span><b><span class="en">Methods</span><span class="vi">Phương pháp</span></b><small><span class="en">Beginner to Petrus, step by step</span><span class="vi">Từ Beginner tới Petrus, từng bước</span></small></a><a class="tile" href="#library" style="--c:#f5922b"><span class="ti"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M8.5 7l-5 5 5 5M15.5 7l5 5-5 5"/></svg></span><b><span class="en">Algorithms</span><span class="vi">Thuật toán</span></b><small><span class="en">OLL, PLL and triggers</span><span class="vi">OLL, PLL và công thức nhỏ</span></small></a><a class="tile" href="#timer" style="--c:#f0584c"><span class="ti"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="13.5" r="7.5"/><path d="M12 9.5v4.2l2.8 1.8M9.5 2.5h5"/></svg></span><b><span class="en">Timer</span><span class="vi">Đồng hồ</span></b><small><span class="en">Scrambles, ao5, ao12</span><span class="vi">Scramble, ao5, ao12</span></small></a></div>
+</section>
+
+<section id="course"><h2><span class="en">Your course</span><span class="vi">Lộ trình của bạn</span></h2><div id="planBox"></div></section>
+
+<section id="sim" aria-label="3D simulator">
+  <button class="btn" id="simBack">← <span class="en">Back to guide</span><span class="vi">Về trang hướng dẫn</span></button>
+  <details class="help" open><summary tabindex="-1"><span class="en">How to use</span><span class="vi">Cách dùng</span></summary><button class="x" id="helpX" aria-label="Hide">×</button>
+  <p class="sub"><span class="en">Type moves while the cube is in view. Hold several keys together, say R then U, and they stack up on screen as you press; let go of everything and the cube runs the whole sequence. Shift + a letter turns it counter-clockwise (R'). Tap ' or 2 to change the last move; Esc cancels.</span><span class="vi">Gõ nước đi khi khối đang trong tầm nhìn. Giữ nhiều phím cùng lúc, ví dụ R rồi U, các nước hiện ngay trên màn hình khi bạn bấm; thả hết phím thì khối chạy cả chuỗi. Shift + chữ là xoay ngược (R'). Bấm ' hoặc 2 để đổi nước vừa nhập; Esc để huỷ.</span></p>
+  </details>
+  <div class="sim">
+    <div id="stage">
+      <canvas id="gl" aria-label="Interactive cube. Drag to orbit."></canvas>
+      <button class="btn" id="noteOpen" aria-label="Notation">R U F</button><button class="btn" id="helpOpen" aria-label="How to use">?</button><div id="nogl"><span>WebGL unavailable — the guides and timer still work.</span></div>
+    </div>
+    <div id="hud">
+      <div id="hudLabel">Free play</div>
+      <div id="pend" data-ph="" aria-live="polite"></div>
+      <div id="hudSteps" aria-live="polite"></div>
+      <div class="ctl">
+        <button class="btn" id="bReset">Reset</button>
+        <button class="btn" id="bStep">Step</button>
+        <button class="btn go" id="bSolve"><span class="en">Solve</span><span class="vi">Giải</span></button><button id="bPlay" hidden></button><select class="btn" id="bMethod" aria-label="Method"><option value="beginner">Beginner (LBL)</option><option disabled>CFOP · sắp có / coming soon</option><option disabled>Roux · sắp có / coming soon</option><option disabled>ZZ · sắp có / coming soon</option><option disabled>Petrus · sắp có / coming soon</option></select>
+        <select class="btn" id="bSpeed" aria-label="Speed"><option value=".5">0.5×</option><option value="1" selected>1×</option><option value="2">2×</option><option value="4">4×</option></select>
+      </div>
+    </div>
+  </div>
+  <details class="mvbox" open><summary tabindex="-1"><span class="en">Notation</span><span class="vi">Ký hiệu</span></summary><button class="x" id="noteX" aria-label="Hide">×</button>
+  <p class="sub"><span class="en">A letter is a face turned a quarter clockwise as you look straight at it. An apostrophe (') reverses it. A 2 is a half turn. Press the keys, watch the cube.</span><span class="vi">Mỗi chữ là một mặt xoay 90° theo chiều kim đồng hồ khi bạn nhìn thẳng vào mặt đó. Dấu nháy (') là xoay ngược. Số 2 là xoay 180°. Bấm phím và xem khối xoay.</span></p>
+  <div id="mvList"></div>
+  </details>
+</section>
+
+<section id="methods">
+  <div class="num">02</div>
+  <h2><span class="en">Methods</span><span class="vi">Phương pháp</span></h2>
+  <div class="tabs" role="tablist" id="tabs"></div>
+  <div id="method"></div>
+</section>
+
+<section id="library">
+  <div class="num">03</div>
+  <h2><span class="en">Algorithm library</span><span class="vi">Thư viện thuật toán</span></h2>
+  <p class="sub"><span class="en">Selecting one sets the cube to the state that algorithm solves, so Play shows exactly what it does.</span><span class="vi">Chọn một thuật toán, khối sẽ về đúng trạng thái nó giải, bấm Play để xem nó làm gì.</span></p>
+  <div class="bar">
+    <input id="q" type="search" placeholder="Search · Tìm" aria-label="Search algorithms">
+    <button class="btn chip" data-f="all" aria-pressed="true">All</button>
+    <button class="btn chip" data-f="OLL" aria-pressed="false">OLL</button>
+    <button class="btn chip" data-f="PLL" aria-pressed="false">PLL</button>
+    <button class="btn chip" data-f="Trigger" aria-pressed="false">Trigger</button>
+  </div>
+  <div id="lib"></div>
+</section>
+
+<section id="timer">
+  <div class="num">04</div>
+  <h2><span class="en">Timer</span><span class="vi">Đồng hồ</span></h2>
+  <div id="scr"></div>
+  <div id="pad" data-s="idle" role="button" tabindex="0" aria-label="Timer. Hold space or press and hold, release to start, tap to stop.">
+    <div id="time">0.00</div>
+    <div id="hint"><span class="en">Hold space (or press and hold here) until green, release to start. Any press stops.</span><span class="vi">Giữ phím cách (hoặc nhấn giữ ở đây) tới khi xanh, thả để bắt đầu. Bấm bất kỳ để dừng.</span></div>
+  </div>
+  <div class="stats">
+    <div><span class="en">Best</span><span class="vi">Tốt nhất</span><b id="sBest">–</b></div>
+    <div>ao5<b id="sA5">–</b></div><div>ao12<b id="sA12">–</b></div>
+    <div><span class="en">Solves</span><span class="vi">Số lần</span><b id="sN">0</b></div>
+  </div>
+  <div class="ctl"><button class="btn" id="bNew"><span class="en">New scramble</span><span class="vi">Scramble mới</span></button><button class="btn" id="bDel"><span class="en">Delete last</span><span class="vi">Xoá lần cuối</span></button><button class="btn" id="bClr"><span class="en">Clear all</span><span class="vi">Xoá hết</span></button><button class="btn go" id="bShow"><span class="en">Show scramble on cube</span><span class="vi">Xem scramble trên khối</span></button></div>
+  <p id="hist"></p>
+</section>
+
+<footer><span class="en">Colour scheme: white up, green front. Algorithms are standard community notations; the setup state is computed by inverting each one.</span><span class="vi">Màu chuẩn: trắng trên, xanh lá trước. Thuật toán theo ký hiệu cộng đồng; trạng thái ban đầu được tính bằng cách đảo ngược chính thuật toán.</span></footer>
+</main>
+<aside id="coach" aria-live="polite" hidden>
+  <div class="ch"><span class="pill" id="cStep"></span><button class="x" id="cQuit" aria-label="Close">×</button></div>
+  <h3 id="cTitle"></h3><p id="cText"></p><ul id="cTasks"></ul>
+  <div class="ctl"><button class="btn" id="cShow"><span class="en">Show me</span><span class="vi">Xem mẫu</span></button><button class="btn" id="cNext"></button></div>
+</aside>
+<div id="wiz" role="dialog" aria-modal="true" aria-labelledby="wizQ" hidden>
+  <div class="wbox">
+    <div class="wtop"><button class="btn" id="wBack" aria-label="Back">←</button><div class="wbar"><i id="wFill"></i></div><button class="btn" id="wClose" aria-label="Close">×</button></div>
+    <h2 id="wizQ"></h2><div id="wOpts"></div>
+  </div>
+</div>
+
+<script>
+(() => {
+'use strict';
+const $ = (s, r = document) => r.querySelector(s);
+const $$ = (s, r = document) => [...r.querySelectorAll(s)];
+const bi = o => `<span class="en">${o.e}</span><span class="vi">${o.v}</span>`;
+const store = {
+  get(k, fallback) { try { const raw = localStorage.getItem('rg.' + k); return raw ? JSON.parse(raw) : fallback; } catch (err) { return fallback; } },
+  set(k, v) { try { localStorage.setItem('rg.' + k, JSON.stringify(v)); return true; } catch (err) { return false; } }
+};
+const REDUCED = matchMedia('(prefers-reduced-motion:reduce)').matches;
+const BASE_MS = 340, QUARTER = Math.PI / 2;
+
+/* ---------- cube ---------- */
+const MOVES = { R: ['x', 1, -1], L: ['x', -1, 1], U: ['y', 1, -1], D: ['y', -1, 1], F: ['z', 1, -1], B: ['z', -1, 1], M: ['x', 0, 1] };
+const FACES = [['x', 1, 0xd62a1e], ['x', -1, 0xff7a00], ['y', 1, 0xf4f4ee], ['y', -1, 0xffd500], ['z', 1, 0x00a84f], ['z', -1, 0x1859d6]];
+const invert = alg => alg.split(/\s+/).filter(Boolean).reverse().map(t => t.endsWith("'") ? t.slice(0, -1) : t.endsWith('2') ? t : t + "'").join(' ');
+const ease = p => p < .5 ? 4 * p ** 3 : 1 - (-2 * p + 2) ** 3 / 2;
+
+let speed = 1, active = null, yaw = -.62, pitch = .5, dragging = false;
+const queue = [], cubies = [];
+let renderer, scene, camera, cube;
+
+function initGL() {
+  const canvas = $('#gl');
+  try {
+    renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
+  } catch (err) { $('#nogl').style.display = 'grid'; return false; }
+  renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+  scene = new THREE.Scene();
+  camera = new THREE.PerspectiveCamera(32, 1, .1, 100);
+  scene.add(new THREE.AmbientLight(0xffffff, .75));
+  const key = new THREE.DirectionalLight(0xffffff, .7); key.position.set(4, 7, 6); scene.add(key);
+  cube = new THREE.Group(); scene.add(cube);
+  const box = new THREE.BoxGeometry(.97, .97, .97), plane = new THREE.PlaneGeometry(.8, .8);
+  const body = new THREE.MeshStandardMaterial({ color: 0x0d0d0b, roughness: .55 });
+  const mats = FACES.map(f => new THREE.MeshStandardMaterial({ color: f[2], roughness: .38 }));
+  const up = new THREE.Vector3(0, 0, 1);
+  for (let x = -1; x <= 1; x++) for (let y = -1; y <= 1; y++) for (let z = -1; z <= 1; z++) {
+    if (!x && !y && !z) continue;
+    const c = new THREE.Mesh(box, body), at = { x, y, z };
+    c.position.set(x, y, z); c.userData.home = new THREE.Vector3(x, y, z);
+    FACES.forEach(([axis, sign], i) => {
+      if (at[axis] !== sign) return;
+      const n = new THREE.Vector3(); n[axis] = sign;
+      const s = new THREE.Mesh(plane, mats[i]);
+      s.position.copy(n).multiplyScalar(.487); s.quaternion.setFromUnitVectors(up, n); s.userData.f = i;
+      c.add(s);
+    });
+    cube.add(c); cubies.push(c);
+  }
+  const fit = () => {
+    const w = canvas.clientWidth, h = canvas.clientHeight; if (!w || !h) return;
+    renderer.setSize(w, h, false); camera.aspect = w / h;
+    camera.position.set(0, 0, Math.max(12.5, 12.5 / Math.min(1, camera.aspect * 1.15)));
+    camera.updateProjectionMatrix();
+    cube.position.y = 0;
+  };
+  new ResizeObserver(fit).observe(canvas); fit();
+  let lx = 0, ly = 0;
+  canvas.addEventListener('pointerdown', e => { dragging = true; lx = e.clientX; ly = e.clientY; canvas.setPointerCapture(e.pointerId); });
+  canvas.addEventListener('pointermove', e => {
+    if (!dragging) return;
+    yaw += (e.clientX - lx) * .008; pitch = Math.max(-1.3, Math.min(1.3, pitch + (e.clientY - ly) * .008)); lx = e.clientX; ly = e.clientY;
+  });
+  ['pointerup', 'pointercancel'].forEach(t => canvas.addEventListener(t, () => { dragging = false; }));
+  let last = performance.now();
+  const frame = now => {
+    const dt = now - last; last = now;
+    if (active) {
+      const p = Math.min(1, (now - active.t0) / active.dur);
+      active.pivot.rotation[active.axis] = active.total * ease(p);
+      if (p >= 1) finish();
+    }
+    if (!active && queue.length) begin(queue.shift());
+    if (!dragging && !REDUCED && !active && !queue.length) yaw += dt * .00012;
+    cube.rotation.set(pitch, yaw, 0);
+    renderer.render(scene, camera);
+    requestAnimationFrame(frame);
+  };
+  requestAnimationFrame(frame);
+  return true;
+}
+
+function begin(job) {
+  const m = /^([RLUDFBM])(2|')?$/.exec(job.tok);
+  if (!m) { if (job.cb) job.cb(); return; }
+  const [axis, layer, dir] = MOVES[m[1]];
+  const total = dir * QUARTER * (m[2] === "'" ? -1 : 1) * (m[2] === '2' ? 2 : 1);
+  const pivot = new THREE.Group(); cube.add(pivot);
+  const members = cubies.filter(c => Math.round(c.position[axis]) === layer);
+  members.forEach(c => pivot.attach(c));
+  active = { pivot, axis, total, members, t0: performance.now(), dur: job.dur, cb: job.cb };
+  if (!job.dur) finish();
+}
+function finish() {
+  const a = active;
+  a.pivot.rotation[a.axis] = a.total; a.pivot.updateMatrixWorld(true);
+  a.members.forEach(c => { cube.attach(c); c.position.set(Math.round(c.position.x), Math.round(c.position.y), Math.round(c.position.z)); });
+  cube.remove(a.pivot); active = null;
+  if (a.cb) a.cb();
+}
+const flush = () => { queue.length = 0; if (active) { active.cb = null; finish(); } };
+const turnNow = tok => { if (cube) { flush(); begin({ tok, dur: 0 }); } };
+const turn = (tok, cb) => { if (cube) queue.push({ tok, cb, dur: BASE_MS / speed / (REDUCED ? 3 : 1) }); };
+const resetCube = () => { if (!cube) return; flush(); cubies.forEach(c => { c.position.copy(c.userData.home); c.quaternion.identity(); }); };
+
+/* ---------- solver ---------- */
+const SLOT = [], SLOT_AT = new Map();
+const slotKey = (p, n) => p.join() + '|' + n.join();
+const nonZero = p => p.filter(c => c !== 0).length;
+for (let x = -1; x <= 1; x++) for (let y = -1; y <= 1; y++) for (let z = -1; z <= 1; z++) {
+  if (!x && !y && !z) continue;
+  FACES.forEach(([axis, sign], f) => {
+    const p = [x, y, z], n = [0, 0, 0], ai = 'xyz'.indexOf(axis);
+    n[ai] = sign;
+    if (p[ai] === sign) { SLOT_AT.set(slotKey(p, n), SLOT.length); SLOT.push({ p, n, f }); }
+  });
+}
+const SOLVED = SLOT.map(s => s.f);
+const spin = (v, axis, q) => {
+  let [x, y, z] = v;
+  for (let k = ((q % 4) + 4) % 4; k > 0; k--) {
+    if (axis === 'x') [y, z] = [-z, y]; else if (axis === 'y') [x, z] = [z, -x]; else [x, y] = [-y, x];
+  }
+  return [x, y, z];
+};
+const MOVE_NAMES = [], PERM = {};
+'RLUDFB'.split('').forEach(f => {
+  const [axis, layer, dir] = MOVES[f], ai = 'xyz'.indexOf(axis);
+  [['', 1], ['2', 2], ["'", 3]].forEach(([suffix, k]) => {
+    const name = f + suffix; MOVE_NAMES.push(name);
+    PERM[name] = Uint8Array.from(SLOT.map((s, i) => s.p[ai] === layer ? SLOT_AT.get(slotKey(spin(s.p, axis, dir * k), spin(s.n, axis, dir * k))) : i));
+  });
+});
+const apply = (s, tok) => { const out = new Uint8Array(54), pm = PERM[tok]; for (let i = 0; i < 54; i++) out[pm[i]] = s[i]; return out; };
+const runToks = (s, toks) => toks.reduce((acc, t) => apply(acc, t), s);
+
+const EDGE24 = SLOT.map((s, i) => i).filter(i => nonZero(SLOT[i].p) === 2);
+const EDGE_IDX = new Map(EDGE24.map((slot, j) => [slot, j]));
+const partner = slot => EDGE24.find(o => o !== slot && SLOT[o].p.join() === SLOT[slot].p.join());
+const CROSS_SIDES = [4, 0, 5, 1];
+const crossStep = {};
+MOVE_NAMES.forEach(m => { crossStep[m] = EDGE24.map(slot => EDGE_IDX.get(PERM[m][slot])); });
+const encode = d => ((d[0] * 24 + d[1]) * 24 + d[2]) * 24 + d[3];
+const crossHome = CROSS_SIDES.map(c => EDGE_IDX.get(EDGE24.find(sl => SOLVED[sl] === 3 && SOLVED[partner(sl)] === c)));
+let crossDist = null;
+function buildCrossTable() {
+  crossDist = new Int8Array(24 ** 4).fill(-1);
+  let level = [crossHome]; crossDist[encode(crossHome)] = 0;
+  for (let d = 0; level.length; d++) {
+    const next = [];
+    level.forEach(digits => MOVE_NAMES.forEach(m => {
+      const nd = digits.map(x => crossStep[m][x]), k = encode(nd);
+      if (crossDist[k] < 0) { crossDist[k] = d + 1; next.push(nd); }
+    }));
+    level = next;
+  }
+}
+function solveCross(s) {
+  if (!crossDist) buildCrossTable();
+  let digits = CROSS_SIDES.map(c => EDGE_IDX.get(EDGE24.find(sl => s[sl] === 3 && s[partner(sl)] === c)));
+  const moves = [];
+  while (crossDist[encode(digits)] > 0) {
+    const here = crossDist[encode(digits)];
+    const m = MOVE_NAMES.find(mv => crossDist[encode(digits.map(x => crossStep[mv][x]))] === here - 1);
+    moves.push(m); digits = digits.map(x => crossStep[m][x]);
+  }
+  return moves;
+}
+
+const pick = pred => SLOT.map((s, i) => i).filter(i => pred(SLOT[i]));
+const SLOTS_AT = (cx, cz, y) => pick(s => s.p[0] === cx && s.p[1] === y && s.p[2] === cz);
+const QUADRANTS = [[1, 1], [-1, 1], [-1, -1], [1, -1]];
+const GOAL = {
+  cross: pick(s => s.p[1] === -1 && nonZero(s.p) === 2),
+  dCorners: QUADRANTS.map(([x, z]) => SLOTS_AT(x, z, -1)),
+  mids: QUADRANTS.map(([x, z]) => SLOTS_AT(x, z, 0)),
+  llCross: pick(s => s.p[1] === 1 && s.f === 2 && nonZero(s.p) === 2),
+  llFace: pick(s => s.f === 2),
+  topCorners: pick(s => s.p[1] === 1 && nonZero(s.p) === 3),
+  all: SLOT.map((s, i) => i)
+};
+const FACE_NEXT = { F: 'R', R: 'B', B: 'L', L: 'F', U: 'U', D: 'D' };
+const turnAlg = (alg, k) => alg.split(' ').map(t => { let f = t[0]; for (let i = 0; i < k; i++) f = FACE_NEXT[f]; return f + t.slice(1); });
+const withU = algs => [['U'], ["U'"], ['U2'], ...algs.flatMap(a => [0, 1, 2, 3].map(k => turnAlg(a, k)))];
+const TRIGGERS = [1, 2, 3, 4, 5].map(k => Array(k).fill("R U R' U'").join(' '));
+const MACROS = {
+  corners: withU(TRIGGERS),
+  mids: withU(["U R U' R' U' F' U F", "U' L' U L U F U' F'"]),
+  llCross: withU(["F R U R' U' F'"]),
+  llOrient: withU(["R U R' U R U2 R'", "R U2 R' U' R U' R'"]),
+  llCorners: withU(["U R U' L' U R' U' L"]),
+  llEdges: withU(["R U' R U R U R U' R' U' R2", "R2 U R U R' U' R' U' R' U R'"])
+};
+function findMacros(s, macros, ok, maxDepth) {
+  const dive = (st, depth, afterU) => {
+    if (!depth) return ok(st) ? [] : null;
+    for (let i = 0; i < macros.length; i++) {
+      if (afterU && i < 3) continue;
+      const rest = dive(runToks(st, macros[i]), depth - 1, i < 3);
+      if (rest) return [i, ...rest];
+    }
+    return null;
+  };
+  for (let d = 0; d <= maxDepth; d++) { const hit = dive(s, d, false); if (hit) return hit.flatMap(i => macros[i]); }
+  return null;
+}
+function solveBeginner(start) {
+  let s = start; const out = [], marks = [], goals = [GOAL.cross];
+  const take = toks => { s = runToks(s, toks); out.push(...toks); };
+  const stage = (macros, goal, depth) => {
+    goals.push(goal);
+    const toks = findMacros(s, macros, st => goals.every(g => g.every(i => st[i] === SOLVED[i])), depth);
+    if (!toks) throw new Error('stage failed');
+    take(toks); marks.push(out.length);
+  };
+  take(solveCross(s)); marks.push(out.length);
+  GOAL.dCorners.forEach(g => stage(MACROS.corners, g, 4));
+  GOAL.mids.forEach(g => stage(MACROS.mids, g, 4));
+  stage(MACROS.llCross, GOAL.llCross, 6);
+  stage(MACROS.llOrient, GOAL.llFace, 5);
+  stage(MACROS.llCorners, GOAL.topCorners, 5);
+  stage(MACROS.llEdges, GOAL.all, 5);
+  out.marks = marks;
+  return out;
+}
+const quarters = t => t.endsWith('2') ? 2 : t.endsWith("'") ? 3 : 1;
+const simplify = toks => {
+  const out = [];
+  toks.forEach(t => {
+    const last = out[out.length - 1];
+    if (last && last[0] === t[0]) {
+      const q = (quarters(last) + quarters(t)) % 4;
+      out.pop();
+      if (q) out.push(t[0] + ['', '', '2', "'"][q]);
+    } else out.push(t);
+  });
+  return out;
+};
+function readState() {
+  const s = new Uint8Array(54), v = new THREE.Vector3();
+  cubies.forEach(c => {
+    const p = [c.position.x, c.position.y, c.position.z].map(Math.round);
+    c.children.forEach(st => {
+      v.copy(st.position).normalize().applyQuaternion(c.quaternion);
+      s[SLOT_AT.get(slotKey(p, [v.x, v.y, v.z].map(Math.round)))] = st.userData.f;
+    });
+  });
+  return s;
+}
+$('#bSolve').onclick = () => {
+  if (!cube) return;
+  flush();
+  const s = readState(), vi = document.body.dataset.l === 'vi';
+  const say = text => { P.gen++; Object.assign(P, { steps: [], done: 0, queued: 0, label: text }); drawHud(); };
+  if (SLOT.some((sl, i) => nonZero(sl.p) === 1 && s[i] !== SOLVED[i])) return say(vi ? 'Tâm bị lệch do nước M. Bấm Reset rồi thử lại' : 'Centres moved by M turns. Press Reset and retry');
+  if (s.every((v, i) => v === SOLVED[i])) return say(vi ? 'Khối đã giải xong' : 'Already solved');
+  let moves;
+  try { moves = simplify(solveBeginner(s)); } catch (err) { return say(vi ? 'Không giải được trạng thái này' : 'Could not solve this state'); }
+  P.gen++;
+  Object.assign(P, { steps: moves, done: 0, queued: 0, label: `${vi ? 'Giải từng lớp' : 'Layer by layer'} · ${moves.length} ${vi ? 'nước' : 'moves'}` });
+  drawHud(); $('#bPlay').click();
+};
+
+/* ---------- player ---------- */
+const P = { steps: [], done: 0, queued: 0, label: 'Free play', gen: 0 };
+function drawHud() {
+  $('#hudLabel').textContent = P.label;
+  $('#hudSteps').innerHTML = P.steps.map((t, i) => `<span class="tok ${i < P.done ? 'done' : i === P.done ? 'next' : ''}">${t}</span>`).join(' ');
+  const box = $('#hudSteps'), nx = $('.next', box);
+  if (nx) box.scrollTop = nx.offsetTop - 28;
+}
+function loadAlg(alg, label) {
+  resetCube(); invert(alg).split(' ').forEach(turnNow);
+  P.gen++; Object.assign(P, { steps: alg.split(/\s+/), done: 0, queued: 0, label }); drawHud();
+}
+function stepOnce() {
+  if (P.queued >= P.steps.length) return;
+  const gen = P.gen;
+  turn(P.steps[P.queued++], () => { if (P.gen === gen) { P.done++; drawHud(); } });
+}
+const showSim = () => { if (location.hash !== '#sim') location.hash = 'sim'; };
+$('#bStep').onclick = stepOnce;
+$('#bPlay').onclick = () => { while (P.queued < P.steps.length) stepOnce(); };
+$('#bReset').onclick = () => { resetCube(); P.gen++; Object.assign(P, { steps: [], done: 0, queued: 0, label: 'Free play' }); drawHud(); };
+$('#bSpeed').onchange = e => { speed = +e.target.value; };
+const rerun = () => { if (P.steps.length && P.label !== 'Scramble') loadAlg(P.steps.join(' '), P.label); };
+$('#bReset').addEventListener('dblclick', rerun);
+
+/* ---------- notation ---------- */
+const NOTES = [
+  ['R', 'Right face', 'Mặt phải'], ['L', 'Left face', 'Mặt trái'], ['U', 'Up face', 'Mặt trên'],
+  ['D', 'Down face', 'Mặt dưới'], ['F', 'Front face', 'Mặt trước'], ['B', 'Back face', 'Mặt sau'],
+  ['M', 'Middle slice, same direction as L', 'Lớp giữa, cùng chiều với L']
+];
+$('#mvList').innerHTML = NOTES.map(([k, e, v]) => `<div class="mv"><i>${k}</i><div class="keys">${[k, k + "'", k + '2'].map(t => `<button class="key" data-m="${t}" aria-label="${t}">${t}</button>`).join('')}</div><small>${bi({ e, v })}</small></div>`).join('');
+$('#mvList').addEventListener('click', e => { const b = e.target.closest('[data-m]'); if (b) { pend.push(b.dataset.m); runPending(); } });
+
+/* ---------- methods ---------- */
+const S = (te, tv, de, dv, alg) => ({ t: { e: te, v: tv }, d: { e: de, v: dv }, alg });
+const METHODS = [
+  { id: 'beginner', lv: '01', n: { e: 'Beginner', v: 'Người mới' }, d: { e: 'Layer by layer. About 7 steps, about 120 moves per solve, no speed needed.', v: 'Giải từng lớp. Khoảng 7 bước, ~120 nước mỗi lần giải, không cần nhanh.' }, steps: [
+    S('White cross', 'Chữ thập trắng', 'Bring the four white edges to the top so each side colour matches its centre. Centres never move; they are your reference.', 'Đưa 4 cạnh trắng lên trên sao cho màu bên hông khớp màu tâm. Tâm không bao giờ di chuyển, hãy dùng làm mốc.'),
+    S('White corners', 'Góc trắng', 'Put a white corner above its slot at the front-right, then repeat the trigger until it drops in white-side-up.', 'Đặt góc trắng phía trên ô trống ở trước-phải, rồi lặp công thức cho tới khi nó vào đúng với mặt trắng hướng lên.', "R U R' U'"),
+    S('Middle layer, edge to the right', 'Lớp giữa, cạnh sang phải', 'Edge on top with no yellow, front colour matching the front centre.', 'Cạnh ở lớp trên không có màu vàng, màu mặt trước khớp tâm trước.', "U R U' R' U' F' U F"),
+    S('Middle layer, edge to the left', 'Lớp giữa, cạnh sang trái', 'Mirror of the previous case.', 'Đối xứng của trường hợp trên.', "U' L' U L U F U' F'"),
+    S('Yellow cross', 'Chữ thập vàng', 'Repeat until the yellow cross appears: dot, then L-shape, then line.', 'Lặp tới khi hiện chữ thập vàng: chấm, rồi chữ L, rồi đường thẳng.', "F R U R' U' F'"),
+    S('Yellow face', 'Mặt vàng', 'Hold the cube so a single yellow corner faces you at front-left; repeat until the whole top is yellow.', 'Cầm khối sao cho một góc vàng duy nhất hướng về bạn ở trước-trái; lặp tới khi cả mặt trên vàng.', "R U R' U R U2 R'"),
+    S('Place corners', 'Xếp góc', 'Find a corner already in its right place, hold it at front-right, repeat until all four corners are correct.', 'Tìm góc đã đúng chỗ, đặt nó ở trước-phải, lặp tới khi cả 4 góc đúng.', "U R U' L' U R' U' L"),
+    S('Place last edges', 'Xếp cạnh cuối', 'Solved edge at the back, then cycle the other three. Do it once or twice.', 'Cạnh đã đúng ở phía sau, rồi hoán đổi vòng ba cạnh còn lại. Làm một hoặc hai lần.', "R U' R U R U R U' R' U' R2")
+  ] },
+  { id: 'cfop', lv: '02', n: { e: 'CFOP', v: 'CFOP' }, d: { e: 'The dominant speedsolving method. Four stages, about 55 moves, needs 78 last-layer algorithms to be complete.', v: 'Phương pháp speedcubing phổ biến nhất. Bốn giai đoạn, ~55 nước, cần 78 công thức lớp cuối để đầy đủ.' }, steps: [
+    S('Cross', 'Chữ thập', 'Solve the four edges on the bottom, planned entirely during the 15-second inspection.', 'Giải 4 cạnh ở mặt dưới, lên kế hoạch hoàn toàn trong 15 giây quan sát.'),
+    S('F2L', 'F2L', 'Pair each corner with its edge and insert both together. Four slots, intuitive; the trigger is the building block.', 'Ghép mỗi góc với cạnh của nó rồi đưa cả cặp vào cùng lúc. Bốn ô, giải bằng trực giác; công thức nhỏ là viên gạch nền.', "R U R' U'"),
+    S('OLL', 'OLL', 'Orient the last layer so the top is one colour. 57 cases; start with the 2-look: cross, then corners.', 'Định hướng lớp cuối để mặt trên đồng màu. 57 trường hợp; bắt đầu 2-look: chữ thập, rồi góc.', "R U R' U R U2 R'"),
+    S('PLL', 'PLL', 'Permute the last layer. 21 cases; the T-perm is the one to learn first.', 'Hoán vị lớp cuối. 21 trường hợp; T-perm là công thức nên học đầu tiên.', "R U R' U' R' F R2 U' R' U' R U R' F'")
+  ] },
+  { id: 'roux', lv: '03', n: { e: 'Roux', v: 'Roux' }, d: { e: 'Block building, then M-slice only. Fewer moves than CFOP, and it relies on lookahead rather than algorithms.', v: 'Dựng khối, rồi chỉ xoay lớp M. Ít nước hơn CFOP, dựa vào nhìn trước thay vì công thức.' }, steps: [
+    S('First block', 'Khối đầu', 'Build a 1×2×3 block on the left: the left-bottom edge, two corners and the edges between.', 'Dựng khối 1×2×3 ở bên trái: cạnh trái-dưới, hai góc và các cạnh giữa.'),
+    S('Second block', 'Khối thứ hai', 'Build the matching block on the right using only R, r, U and M.', 'Dựng khối tương ứng bên phải, chỉ dùng R, r, U và M.'),
+    S('CMLL', 'CMLL', 'Solve all four top corners, ignoring the edges.', 'Giải cả 4 góc trên, bỏ qua các cạnh.'),
+    S('LSE', 'LSE', 'Finish six edges with only M and U moves. Orient, then split, then permute.', 'Hoàn tất 6 cạnh chỉ bằng M và U: định hướng, tách, rồi hoán vị.')
+  ] },
+  { id: 'zz', lv: '04', n: { e: 'ZZ', v: 'ZZ' }, d: { e: 'Fix every edge orientation first, then finish with only R, L, U. Slow start, very fast finish.', v: 'Sửa hướng mọi cạnh trước, rồi hoàn tất chỉ bằng R, L, U. Khởi đầu chậm, kết thúc rất nhanh.' }, steps: [
+    S('EOLine', 'EOLine', 'Orient all 12 edges and place the two bottom edges that sit on the front-back line.', 'Định hướng cả 12 cạnh và đặt hai cạnh dưới nằm trên trục trước-sau.'),
+    S('F2L, left and right', 'F2L trái và phải', 'Build the left block, then the right block, with R, L, U only. Edge orientation keeps this free of F and B turns.', 'Dựng khối trái rồi khối phải chỉ với R, L, U. Cạnh đã đúng hướng nên không cần xoay F, B.'),
+    S('Last layer', 'Lớp cuối', 'Usually ZBLL in one step, or the 2-look alternative with COLL and EPLL.', 'Thường dùng ZBLL một bước, hoặc cách 2-look với COLL và EPLL.')
+  ] },
+  { id: 'petrus', lv: '05', n: { e: 'Petrus', v: 'Petrus' }, d: { e: 'Grow a 2×2×2, expand it to 2×2×3, fix edge orientation, then finish F2L. Strong for fewest moves.', v: 'Dựng 2×2×2, mở rộng thành 2×2×3, sửa hướng cạnh, rồi hoàn tất F2L. Mạnh ở thi ít nước.' }, steps: [
+    S('2×2×2 block', 'Khối 2×2×2', 'Build a 2×2×2 in one corner using intuition, aiming for as few moves as possible.', 'Dựng khối 2×2×2 ở một góc bằng trực giác, càng ít nước càng tốt.'),
+    S('Expand to 2×2×3', 'Mở rộng 2×2×3', 'Add the third layer of the block without breaking the 2×2×2.', 'Thêm lớp thứ ba cho khối mà không phá 2×2×2.'),
+    S('Orient edges', 'Định hướng cạnh', 'Fix every edge orientation so the rest of the solve needs no F or B turns.', 'Sửa hướng mọi cạnh để phần còn lại không cần xoay F, B.'),
+    S('Finish F2L and last layer', 'Hoàn tất F2L và lớp cuối', 'Complete the remaining pairs, then solve the last layer as in CFOP or ZZ.', 'Hoàn tất các cặp còn lại, rồi giải lớp cuối như CFOP hoặc ZZ.')
+  ] }
+];
+let done = store.get('done', {}), current = 'beginner';
+function drawMethod() {
+  const m = METHODS.find(x => x.id === current);
+  $$('.tab').forEach(t => t.setAttribute('aria-selected', t.dataset.id === current));
+  const tally = METHODS.map(x => x.steps.filter((_, i) => done[x.id + i]).length);
+  $$('.tab').forEach((t, i) => { t.querySelector('sup').textContent = `${tally[i]}/${METHODS[i].steps.length}`; });
+  $('#method').innerHTML = `<div class="lv">${m.lv} · ${bi(m.n)}</div><p class="sub">${bi(m.d)}</p>` + m.steps.map((s, i) => `
+    <div class="step ${done[m.id + i] ? 'ok' : ''}"><input class="chk" type="checkbox" data-k="${m.id + i}" ${done[m.id + i] ? 'checked' : ''} aria-label="Done"><div><h3>${i + 1}. ${bi(s.t)}</h3><p>${bi(s.d)}</p>
+    ${s.alg ? `<div class="alg"><code>${s.alg}</code><button class="play" data-alg="${s.alg}" data-lb="${s.t.e}">PLAY ▶</button></div>` : ''}</div></div>`).join('');
+}
+$('#tabs').innerHTML = METHODS.map(m => `<button class="tab" role="tab" data-id="${m.id}">${bi(m.n)} <sup style="font:700 11px var(--mono)"></sup></button>`).join('');
+$('#tabs').addEventListener('click', e => { const t = e.target.closest('.tab'); if (!t) return; current = t.dataset.id; history.replaceState(null, '', '#' + current); drawMethod(); });
+$('#method').addEventListener('change', e => {
+  if (!e.target.dataset.k) return;
+  done[e.target.dataset.k] = e.target.checked; store.set('done', done); drawMethod();
+});
+$('#method').addEventListener('click', e => { const b = e.target.closest('.play'); if (b) { loadAlg(b.dataset.alg, b.dataset.lb); showSim(); setTimeout(() => $('#bPlay').click(), REDUCED ? 0 : 700); } });
+
+/* ---------- library ---------- */
+const LIB = [
+  ['Trigger', 'Trigger', "R U R' U'", 'The building block of F2L and Sune.', 'Viên gạch nền của F2L và Sune.'],
+  ['Sune', 'OLL', "R U R' U R U2 R'", 'Three twisted corners; the first OLL to learn.', 'Ba góc xoay sai; OLL đầu tiên nên học.'],
+  ['Anti-Sune', 'OLL', "R U2 R' U' R U' R'", 'Mirror of Sune.', 'Đối xứng của Sune.'],
+  ['Cross: line', 'OLL', "F R U R' U' F'", 'Yellow line to yellow cross.', 'Từ đường thẳng vàng thành chữ thập vàng.'],
+  ['T-perm', 'PLL', "R U R' U' R' F R2 U' R' U' R U R' F'", 'Swaps two corners and two edges.', 'Đổi chỗ hai góc và hai cạnh.'],
+  ['Jb-perm', 'PLL', "R U R' F' R U R' U' R' F R2 U' R' U'", 'Swaps two adjacent corners and two edges.', 'Đổi hai góc kề nhau và hai cạnh.'],
+  ['Y-perm', 'PLL', "F R U' R' U' R U R' F' R U R' U' R' F R F'", 'Swaps two diagonal corners and two edges.', 'Đổi hai góc chéo và hai cạnh.'],
+  ['Ua-perm', 'PLL', "R U' R U R U R U' R' U' R2", 'Cycles three edges.', 'Hoán vị vòng ba cạnh.'],
+  ['Ub-perm', 'PLL', "R2 U R U R' U' R' U' R' U R'", 'Cycles three edges the other way.', 'Hoán vị vòng ba cạnh theo chiều ngược lại.'],
+  ['H-perm', 'PLL', "M2 U M2 U2 M2 U M2", 'Swaps two opposite pairs of edges.', 'Đổi hai cặp cạnh đối diện.'],
+  ['Z-perm', 'PLL', "M' U M2 U M2 U M' U2 M2", 'Swaps two adjacent pairs of edges.', 'Đổi hai cặp cạnh kề nhau.'],
+  ['Corner swap', 'PLL', "U R U' L' U R' U' L", 'Beginner corner cycle.', 'Hoán vị góc cho người mới.']
+];
+let filter = 'all';
+function drawLib() {
+  const q = $('#q').value.trim().toLowerCase();
+  const rows = LIB.filter(r => (filter === 'all' || r[1] === filter) && (!q || (r[0] + r[1] + r[2] + r[3] + r[4]).toLowerCase().includes(q)));
+  $('#lib').innerHTML = rows.length ? rows.map(r => `<div class="row"><b>${r[0]}</b><small>${bi({ e: r[3], v: r[4] })}</small><span class="t ${r[1]}">${r[1]}</span><div class="alg"><code>${r[2]}</code></div><button class="play" data-alg="${r[2]}" data-lb="${r[0]}">LOAD ▶</button></div>`).join('') : `<p class="sub">${bi({ e: 'No match.', v: 'Không có kết quả.' })}</p>`;
+}
+$('#q').oninput = drawLib;
+$$('.chip').forEach(b => b.onclick = () => { filter = b.dataset.f; $$('.chip').forEach(c => c.setAttribute('aria-pressed', c === b)); drawLib(); });
+$('#lib').addEventListener('click', e => { const b = e.target.closest('.play'); if (b) { loadAlg(b.dataset.alg, b.dataset.lb); showSim(); } });
+
+/* ---------- timer ---------- */
+const HOLD_MS = 300, AXIS = { R: 0, L: 0, U: 1, D: 1, F: 2, B: 2 };
+let times = store.get('times', []), scr = '', tState = 'idle', tStart = 0, holdTimer = 0, raf = 0;
+const fmt = ms => { const s = ms / 1000; return s >= 60 ? `${Math.floor(s / 60)}:${(s % 60).toFixed(2).padStart(5, '0')}` : s.toFixed(2); };
+const avg = n => { if (times.length < n) return null; const s = times.slice(-n).sort((a, b) => a - b).slice(1, -1); return s.reduce((a, b) => a + b, 0) / s.length; };
+function newScramble() {
+  const out = []; let lastAxis = -1;
+  while (out.length < 20) {
+    const f = 'RLUDFB'[Math.random() * 6 | 0];
+    if (AXIS[f] === lastAxis) continue;
+    lastAxis = AXIS[f]; out.push(f + ['', "'", '2'][Math.random() * 3 | 0]);
+  }
+  scr = out.join(' '); $('#scr').textContent = scr;
+  
+}
+function showScramble() {
+  resetCube(); scr.split(' ').forEach(turnNow);
+  P.gen++; Object.assign(P, { steps: [], done: 0, queued: 0, label: 'Scramble' }); drawHud(); showSim();
+}
+function drawStats() {
+  const best = times.length ? Math.min(...times) : null, a5 = avg(5), a12 = avg(12);
+  $('#sBest').textContent = best == null ? '–' : fmt(best); $('#sA5').textContent = a5 == null ? '–' : fmt(a5);
+  $('#sA12').textContent = a12 == null ? '–' : fmt(a12); $('#sN').textContent = times.length;
+  $('#hist').textContent = times.slice(-12).reverse().map(fmt).join('  ·  ');
+}
+const setT = s => { tState = s; $('#pad').dataset.s = s; };
+function press() {
+  if (tState === 'running') {
+    cancelAnimationFrame(raf); const t = performance.now() - tStart;
+    $('#time').textContent = fmt(t); times.push(t); store.set('times', times); setT('idle'); drawStats(); newScramble(); return;
+  }
+  if (tState !== 'idle') return;
+  setT('holding'); $('#time').textContent = '0.00';
+  holdTimer = setTimeout(() => { if (tState === 'holding') setT('ready'); }, HOLD_MS);
+}
+function release() {
+  clearTimeout(holdTimer);
+  if (tState === 'ready') {
+    setT('running'); tStart = performance.now();
+    const tick = () => { $('#time').textContent = fmt(performance.now() - tStart); raf = requestAnimationFrame(tick); }; tick();
+  } else if (tState === 'holding') setT('idle');
+}
+const pad = $('#pad');
+pad.addEventListener('pointerdown', e => { e.preventDefault(); press(); });
+pad.addEventListener('pointerup', release);
+pad.addEventListener('pointerleave', () => { if (tState === 'holding') release(); });
+const typing = e => e.target.closest('input,select,textarea,button');
+const held = new Set(), pend = [];
+let simInView = false;
+const drawPend = () => { $('#pend').textContent = pend.join(' '); };
+function runPending() {
+  if (!pend.length) return;
+  const seq = pend.splice(0); drawPend(); if (coach.i >= 0) coach.seen.push(...seq);
+  P.gen++; Object.assign(P, { steps: seq, done: 0, queued: 0, label: 'Free play' }); drawHud(); $('#bPlay').click();
+}
+const keyKind = e => {
+  if (e.key === "'") return 'prime';
+  if (e.key === '2') return 'double';
+  const m = /^Key([A-Z])$/.exec(e.code);
+  return m && MOVES[m[1]] ? m[1] : null;
+};
+new IntersectionObserver(([en]) => { simInView = en.isIntersecting; }, { threshold: .35 }).observe($('#stage'));
+addEventListener('keydown', e => {
+  if (e.code === 'Space') { if (document.body.dataset.view !== 'timer') return; if (tState === 'running' || !typing(e)) { e.preventDefault(); if (!e.repeat) press(); } return; }
+  if (e.key === 'Escape') { pend.length = 0; drawPend(); return; }
+  if (!simInView || e.metaKey || e.ctrlKey || e.altKey || e.target.closest('input,select,textarea')) return;
+  const kind = keyKind(e); if (!kind) return;
+  e.preventDefault(); if (e.repeat) return;
+  held.add(e.code);
+  if (kind === 'prime' || kind === 'double') {
+    const i = pend.length - 1; if (i < 0) return;
+    pend[i] = kind === 'double' ? pend[i][0] + '2' : pend[i].endsWith("'") ? pend[i][0] : pend[i][0] + "'";
+  } else pend.push(kind + (e.shiftKey ? "'" : ''));
+  drawPend();
+});
+addEventListener('keyup', e => {
+  if (e.code === 'Space' && !typing(e)) release();
+  if (held.delete(e.code) && !held.size) runPending();
+});
+addEventListener('blur', () => { held.clear(); runPending(); });
+$('#bNew').onclick = newScramble;
+$('#bShow').onclick = showScramble;
+$('#bDel').onclick = () => { times.pop(); store.set('times', times); drawStats(); };
+$('#bClr').onclick = () => { if (times.length && confirm($('#lang').dataset.l === 'vi' ? 'Xoá toàn bộ thời gian?' : 'Delete all times?')) { times = []; store.set('times', times); drawStats(); } };
+
+/* ---------- language, boot ---------- */
+function setLang(l) {
+  document.body.dataset.l = l; document.documentElement.lang = l; $('#lang').dataset.l = l; store.set('lang', l);
+  $('#q').placeholder = l === 'vi' ? 'Tìm thuật toán' : 'Search algorithms';
+  $('#pend').dataset.ph = l === 'vi' ? 'GIỮ PHÍM R U F… RỒI THẢ' : 'HOLD KEYS R U F… THEN RELEASE';
+}
+$('#lang').onclick = () => setLang(document.body.dataset.l === 'en' ? 'vi' : 'en');
+setLang(store.get('lang', /^vi/i.test(navigator.language) ? 'vi' : 'en'));
+const hash = location.hash.slice(1);
+if (METHODS.some(m => m.id === hash)) { current = hash; }
+/* ---------- onboarding & course ---------- */
+const icon = k => $(`nav a[href="#${k}"] .ic`).outerHTML;
+const T = (e, v) => ({ e, v });
+const METHOD_COLORS = ['#4fc36e', '#3d9bf0', '#f5922b', '#f0584c', '#ffd500'];
+const methodOpts = recommend => METHODS.map((m, i) => ({
+  v: m.id, c: METHOD_COLORS[i], ic: 'methods', s: recommend ? m.d : null,
+  t: m.id === 'beginner' ? T('Layer by Layer' + (recommend ? ' (Recommended)' : ''), 'Giải từng tầng' + (recommend ? ' (Khuyên dùng)' : '')) : m.n
+}));
+const WIZ = {
+  goal: { q: T('What brings you here?', 'Bạn muốn làm gì?'), next: a => a.goal === 'learn' ? 'heard' : 'proMethod', opts: [
+    { v: 'learn', t: T('I want to learn how to solve the cube', 'Tôi muốn học cách giải Rubik'), s: T('Start from zero, one step at a time', 'Bắt đầu từ con số 0, từng bước một'), ic: 'course', c: '#4fc36e' },
+    { v: 'speed', t: T('I can solve it and want to get faster', 'Tôi đã biết giải, muốn giải nhanh hơn'), s: T('Algorithm drills and the timer', 'Luyện công thức và đồng hồ'), ic: 'timer', c: '#f0584c' }] },
+  heard: { q: T('Have you heard of any solving method?', 'Bạn đã từng nghe về phương pháp giải nào chưa?'), next: () => 'method', opts: [
+    { v: 'none', t: T('Not yet', 'Chưa'), s: T('No problem, we begin with the basics', 'Không sao, mình bắt đầu từ cơ bản'), ic: 'home', c: '#9a9a8e' },
+    ...methodOpts(false).map(o => ({ ...o, ic: 'sim' }))] },
+  method: { q: T('Which method do you want to learn?', 'Bạn muốn học phương pháp nào?'), next: () => null, opts: methodOpts(true) },
+  proMethod: { q: T('Which method do you use?', 'Bạn đang dùng phương pháp nào?'), next: () => 'target', opts: methodOpts(false) },
+  target: { q: T('What time are you aiming for?', 'Bạn nhắm tới mốc thời gian nào?'), next: () => null, opts: [60, 30, 20, 10].map((s, i) => ({ v: String(s), t: T(`Under ${s} seconds`, `Dưới ${s} giây`), ic: 'timer', c: METHOD_COLORS[i] })) }
+};
+let wizStack = [], wizAns = {};
+function wizShow(id) {
+  const step = WIZ[id]; wizStack.push(id);
+  $('#wizQ').innerHTML = bi(step.q);
+  $('#wOpts').innerHTML = step.opts.map(o => `<button class="opt" data-v="${o.v}"><span class="oi" style="--c:${o.c}">${icon(o.ic)}</span><span class="ot">${bi(o.t)}${o.s ? `<small>${bi(o.s)}</small>` : ''}</span></button>`).join('');
+  $('#wFill').style.width = `${wizStack.length / 3 * 100}%`;
+  $('#wOpts .opt').focus();
+}
+function openWizard() { wizStack = []; wizAns = {}; $('#wiz').hidden = false; wizShow('goal'); }
+const closeWizard = () => { $('#wiz').hidden = true; };
+function finishWizard() {
+  store.set('profile', wizAns); store.set('lessons', {}); closeWizard(); refreshStart();
+  if (location.hash === '#course') drawCourse(); else location.hash = 'course';
+}
+$('#wOpts').onclick = e => {
+  const b = e.target.closest('.opt'); if (!b) return;
+  const id = wizStack[wizStack.length - 1]; wizAns[id] = b.dataset.v;
+  const nextId = WIZ[id].next(wizAns);
+  if (nextId) wizShow(nextId); else finishWizard();
+};
+$('#wBack').onclick = () => { if (wizStack.length > 1) { wizStack.pop(); wizShow(wizStack.pop()); } };
+$('#wClose').onclick = closeWizard;
+addEventListener('keydown', e => { if (e.key === 'Escape' && !$('#wiz').hidden) closeWizard(); });
+const refreshStart = () => { $('#start').innerHTML = bi(store.get('profile', null) ? T('Continue my course', 'Tiếp tục lộ trình') : T('Get Started', 'Bắt đầu')); };
+$('#start').onclick = () => { if (store.get('profile', null)) location.hash = 'course'; else openWizard(); };
+
+function buildPlan(p) {
+  const plan = [], add = (id, t, s, act) => plan.push({ id, t, s, ...act });
+  const m = METHODS.find(x => x.id === (p.method || p.proMethod)) || METHODS[0];
+  if (p.goal === 'learn') {
+    add('not', T('Learn the notation', 'Học ký hiệu'),
+      T(`Each letter turns one face a quarter clockwise as you look straight at it: R right, L left, U up, D down, F front, B back. Hold Shift for the reverse (R'), and tap 2 while holding a letter for a half turn.`, `Mỗi chữ xoay một mặt 90° theo chiều kim đồng hồ khi bạn nhìn thẳng vào: R phải, L trái, U trên, D dưới, F trước, B sau. Giữ Shift để xoay ngược (R'), bấm 2 khi đang giữ một chữ để xoay 180°.`),
+      { k: 'moves', go: 'sim', need: ['R', "R'", 'U2', 'F'], more: T('Click the keys under Notation, or type on your keyboard.', 'Bấm các phím ở mục Ký hiệu, hoặc gõ trên bàn phím.') });
+    add('feel', T('Get comfortable with the cube', 'Làm quen với khối'),
+      T(`Hold R and U together, then let go: the cube runs them in order. Now try the four-move trigger R U R' U'. It is fine to type it in two goes.`, `Giữ R và U cùng lúc rồi thả ra: khối chạy theo thứ tự. Giờ thử chuỗi bốn nước R U R' U'. Gõ làm hai lần cũng được.`),
+      { k: 'seq', go: 'sim', seq: "R U R' U'", more: T('The trigger shows up in almost every method.', 'Chuỗi này xuất hiện trong gần như mọi phương pháp.') });
+    m.steps.forEach((s, i) => {
+      const act = s.alg ? { k: 'solved', go: 'sim', alg: s.alg } : m.id === 'beginner' ? { k: 'read', go: 'sim', stage: BEGINNER_STAGES[i] } : { k: 'read', method: m.id };
+      const more = s.alg ? T('Press Show me to watch it, then type it yourself.', 'Bấm Xem mẫu để xem, rồi tự gõ lại.') : m.id === 'beginner' ? T('Press Show me to watch this stage on a scrambled cube.', 'Bấm Xem mẫu để xem bước này trên một khối đã xáo.') : null;
+      add(m.id + i, T(`${i + 1}. ${s.t.e}`, `${i + 1}. ${s.t.v}`), s.d, { ...act, more });
+    });
+    [...new Set(m.steps.filter(s => s.alg).map(s => s.alg))].forEach((alg, i) => add('drill' + i, T('Drill: ' + alg, 'Luyện: ' + alg),
+      T('The cube is set to the state this algorithm fixes. Type it to solve the cube.', 'Khối được đặt về trạng thái mà công thức này giải. Hãy gõ nó để giải khối.'), { k: 'solved', go: 'sim', alg }));
+    add('t5', T('Solve it five times on the timer', 'Tự giải 5 lần với đồng hồ'), T('Slow is fine. Use the scramble shown, hold space until green, release to start, press space to stop.', 'Chậm cũng được. Làm theo scramble đã cho, giữ phím cách tới khi xanh, thả để bắt đầu, bấm phím cách để dừng.'), { k: 'timer', go: 'timer', n: 5 });
+  } else {
+    add('rev', T('Review ' + m.n.e, 'Ôn lại ' + m.n.v), m.d, { k: 'read', method: m.id });
+    add('pll', T('Drill the PLL algorithms', 'Luyện công thức PLL'), T('Pick one in the library, press LOAD, and type it until your fingers know it.', 'Chọn một công thức trong thư viện, bấm LOAD và gõ tới khi tay thuộc.'), { k: 'read', go: 'library', filter: 'PLL' });
+    add('oll', T('Drill the OLL algorithms', 'Luyện công thức OLL'), T('Start with the 2-look cases, then add the rest one at a time.', 'Bắt đầu với các trường hợp 2-look rồi thêm dần từng cái.'), { k: 'read', go: 'library', filter: 'OLL' });
+    add('time', T(`Get under ${p.target} seconds`, `Đạt dưới ${p.target} giây`), T('Solve on the timer until a single solve beats your goal.', 'Giải với đồng hồ tới khi có một lần nhanh hơn mục tiêu.'), { k: 'goal', go: 'timer', target: +p.target });
+  }
+  return plan;
+}
+function drawCourse() {
+  const p = store.get('profile', null), box = $('#planBox');
+  if (!p) { box.innerHTML = `<p class="sub">${bi(T('Answer three quick questions and we will build your course.', 'Trả lời vài câu hỏi ngắn, mình sẽ tạo lộ trình cho bạn.'))}</p><button class="btn go cta" data-act="wiz">${bi(T('Get Started', 'Bắt đầu'))}</button>`; return; }
+  const plan = buildPlan(p), done = store.get('lessons', {}), count = plan.filter(l => done[l.id]).length;
+  const m = METHODS.find(x => x.id === (p.method || p.proMethod)) || METHODS[0];
+  const tip = p.goal === 'learn' && m.id !== 'beginner' ? `<div class="tip"><span>${bi(T('New to cubing? Layer by Layer is the gentlest start.', 'Mới chơi Rubik? Giải từng tầng là cách dễ vào nhất.'))}</span><button class="play" data-act="beginner">${bi(T('SWITCH', 'ĐỔI'))}</button></div>` : '';
+  box.innerHTML = `<div class="chips"><span class="pill">${bi(p.goal === 'learn' ? T('Learning from scratch', 'Học từ đầu') : T('Speedsolving', 'Giải nhanh'))}</span><span class="pill">${bi(m.id === 'beginner' ? T('Layer by Layer', 'Giải từng tầng') : m.n)}</span>${p.target ? `<span class="pill">Sub-${p.target}s</span>` : ''}</div>
+    <div class="ctl" style="margin:0 0 14px"><button class="btn go" data-act="go">${bi(T('Continue', 'Tiếp tục'))} ▶</button></div><div class="prog"><i style="width:${count / plan.length * 100}%"></i></div><p class="sub">${count} / ${plan.length}</p>${tip}
+    ${plan.map((l, i) => `<div class="lesson ${done[l.id] ? 'ok' : ''}"><input class="chk" type="checkbox" data-id="${l.id}" ${done[l.id] ? 'checked' : ''} aria-label="Done"><div><b>${bi(l.t)}</b><p>${bi(l.s)}</p></div><button class="play" data-i="${i}">${bi(T('START ▶', 'BẮT ĐẦU ▶'))}</button></div>`).join('')}
+    <div class="ctl"><button class="btn" data-act="wiz">${bi(T('Change my answers', 'Đổi câu trả lời'))}</button></div>`;
+}
+$('#planBox').addEventListener('click', e => {
+  const act = e.target.closest('[data-act]');
+  if (act) {
+    if (act.dataset.act === 'wiz') openWizard();
+    else if (act.dataset.act === 'go') { const plan = buildPlan(store.get('profile', {})), d = store.get('lessons', {}), i = plan.findIndex(l => !d[l.id]); startCoach(i < 0 ? 0 : i); }
+    else { const p = store.get('profile', {}); p.method = 'beginner'; store.set('profile', p); drawCourse(); }
+    return;
+  }
+  const b = e.target.closest('[data-i]'); if (!b) return;
+  startCoach(+b.dataset.i);
+});
+$('#planBox').addEventListener('change', e => {
+  const id = e.target.dataset.id; if (!id) return;
+  const done = store.get('lessons', {}); done[id] = e.target.checked; store.set('lessons', done); drawCourse();
+});
+refreshStart();
+/* ---------- coach ---------- */
+const coach = { i: -1, plan: [], seen: [], advancing: false, reload: false, timerBase: 0, fin: false };
+const BEGINNER_STAGES = [[0, 1], [1, 5], [5, 9], [5, 9], [9, 10], [10, 11], [11, 12], [12, 13]];
+const markDone = id => { const d = store.get('lessons', {}); d[id] = true; store.set('lessons', d); };
+const isSolved = () => readState().every((v, i) => v === SOLVED[i]);
+const taskBtn = l => !['read'].includes(l.k);
+function showLesson() {
+  const l = coach.plan[coach.i];
+  Object.assign(coach, { seen: [], advancing: false, reload: false, timerBase: times.length, fin: !l });
+  $('#coach').hidden = false; document.body.classList.add('coaching');
+  if (!l) {
+    $('#cStep').textContent = '✓'; $('#cTitle').innerHTML = bi(T('Course complete', 'Hoàn thành lộ trình'));
+    $('#cText').innerHTML = bi(T('Keep the habit going on the timer and in the library.', 'Hãy giữ thói quen luyện với đồng hồ và thư viện.'));
+    $('#cTasks').innerHTML = ''; $('#cShow').hidden = true; $('#cNext').className = 'btn go'; $('#cNext').innerHTML = bi(T('Back to course', 'Về lộ trình')); return;
+  }
+  $('#cStep').textContent = `${coach.i + 1} / ${coach.plan.length}`;
+  $('#cTitle').innerHTML = bi(l.t);
+  $('#cText').innerHTML = bi(l.s) + (l.more ? '<br><br>' + bi(l.more) : '');
+  $('#cShow').hidden = !(l.alg || l.stage);
+  $('#cNext').className = 'btn' + (taskBtn(l) ? '' : ' go');
+  $('#cNext').innerHTML = bi(taskBtn(l) ? T('Skip', 'Bỏ qua') : T('Next ▶', 'Tiếp ▶'));
+  if (l.filter) { filter = l.filter; $$('.chip').forEach(c => c.setAttribute('aria-pressed', c.dataset.f === filter)); drawLib(); }
+  if (l.alg) loadAlg(l.alg, l.alg);
+  else if (l.go === 'sim') { resetCube(); Object.assign(P, { steps: [], done: 0, queued: 0, label: 'Free play' }); P.gen++; drawHud(); }
+  const dest = l.method || l.go;
+  if (location.hash.slice(1) !== dest) location.hash = dest; else route();
+  evaluate();
+}
+function evaluate() {
+  const l = coach.plan[coach.i];
+  if (!l || coach.fin || $('#coach').hidden) return;
+  const idle = !!cube && !active && !queue.length, run = coach.seen.join(' ');
+  const since = times.slice(coach.timerBase);
+  let list = [];
+  if (l.k === 'moves') list = l.need.map(t => ({ t: T('Turn ' + t, 'Xoay ' + t), ok: coach.seen.includes(t) }));
+  else if (l.k === 'seq') list = [{ t: T('Type ' + l.seq, 'Gõ ' + l.seq), ok: run.includes(l.seq) }];
+  else if (l.k === 'solved') list = [{ t: T('Type the algorithm so the cube is solved again', 'Gõ công thức để khối về trạng thái đã giải'), ok: idle && coach.seen.length > 0 && isSolved() }];
+  else if (l.k === 'timer') list = [{ t: T(`Finish ${l.n} solves on the timer (${Math.min(since.length, l.n)}/${l.n})`, `Hoàn thành ${l.n} lần giải trên đồng hồ (${Math.min(since.length, l.n)}/${l.n})`), ok: since.length >= l.n }];
+  else if (l.k === 'goal') list = [{ t: T(`Get one solve under ${l.target} seconds`, `Có một lần giải dưới ${l.target} giây`), ok: since.some(x => x < l.target * 1000) }];
+  $('#cTasks').innerHTML = list.map(x => `<li class="${x.ok ? 'ok' : ''}">${bi(x.t)}</li>`).join('');
+  if (coach.reload && idle) { coach.reload = false; loadAlg(l.alg, l.alg); coach.seen = []; }
+  if (list.length && list.every(x => x.ok) && !coach.advancing) {
+    coach.advancing = true; markDone(l.id);
+    $('#cNext').className = 'btn go'; $('#cNext').innerHTML = bi(T('✓ Great, next ▶', '✓ Tốt lắm, tiếp ▶'));
+    setTimeout(() => { if (coach.advancing && coach.plan[coach.i] === l) nextLesson(); }, 1600);
+  }
+}
+function nextLesson() {
+  const l = coach.plan[coach.i];
+  if (coach.fin) { quitCoach(); location.hash = 'course'; return; }
+  if (l && l.k === 'read') markDone(l.id);
+  coach.i++; showLesson();
+}
+function quitCoach() { coach.i = -1; $('#coach').hidden = true; document.body.classList.remove('coaching'); }
+function startCoach(i) { const p = store.get('profile', null); if (!p) return; coach.plan = buildPlan(p); coach.i = i; showLesson(); }
+function demoStage([a, b]) {
+  resetCube();
+  Array.from({ length: 22 }, () => MOVE_NAMES[Math.random() * 18 | 0]).forEach(turnNow);
+  const raw = solveBeginner(readState()), cut = k => k ? raw.marks[k - 1] : 0;
+  raw.slice(0, cut(a)).forEach(turnNow);
+  P.gen++; Object.assign(P, { steps: raw.slice(cut(a), cut(b)), done: 0, queued: 0, label: document.body.dataset.l === 'vi' ? 'Minh hoạ' : 'Demo' });
+  drawHud(); $('#bPlay').click();
+}
+$('#cShow').onclick = () => {
+  const l = coach.plan[coach.i]; if (!l) return;
+  if (l.alg) { loadAlg(l.alg, l.alg); $('#bPlay').click(); coach.reload = true; } else if (l.stage) demoStage(l.stage);
+};
+$('#cNext').onclick = nextLesson;
+$('#cQuit').onclick = quitCoach;
+setInterval(evaluate, 350);
+const setPanel = (cls, on) => { document.body.classList.toggle(cls, on); store.set(cls, on); };
+['nohelp', 'nonote'].forEach(c => document.body.classList.toggle(c, store.get(c, false)));
+$('#helpX').onclick = () => setPanel('nohelp', true); $('#helpOpen').onclick = () => setPanel('nohelp', false);
+$('#noteX').onclick = () => setPanel('nonote', true); $('#noteOpen').onclick = () => setPanel('nonote', false);
+
+const VIEWS = ['home', 'course', 'sim', 'methods', 'library', 'timer'];
+function route() {
+  const h = location.hash.slice(1), isMethod = METHODS.some(m => m.id === h);
+  const view = VIEWS.includes(h) ? h : isMethod ? 'methods' : 'home';
+  document.body.dataset.view = view;
+  document.body.classList.toggle('simpage', view === 'sim');
+  if (isMethod) { current = h; drawMethod(); }
+  if (view === 'course') drawCourse();
+  $$('nav a').forEach(a => a.classList.toggle('on', a.getAttribute('href') === '#' + view));
+  scrollTo(0, 0);
+}
+addEventListener('hashchange', route);
+$('#simBack').onclick = () => { history.replaceState(null, '', location.pathname + location.search); route(); };
+initGL();
+route();
+drawHud(); drawMethod(); drawLib(); drawStats(); newScramble();
+})();
+</script>
+</body>
+</html>
