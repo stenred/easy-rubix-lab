@@ -45,7 +45,7 @@ h1{font:900 clamp(5rem,14.5vw,13rem)/.8 var(--disp);margin:clamp(48px,9vw,120px)
 h1 span{display:block}h1 .o{-webkit-text-stroke:2px var(--ink);color:transparent;padding-left:.35em}h1 .a{color:var(--acid)}
 .lead{max-width:34ch;font-size:19px;color:var(--ink)}
 section{padding-top:clamp(72px,10vw,140px)}
-.num{font:900 clamp(6rem,12vw,10rem)/.75 var(--disp);-webkit-text-stroke:1.5px var(--dim);color:transparent;margin:0 0 8px -.04em}
+
 h2{font:900 clamp(2.4rem,5vw,4rem)/.9 var(--disp);text-transform:uppercase;margin:0 0 20px}
 p.sub{max-width:52ch;color:var(--dim);margin:0 0 32px}
 .mv{display:grid;grid-template-columns:3.2rem auto 1fr;gap:6px 18px;align-items:center;padding:10px 0;border-top:1px solid var(--line)}
@@ -97,7 +97,7 @@ h1{font:900 clamp(3.2rem,9vw,7rem)/.98 var(--disp);letter-spacing:-.03em;text-tr
 h1 .o{-webkit-text-stroke:0;color:var(--ink);padding:0}
 .lead{font-size:20px;font-weight:700;color:var(--dim)}
 section{margin-top:24px;padding:clamp(20px,3.5vw,44px);background:var(--panel);border-radius:20px}
-.num{font:800 13px var(--body);-webkit-text-stroke:0;color:#fff;background:var(--acid);display:inline-block;padding:4px 14px;border-radius:999px;margin:0 0 14px}
+
 h2{font:900 clamp(1.9rem,4vw,2.9rem)/1.05 var(--disp);text-transform:none;letter-spacing:-.02em}
 p.sub{color:var(--dim);font-weight:600}
 .btn{border:0;border-radius:12px;background:var(--card);color:var(--ink);font:800 14px var(--body);letter-spacing:0;text-transform:none;box-shadow:0 3px 0 rgba(0,0,0,.28)}
@@ -145,7 +145,7 @@ body.simpage{overflow:hidden}body.simpage #sim{display:block}
 #sim .sim{position:absolute;inset:0;display:block;border-radius:0}
 #sim #stage{position:absolute;inset:0;min-height:0}
 #sim #hud{position:absolute;left:50%;bottom:calc(16px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);width:min(680px,calc(100% - 24px));gap:8px;padding:16px 18px;border-radius:20px;background:color-mix(in srgb,var(--card) 92%,transparent);backdrop-filter:blur(10px)}
-#simBack{position:absolute;top:calc(14px + env(safe-area-inset-top,0px));left:14px;z-index:3}
+
 #sim .help,#sim .mvbox{position:absolute;z-index:3;max-width:min(440px,calc(100% - 28px))}
 #sim .help{top:calc(14px + env(safe-area-inset-top,0px));right:14px}
 #sim .mvbox{top:calc(70px + env(safe-area-inset-top,0px));left:14px;max-height:calc(100% - 330px);overflow:auto}
@@ -153,7 +153,7 @@ body.simpage{overflow:hidden}body.simpage #sim{display:block}
 #sim details[open]>summary{margin-bottom:8px}
 @media (max-width:600px){#sim #hud{padding:12px 14px}#pend{font-size:2.2rem}}
 body.simpage #sim{display:grid;grid-template-columns:minmax(250px,320px) minmax(0,1fr) minmax(250px,340px);grid-template-rows:auto minmax(0,1fr);gap:14px;padding:calc(14px + env(safe-area-inset-top,0px)) 14px calc(14px + env(safe-area-inset-bottom,0px))}
-#simBack{position:static;grid-column:1;grid-row:1;justify-self:start}
+
 #sim .mvbox{position:static;inset:auto;grid-column:1;grid-row:2;max-width:none;max-height:none;overflow:auto}
 #sim .help{position:static;inset:auto;grid-column:3;grid-row:1/3;max-width:none;overflow:auto}
 #sim .sim{position:static;inset:auto;grid-column:2;grid-row:1/3;display:flex;flex-direction:column;gap:12px;background:none;min-height:0}
@@ -167,7 +167,7 @@ body.simpage #sim{display:grid;grid-template-columns:minmax(250px,320px) minmax(
 #sim #pend{font-size:clamp(1.8rem,3vw,2.6rem);min-height:1.2em}
 #sim #hudSteps{min-height:1.6em;max-height:7.2em;overflow:auto;position:relative}
 @media (max-width:900px){body.simpage #sim{display:flex;flex-direction:column;overflow-y:auto;gap:12px}
-#simBack{align-self:flex-start;flex:none}
+
 #sim .sim{flex:none}
 #sim #stage{flex:none;height:54vh}
 #sim .help{order:3}#sim .mvbox{order:4}#sim .help,#sim .mvbox{flex:none;overflow:visible}}
@@ -184,8 +184,8 @@ nav a.on{background:var(--card);color:var(--ink);box-shadow:inset 4px 0 0 var(--
 main{max-width:none;margin:0 0 0 var(--side);padding:20px clamp(16px,3vw,40px) 60px}
 main>section:not(#sim){display:none;max-width:1040px;margin:0 auto}
 body[data-view=home] #home,body[data-view=methods] #methods,body[data-view=library] #library,body[data-view=timer] #timer{display:block}
-.num{display:none}
-#sim{left:var(--side)}#simBack{display:none}#sim .mvbox{grid-row:1/3}
+
+#sim{left:var(--side)}#sim .mvbox{grid-row:1/3}
 .tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;margin-top:32px}
 .tile{display:block;padding:20px;border-radius:16px;background:var(--card);color:var(--ink);text-decoration:none;box-shadow:0 4px 0 rgba(0,0,0,.25);transition:transform .15s}
 .tile:hover{transform:translateY(-3px)}.tile:active{transform:translateY(2px);box-shadow:none}
@@ -341,8 +341,6 @@ nav a.on .ic{animation:bounce .6s cubic-bezier(.3,1.6,.5,1)}
 .tok.next{animation:blink 1.2s ease-in-out infinite}
 #pad[data-s=running] #time{animation:tick 1s ease-in-out infinite}
 #pad[data-s=ready]{animation:ready 1s ease-in-out infinite}
-#cheer{position:absolute;left:50%;top:16%;z-index:3;transform:translateX(-50%) scale(.5);opacity:0;pointer-events:none;white-space:nowrap;font:900 clamp(2.2rem,5vw,3.8rem) var(--disp);background-image:linear-gradient(90deg,#e8776b,#eda35a,#e9c25a,#6dbb85,#6aa7e0);-webkit-background-clip:text;background-clip:text;color:transparent;filter:drop-shadow(0 4px 18px rgba(0,0,0,.35))}
-#cheer.show{animation:cheer 2s cubic-bezier(.2,.8,.2,1) both}
 @keyframes drift{from{transform:translate3d(-2%,-1%,0) scale(1)}to{transform:translate3d(3%,2%,0) scale(1.12)}}
 @keyframes shimmer{from{background-position:0 0}to{background-position:200% 0}}
 @keyframes float{0%,100%{transform:rotate(-3deg) translateY(0)}50%{transform:rotate(-1deg) translateY(-12px)}}
@@ -354,7 +352,27 @@ nav a.on .ic{animation:bounce .6s cubic-bezier(.3,1.6,.5,1)}
 @keyframes blink{50%{filter:brightness(1.3)}}
 @keyframes tick{50%{text-shadow:0 0 26px color-mix(in srgb,var(--acid) 60%,transparent)}}
 @keyframes ready{50%{box-shadow:0 0 0 8px color-mix(in srgb,var(--acid) 22%,transparent)}}
-@keyframes cheer{0%{opacity:0;transform:translateX(-50%) scale(.5)}18%{opacity:1;transform:translateX(-50%) scale(1.1)}30%{transform:translateX(-50%) scale(1)}80%{opacity:1}100%{opacity:0;transform:translateX(-50%) translateY(-24px) scale(1)}}
+
+@property --acid{syntax:"<color>";inherits:true;initial-value:#7fb685}
+@property --shade{syntax:"<color>";inherits:true;initial-value:#4f8a5a}
+body{transition:--acid .6s ease,--shade .6s ease}
+nav{position:relative}
+.navpill{position:absolute;left:0;top:0;z-index:0;border-radius:16px;background:var(--card);box-shadow:inset 4px 0 0 var(--c,var(--acid)),0 3px 0 rgba(0,0,0,.14);opacity:0;pointer-events:none}
+.navpill.ready{transition:transform .55s cubic-bezier(.34,1.45,.5,1),width .3s,height .3s,opacity .2s}
+nav a{z-index:1;border-radius:16px}
+nav a:hover{background:color-mix(in srgb,var(--c) 12%,transparent)}
+nav a.on{background:transparent;box-shadow:none;color:var(--ink)}
+nav a.on:hover{background:transparent}
+nav a .ic{transition:transform .25s cubic-bezier(.3,1.5,.5,1),filter .3s}
+nav a:active .ic{transform:scale(.82)}
+nav a.on .ic{animation:iconpop .6s cubic-bezier(.3,1.5,.5,1);filter:drop-shadow(0 0 7px color-mix(in srgb,var(--c) 70%,transparent))}
+nav a>span{transform:translate(-8px,-50%);transition:opacity .18s,transform .25s cubic-bezier(.2,.8,.2,1)}
+nav a:hover>span,nav a:focus-visible>span{transform:translate(0,-50%)}
+.ripple{position:absolute;width:44px;height:44px;margin:-22px 0 0 -22px;border-radius:50%;background:var(--c);opacity:.35;pointer-events:none;animation:ripple .55s ease-out forwards}
+@keyframes ripple{to{transform:scale(2.2);opacity:0}}
+@keyframes iconpop{0%{transform:scale(.6) rotate(-18deg)}55%{transform:scale(1.25) rotate(8deg)}100%{transform:scale(1) rotate(0)}}
+
+.step,.row,.lesson{animation:none}
 </style>
 </head>
 <body data-l="en">
@@ -364,6 +382,7 @@ nav a.on .ic{animation:bounce .6s cubic-bezier(.3,1.6,.5,1)}
 <header>
   <a class="brand" href="#home" aria-label="easy-rubix-lab" title="easy-rubix-lab"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l8.5 4.5v9L12 21l-8.5-4.5v-9z"/><path d="M12 12l8.5-4.5M12 12 3.5 7.5M12 12v9"/></svg></a>
   <nav>
+    <i class="navpill" aria-hidden="true"></i>
     <a href="#home"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 11.5 12 4l9 7.5"/><path d="M5.5 10v9.5h5v-5h3v5h5V10"/></svg><span class="en">Home</span><span class="vi">Trang chủ</span></a>
     <a href="#course"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 21V4"/><path d="M5 4h12l-2.5 4L17 12H5"/></svg><span class="en">Course</span><span class="vi">Lộ trình</span></a>
     <a href="#sim"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l8.5 4.5v9L12 21l-8.5-4.5v-9z"/><path d="M12 12l8.5-4.5M12 12 3.5 7.5M12 12v9"/></svg><span class="en">Simulator</span><span class="vi">Mô phỏng</span></a>
@@ -391,15 +410,13 @@ nav a.on .ic{animation:bounce .6s cubic-bezier(.3,1.6,.5,1)}
 <section id="course"><h2><span class="en">Your course</span><span class="vi">Lộ trình của bạn</span></h2><div id="planBox"></div></section>
 
 <section id="sim" aria-label="3D simulator">
-  <button class="btn" id="simBack">← <span class="en">Back to guide</span><span class="vi">Về trang hướng dẫn</span></button>
   <details class="help" open><summary tabindex="-1"><span class="en">How to use</span><span class="vi">Cách dùng</span></summary><button class="x" id="helpX" aria-label="Hide">×</button>
   <p class="sub"><span class="en">Instant mode: every key turns the cube at once. Stack mode: keys pile up on screen, Enter runs them, Backspace removes the last one. Shift + a letter is the reverse (R'); in Stack mode tap ' or 2 to change the last move. Esc clears. Switch mode in Settings. The arrow keys or the arrow pad turn the whole cube to bring another face to the front.</span><span class="vi">Chế độ xoay ngay: bấm phím nào khối xoay luôn. Chế độ xếp hàng: các phím hiện trên màn hình, Enter để chạy, Backspace để xoá nước cuối. Shift + chữ là xoay ngược (R'); ở chế độ xếp hàng bấm ' hoặc 2 để đổi nước vừa nhập. Esc để xoá hết. Đổi chế độ trong Cài đặt. Phím mũi tên hoặc bảng mũi tên xoay cả khối để đưa mặt khác ra phía trước.</span></p>
   </details>
   <div class="sim">
     <div id="stage">
       <canvas id="gl" aria-label="Interactive cube. Drag to orbit."></canvas>
-      <button class="btn" id="noteOpen" aria-label="Notation">R U F</button><button class="btn" id="helpOpen" aria-label="How to use">?</button><div id="cheer" aria-live="polite"><span class="en">Solved!</span><span class="vi">Đã giải xong!</span></div>
-      <div id="orient" role="group" aria-label="Rotate whole cube · Xoay cả khối" title="Rotate whole cube · Xoay cả khối">
+      <button class="btn" id="noteOpen" aria-label="Notation">R U F</button><button class="btn" id="helpOpen" aria-label="How to use">?</button><div id="orient" role="group" aria-label="Rotate whole cube · Xoay cả khối" title="Rotate whole cube · Xoay cả khối">
         <button class="btn" data-r="x" aria-label="Up · Lên">↑</button>
         <button class="btn" data-r="y" aria-label="Left · Trái">←</button>
         <button class="btn" data-r="x'" aria-label="Down · Xuống">↓</button>
@@ -414,7 +431,7 @@ nav a.on .ic{animation:bounce .6s cubic-bezier(.3,1.6,.5,1)}
       <div class="ctl">
         <button class="btn" id="bReset">Reset</button>
         <button class="btn" id="bStep">Step</button>
-        <button class="btn go" id="bSolve"><span class="en">Solve</span><span class="vi">Giải</span></button><button id="bPlay" hidden></button><select class="btn" id="bMethod" aria-label="Method"><option value="beginner">Beginner (LBL)</option><option disabled>CFOP · sắp có / coming soon</option><option disabled>Roux · sắp có / coming soon</option><option disabled>ZZ · sắp có / coming soon</option><option disabled>Petrus · sắp có / coming soon</option></select>
+        <button class="btn go" id="bSolve"><span class="en">Solve</span><span class="vi">Giải</span></button><select class="btn" id="bMethod" aria-label="Method"><option value="beginner">Beginner (LBL)</option><option disabled>CFOP · sắp có / coming soon</option><option disabled>Roux · sắp có / coming soon</option><option disabled>ZZ · sắp có / coming soon</option><option disabled>Petrus · sắp có / coming soon</option></select>
         <select class="btn" id="bSpeed" aria-label="Speed"><option value=".5">0.5×</option><option value="1" selected>1×</option><option value="2">2×</option><option value="4">4×</option></select>
       </div>
     </div>
@@ -426,14 +443,12 @@ nav a.on .ic{animation:bounce .6s cubic-bezier(.3,1.6,.5,1)}
 </section>
 
 <section id="methods">
-  <div class="num">02</div>
   <h2><span class="en">Methods</span><span class="vi">Phương pháp</span></h2>
   <div class="tabs" role="tablist" id="tabs"></div>
   <div id="method"></div>
 </section>
 
 <section id="library">
-  <div class="num">03</div>
   <h2><span class="en">Algorithm library</span><span class="vi">Thư viện thuật toán</span></h2>
   <p class="sub"><span class="en">Selecting one sets the cube to the state that algorithm solves, so Play shows exactly what it does.</span><span class="vi">Chọn một thuật toán, khối sẽ về đúng trạng thái nó giải, bấm Play để xem nó làm gì.</span></p>
   <div class="bar">
@@ -447,7 +462,6 @@ nav a.on .ic{animation:bounce .6s cubic-bezier(.3,1.6,.5,1)}
 </section>
 
 <section id="timer">
-  <div class="num">04</div>
   <h2><span class="en">Timer</span><span class="vi">Đồng hồ</span></h2>
   <div id="scr"></div>
   <div id="pad" data-s="idle" role="button" tabindex="0" aria-label="Timer. Hold space or press and hold, release to start, tap to stop.">
@@ -495,7 +509,13 @@ const $ = (s, r = document) => r.querySelector(s);
 const $$ = (s, r = document) => [...r.querySelectorAll(s)];
 const bi = o => `<span class="en">${o.e}</span><span class="vi">${o.v}</span>`;
 const store = {
-  get(k, fallback) { try { const raw = localStorage.getItem('rg.' + k); return raw ? JSON.parse(raw) : fallback; } catch (err) { return fallback; } },
+  get(k, fallback) {
+    try {
+      const raw = localStorage.getItem('rg.' + k); if (!raw) return fallback;
+      const v = JSON.parse(raw);
+      return fallback === null || (v !== null && typeof v === typeof fallback && Array.isArray(v) === Array.isArray(fallback)) ? v : fallback;
+    } catch (err) { return fallback; }
+  },
   set(k, v) { try { localStorage.setItem('rg.' + k, JSON.stringify(v)); return true; } catch (err) { return false; } }
 };
 const OS_REDUCED = matchMedia('(prefers-reduced-motion:reduce)').matches;
@@ -515,9 +535,9 @@ const BASE_MS = 340, QUARTER = Math.PI / 2;
 const MOVES = { R: ['x', 1, -1], L: ['x', -1, 1], U: ['y', 1, -1], D: ['y', -1, 1], F: ['z', 1, -1], B: ['z', -1, 1], M: ['x', 0, 1], x: ['x', 'all', -1], y: ['y', 'all', -1], z: ['z', 'all', -1] };
 const FACES = [['x', 1, 0xe5534b], ['x', -1, 0xf28c3a], ['y', 1, 0xf3f2ed], ['y', -1, 0xf5c84a], ['z', 1, 0x3fae6a], ['z', -1, 0x3d7fd9]];
 const invert = alg => alg.split(/\s+/).filter(Boolean).reverse().map(t => t.endsWith("'") ? t.slice(0, -1) : t.endsWith('2') ? t : t + "'").join(' ');
-const ease = p => p < .5 ? 4 * p ** 3 : 1 - (-2 * p + 2) ** 3 / 2;
+const ease = p => { const q = p - 1; return 1 + 2.2 * q ** 3 + 1.2 * q ** 2; };
 
-let speed = 1, active = null, yaw = -.62, pitch = .5, dragging = false, pulse = 0, wasSolved = true, moveCount = 0, launchConfetti = () => {};
+let speed = 1, active = null, yaw = -.62, pitch = .5, dragging = false, wasSolved = true, moveCount = 0, spinLeft = 0, floatMix = 1, launchGlow = () => {};
 const queue = [], cubies = [], rotLog = [];
 let renderer, scene, camera, cube;
 
@@ -534,22 +554,23 @@ function initGL() {
   key.position.set(4, 7, 6); fill.position.set(-6, -3, 4); scene.add(key, fill);
   cube = new THREE.Group(); scene.add(cube);
   const dotTex = (() => { const c = document.createElement('canvas'); c.width = c.height = 32; const g = c.getContext('2d'); g.fillStyle = '#fff'; g.beginPath(); g.arc(16, 16, 14, 0, 7); g.fill(); return new THREE.CanvasTexture(c); })();
-  const palette = FACES.map(f => new THREE.Color(f[2])), pieces = [], MOTES = innerWidth < 700 ? 36 : 80;
+  const palette = FACES.map(f => new THREE.Color(f[2])), glows = [], MOTES = innerWidth < 700 ? 36 : 80;
   const moteGeo = new THREE.BufferGeometry(), moteArr = new Float32Array(MOTES * 3), moteCol = new Float32Array(MOTES * 3);
   for (let i = 0; i < MOTES; i++) { moteArr.set([(Math.random() - .5) * 20, (Math.random() - .5) * 13, -3 - Math.random() * 5], i * 3); palette[i % 6].toArray(moteCol, i * 3); }
   moteGeo.setAttribute('position', new THREE.BufferAttribute(moteArr, 3)); moteGeo.setAttribute('color', new THREE.BufferAttribute(moteCol, 3));
   const motes = new THREE.Points(moteGeo, new THREE.PointsMaterial({ size: .16, map: dotTex, vertexColors: true, transparent: true, opacity: .55, depthWrite: false }));
   scene.add(motes);
-  launchConfetti = () => {
-    const N = 120, geo = new THREE.BufferGeometry(), pos = new Float32Array(N * 3), col = new Float32Array(N * 3), vel = [];
-    for (let i = 0; i < N; i++) {
-      palette[i % 6].toArray(col, i * 3);
-      const a = Math.random() * Math.PI * 2, s = .03 + Math.random() * .07;
-      vel.push([Math.cos(a) * s, .07 + Math.random() * .12, Math.sin(a) * s]);
-    }
-    geo.setAttribute('position', new THREE.BufferAttribute(pos, 3)); geo.setAttribute('color', new THREE.BufferAttribute(col, 3));
-    const pts = new THREE.Points(geo, new THREE.PointsMaterial({ size: .24, map: dotTex, vertexColors: true, transparent: true, depthWrite: false }));
-    scene.add(pts); pieces.push({ pts, vel, life: 1 });
+  const ringTex = (() => {
+    const c = document.createElement('canvas'); c.width = c.height = 128;
+    const g = c.getContext('2d'), grad = g.createRadialGradient(64, 64, 30, 64, 64, 62);
+    grad.addColorStop(0, 'rgba(255,255,255,0)'); grad.addColorStop(.72, 'rgba(255,255,255,.9)'); grad.addColorStop(1, 'rgba(255,255,255,0)');
+    g.fillStyle = grad; g.fillRect(0, 0, 128, 128); return new THREE.CanvasTexture(c);
+  })();
+  launchGlow = () => {
+    const mat = new THREE.SpriteMaterial({ map: ringTex, color: 0x6dbb85, transparent: true, depthWrite: false, blending: THREE.AdditiveBlending, opacity: .7 });
+    const sprite = new THREE.Sprite(mat); sprite.position.z = -1.5; sprite.scale.setScalar(2);
+    scene.add(sprite); glows.push({ sprite, life: 1 });
+    if (!REDUCED) spinLeft = Math.PI * 2;
   };
   const roundedBox = (size, radius, seg) => {
     const g = new THREE.BoxGeometry(size, size, size, seg, seg, seg), edge = size / 2 - radius;
@@ -610,19 +631,21 @@ function initGL() {
     if (!active && queue.length) begin(queue.shift());
     if (!dragging && !REDUCED && !active && !queue.length) yaw += dt * .00012;
     cube.rotation.set(pitch, yaw, 0);
-    cube.position.y = REDUCED ? 0 : Math.sin(now * .0011) * .08;
-    pulse = Math.max(0, pulse - dt * .005); cube.scale.setScalar(1 + pulse * .04);
+    floatMix += ((active || queue.length || dragging ? 0 : 1) - floatMix) * Math.min(1, dt * .004);
+    cube.position.y = REDUCED ? 0 : Math.sin(now * .0011) * .07 * floatMix;
     if (!REDUCED) {
       const m = moteGeo.attributes.position.array;
       for (let i = 1; i < m.length; i += 3) { m[i] += dt * .0004 * (1 + (i % 4) * .3); if (m[i] > 6.5) m[i] = -6.5; }
       moteGeo.attributes.position.needsUpdate = true; motes.rotation.y = yaw * .15;
     }
-    for (let k = pieces.length - 1; k >= 0; k--) {
-      const p = pieces[k], arr = p.pts.geometry.attributes.position.array, s = dt / 16;
-      p.vel.forEach((v, i) => { v[1] -= .0035 * s; arr[i * 3] += v[0] * s; arr[i * 3 + 1] += v[1] * s; arr[i * 3 + 2] += v[2] * s; });
-      p.pts.geometry.attributes.position.needsUpdate = true; p.life -= dt * .0006;
-      p.pts.material.opacity = Math.max(0, Math.min(1, p.life * 1.6));
-      if (p.life <= 0) { scene.remove(p.pts); p.pts.geometry.dispose(); p.pts.material.dispose(); pieces.splice(k, 1); }
+    for (let k = glows.length - 1; k >= 0; k--) {
+      const g = glows[k]; g.life -= dt * .0009;
+      g.sprite.scale.setScalar(2 + (1 - g.life) * 7); g.sprite.material.opacity = Math.max(0, g.life) * .7;
+      if (g.life <= 0) { scene.remove(g.sprite); g.sprite.material.dispose(); glows.splice(k, 1); }
+    }
+    if (spinLeft > 0) {
+      const step = spinLeft * (1 - Math.exp(-dt * .0035)); yaw += step; spinLeft -= step;
+      if (spinLeft < .002) { yaw += spinLeft; spinLeft = 0; }
     }
     renderer.render(scene, camera);
     requestAnimationFrame(frame);
@@ -642,14 +665,14 @@ function begin(job) {
   active = { pivot, axis, total, members, t0: performance.now(), dur: job.dur, cb: job.cb };
   if (!job.dur) finish();
 }
-function finish() {
+function finish(silent) {
   const a = active;
   a.pivot.rotation[a.axis] = a.total; a.pivot.updateMatrixWorld(true);
   a.members.forEach(c => { cube.attach(c); c.position.set(Math.round(c.position.x), Math.round(c.position.y), Math.round(c.position.z)); });
-  cube.remove(a.pivot); active = null; pulse = 1; afterMove();
+  cube.remove(a.pivot); active = null; afterMove(silent);
   if (a.cb) a.cb();
 }
-const flush = () => { queue.length = 0; if (active) { active.cb = null; finish(); } };
+const flush = () => { queue.length = 0; if (active) { active.cb = null; finish(true); } };
 const turnNow = tok => { if (cube) { flush(); begin({ tok, dur: 0 }); } };
 const turn = (tok, cb) => { if (cube) queue.push({ tok, cb, dur: BASE_MS / speed / (REDUCED ? 3 : 1) }); };
 const resetCube = () => { if (!cube) return; flush(); rotLog.length = 0; wasSolved = true; moveCount = 0; cubies.forEach(c => { c.position.copy(c.userData.home); c.quaternion.identity(); }); };
@@ -808,7 +831,7 @@ const solveNow = () => {
   try { moves = simplify(solveBeginner(s)); } catch (err) { return say(vi ? 'Không giải được trạng thái này' : 'Could not solve this state'); }
   P.gen++;
   Object.assign(P, { steps: moves, done: 0, queued: 0, label: `${vi ? 'Giải từng lớp' : 'Layer by layer'} · ${moves.length} ${vi ? 'nước' : 'moves'}` });
-  drawHud(); $('#bPlay').click();
+  drawHud(); playAll();
 };
 $('#bSolve').onclick = () => {
   if (!cube) return;
@@ -824,7 +847,7 @@ $('#orient').addEventListener('click', e => { const b = e.target.closest('[data-
 /* ---------- player ---------- */
 const P = { steps: [], done: 0, queued: 0, label: 'Free play', gen: 0 };
 function drawHud() {
-  $('#hudLabel').textContent = P.label;
+  $('#hudLabel').textContent = document.body.dataset.l === 'vi' && P.label === 'Free play' ? 'Chơi tự do' : P.label;
   $('#hudSteps').innerHTML = P.steps.map((t, i) => `<span class="tok ${i < P.done ? 'done' : i === P.done ? 'next' : ''}">${t}</span>`).join(' ');
   const box = $('#hudSteps'), nx = $('.next', box);
   if (nx) box.scrollTop = nx.offsetTop - 28;
@@ -840,11 +863,9 @@ function stepOnce() {
 }
 const showSim = () => { if (location.hash !== '#sim') location.hash = 'sim'; };
 $('#bStep').onclick = stepOnce;
-$('#bPlay').onclick = () => { while (P.queued < P.steps.length) stepOnce(); };
+function playAll() { while (P.queued < P.steps.length) stepOnce(); }
 $('#bReset').onclick = () => { resetCube(); P.gen++; Object.assign(P, { steps: [], done: 0, queued: 0, label: 'Free play' }); drawHud(); };
 $('#bSpeed').onchange = e => { speed = +e.target.value; };
-const rerun = () => { if (P.steps.length && P.label !== 'Scramble') loadAlg(P.steps.join(' '), P.label); };
-$('#bReset').addEventListener('dblclick', rerun);
 
 /* ---------- notation ---------- */
 const NOTES = [
@@ -859,12 +880,12 @@ $('#mvList').addEventListener('click', e => { const b = e.target.closest('[data-
 const S = (te, tv, de, dv, alg) => ({ t: { e: te, v: tv }, d: { e: de, v: dv }, alg });
 const METHODS = [
   { id: 'beginner', lv: '01', n: { e: 'Beginner', v: 'Người mới' }, d: { e: 'Layer by layer. About 7 steps, about 120 moves per solve, no speed needed.', v: 'Giải từng lớp. Khoảng 7 bước, ~120 nước mỗi lần giải, không cần nhanh.' }, steps: [
-    S('White cross', 'Chữ thập trắng', 'Bring the four white edges to the top so each side colour matches its centre. Centres never move; they are your reference.', 'Đưa 4 cạnh trắng lên trên sao cho màu bên hông khớp màu tâm. Tâm không bao giờ di chuyển, hãy dùng làm mốc.'),
-    S('White corners', 'Góc trắng', 'Put a white corner above its slot at the front-right, then repeat the trigger until it drops in white-side-up.', 'Đặt góc trắng phía trên ô trống ở trước-phải, rồi lặp công thức cho tới khi nó vào đúng với mặt trắng hướng lên.', "R U R' U'"),
+    S('Bottom cross', 'Chữ thập tầng đáy', 'Solve the four yellow edges on the bottom so each side colour matches its centre. Centres never move; they are your reference.', 'Giải 4 cạnh vàng ở tầng đáy sao cho màu bên hông khớp màu tâm. Tâm không bao giờ di chuyển, hãy dùng làm mốc.'),
+    S('Bottom corners', 'Góc tầng đáy', 'Put a yellow corner above its slot at the front-right, then repeat the trigger until it drops in with yellow facing down.', 'Đặt góc vàng phía trên ô trống ở trước-phải, rồi lặp công thức cho tới khi nó vào đúng với mặt vàng hướng xuống.', "R U R' U'"),
     S('Middle layer, edge to the right', 'Lớp giữa, cạnh sang phải', 'Edge on top with no yellow, front colour matching the front centre.', 'Cạnh ở lớp trên không có màu vàng, màu mặt trước khớp tâm trước.', "U R U' R' U' F' U F"),
     S('Middle layer, edge to the left', 'Lớp giữa, cạnh sang trái', 'Mirror of the previous case.', 'Đối xứng của trường hợp trên.', "U' L' U L U F U' F'"),
-    S('Yellow cross', 'Chữ thập vàng', 'Repeat until the yellow cross appears: dot, then L-shape, then line.', 'Lặp tới khi hiện chữ thập vàng: chấm, rồi chữ L, rồi đường thẳng.', "F R U R' U' F'"),
-    S('Yellow face', 'Mặt vàng', 'Hold the cube so a single yellow corner faces you at front-left; repeat until the whole top is yellow.', 'Cầm khối sao cho một góc vàng duy nhất hướng về bạn ở trước-trái; lặp tới khi cả mặt trên vàng.', "R U R' U R U2 R'"),
+    S('Top cross', 'Chữ thập mặt trên', 'Repeat until the white cross appears on top: dot, then L-shape, then line.', 'Lặp tới khi hiện chữ thập trắng ở mặt trên: chấm, rồi chữ L, rồi đường thẳng.', "F R U R' U' F'"),
+    S('Top face', 'Mặt trên', 'Hold the cube so a single white corner faces you at front-left; repeat until the whole top is white.', 'Cầm khối sao cho một góc trắng duy nhất hướng về bạn ở trước-trái; lặp tới khi cả mặt trên trắng.', "R U R' U R U2 R'"),
     S('Place corners', 'Xếp góc', 'Find a corner already in its right place, hold it at front-right, repeat until all four corners are correct.', 'Tìm góc đã đúng chỗ, đặt nó ở trước-phải, lặp tới khi cả 4 góc đúng.', "U R U' L' U R' U' L"),
     S('Place last edges', 'Xếp cạnh cuối', 'Solved edge at the back, then cycle the other three. Do it once or twice.', 'Cạnh đã đúng ở phía sau, rồi hoán đổi vòng ba cạnh còn lại. Làm một hoặc hai lần.', "R U' R U R U R U' R' U' R2")
   ] },
@@ -907,15 +928,16 @@ $('#tabs').addEventListener('click', e => { const t = e.target.closest('.tab'); 
 $('#method').addEventListener('change', e => {
   if (!e.target.dataset.k) return;
   done[e.target.dataset.k] = e.target.checked; store.set('done', done); drawMethod();
+  $(`[data-k="${e.target.dataset.k}"]`)?.focus();
 });
-$('#method').addEventListener('click', e => { const b = e.target.closest('.play'); if (b) { loadAlg(b.dataset.alg, b.dataset.lb); showSim(); setTimeout(() => $('#bPlay').click(), REDUCED ? 0 : 700); } });
+$('#method').addEventListener('click', e => { const b = e.target.closest('.play'); if (b) { loadAlg(b.dataset.alg, b.dataset.lb); showSim(); setTimeout(() => playAll(), REDUCED ? 0 : 700); } });
 
 /* ---------- library ---------- */
 const LIB = [
   ['Trigger', 'Trigger', "R U R' U'", 'The building block of F2L and Sune.', 'Viên gạch nền của F2L và Sune.'],
   ['Sune', 'OLL', "R U R' U R U2 R'", 'Three twisted corners; the first OLL to learn.', 'Ba góc xoay sai; OLL đầu tiên nên học.'],
   ['Anti-Sune', 'OLL', "R U2 R' U' R U' R'", 'Mirror of Sune.', 'Đối xứng của Sune.'],
-  ['Cross: line', 'OLL', "F R U R' U' F'", 'Yellow line to yellow cross.', 'Từ đường thẳng vàng thành chữ thập vàng.'],
+  ['Cross: line', 'OLL', "F R U R' U' F'", 'White line to white cross.', 'Từ đường thẳng trắng thành chữ thập trắng.'],
   ['T-perm', 'PLL', "R U R' U' R' F R2 U' R' U' R U R' F'", 'Swaps two corners and two edges.', 'Đổi chỗ hai góc và hai cạnh.'],
   ['Jb-perm', 'PLL', "R U R' F' R U R' U' R' F R2 U' R' U'", 'Swaps two adjacent corners and two edges.', 'Đổi hai góc kề nhau và hai cạnh.'],
   ['Y-perm', 'PLL', "F R U' R' U' R U R' F' R U R' U' R' F R F'", 'Swaps two diagonal corners and two edges.', 'Đổi hai góc chéo và hai cạnh.'],
@@ -937,7 +959,7 @@ $('#lib').addEventListener('click', e => { const b = e.target.closest('.play'); 
 
 /* ---------- timer ---------- */
 const HOLD_MS = 300, AXIS = { R: 0, L: 0, U: 1, D: 1, F: 2, B: 2 };
-let times = store.get('times', []), scr = '', tState = 'idle', tStart = 0, holdTimer = 0, raf = 0;
+let times = store.get('times', []).filter(Number.isFinite), scr = '', tState = 'idle', tStart = 0, holdTimer = 0, raf = 0;
 const fmt = ms => { const s = ms / 1000; return s >= 60 ? `${Math.floor(s / 60)}:${(s % 60).toFixed(2).padStart(5, '0')}` : s.toFixed(2); };
 const avg = n => { if (times.length < n) return null; const s = times.slice(-n).sort((a, b) => a - b).slice(1, -1); return s.reduce((a, b) => a + b, 0) / s.length; };
 function newScramble() {
@@ -981,14 +1003,14 @@ const pad = $('#pad');
 pad.addEventListener('pointerdown', e => { e.preventDefault(); press(); });
 pad.addEventListener('pointerup', release);
 pad.addEventListener('pointerleave', () => { if (tState === 'holding') release(); });
-const typing = e => e.target.closest('input,select,textarea,button');
-const held = new Set(), pend = [];
+const typing = e => e.target.closest('input,select,textarea');
+const pend = [];
 let simInView = false;
 const drawPend = () => { $('#pend').textContent = pend.join(' '); };
 function runPending() {
   if (!pend.length) return;
   const seq = pend.splice(0); drawPend(); if (coach.i >= 0) coach.seen.push(...seq);
-  P.gen++; Object.assign(P, { steps: seq, done: 0, queued: 0, label: 'Free play' }); drawHud(); $('#bPlay').click();
+  P.gen++; Object.assign(P, { steps: seq, done: 0, queued: 0, label: 'Free play' }); drawHud(); playAll();
 }
 const keyKind = e => {
   if (e.key === "'") return 'prime';
@@ -1012,8 +1034,8 @@ addEventListener('keydown', e => {
   if (ROTATE[e.key] && simInView && !e.target.closest('input,select,textarea')) { e.preventDefault(); if (!e.repeat) turnWhole(ROTATE[e.key]); return; }
   if (!simInView || e.metaKey || e.ctrlKey || e.altKey || e.target.closest('input,select,textarea')) return;
   const stack = getMode() === 'stack';
-  if (stack && e.key === 'Enter') { e.preventDefault(); runPending(); return; }
-  if (stack && e.key === 'Backspace') { e.preventDefault(); pend.pop(); drawPend(); return; }
+  if (stack && e.key === 'Enter' && pend.length) { e.preventDefault(); runPending(); return; }
+  if (stack && e.key === 'Backspace' && pend.length) { e.preventDefault(); pend.pop(); drawPend(); return; }
   const kind = keyKind(e); if (!kind) return;
   e.preventDefault(); if (e.repeat) return;
   if (kind === 'prime' || kind === 'double') {
@@ -1023,7 +1045,7 @@ addEventListener('keydown', e => {
   drawPend();
   if (!stack) runPending();
 });
-addEventListener('keyup', e => { if (e.code === 'Space' && !typing(e)) release(); });
+addEventListener('keyup', e => { if (e.code === 'Space' && document.body.dataset.view === 'timer' && !typing(e)) { e.preventDefault(); release(); } });
 $('#bNew').onclick = newScramble;
 $('#bShow').onclick = showScramble;
 $('#bDel').onclick = () => { times.pop(); store.set('times', times); drawStats(); };
@@ -1034,6 +1056,7 @@ function setLang(l) {
   document.body.dataset.l = l; document.documentElement.lang = l; $('#lang').dataset.l = l; store.set('lang', l);
   $('#q').placeholder = l === 'vi' ? 'Tìm thuật toán' : 'Search algorithms';
   setPh();
+  drawHud();
 }
 $('#lang').onclick = () => setLang(document.body.dataset.l === 'en' ? 'vi' : 'en');
 setLang(store.get('lang', /^vi/i.test(navigator.language) ? 'vi' : 'en'));
@@ -1081,9 +1104,17 @@ $('#wOpts').onclick = e => {
 $('#wBack').onclick = () => { if (wizStack.length > 1) { wizStack.pop(); wizShow(wizStack.pop()); } };
 $('#wClose').onclick = closeWizard;
 addEventListener('keydown', e => { if (e.key === 'Escape' && !$('#wiz').hidden) closeWizard(); });
-const refreshStart = () => { $('#start').innerHTML = bi(store.get('profile', null) ? T('Continue my course', 'Tiếp tục lộ trình') : T('Get Started', 'Bắt đầu')); };
-$('#start').onclick = () => { if (store.get('profile', null)) location.hash = 'course'; else openWizard(); };
+const refreshStart = () => { $('#start').innerHTML = bi(readProfile() ? T('Continue my course', 'Tiếp tục lộ trình') : T('Get Started', 'Bắt đầu')); };
+$('#start').onclick = () => { if (readProfile()) location.hash = 'course'; else openWizard(); };
 
+function readProfile() {
+  const p = store.get('profile', null), ids = METHODS.map(m => m.id);
+  if (!p || typeof p !== 'object' || !['learn', 'speed'].includes(p.goal)) return null;
+  const method = ids.includes(p.method) ? p.method : undefined, proMethod = ids.includes(p.proMethod) ? p.proMethod : undefined;
+  const target = ['10', '20', '30', '60'].includes(String(p.target)) ? String(p.target) : undefined;
+  if (p.goal === 'learn' ? !method : !proMethod || !target) return null;
+  return { goal: p.goal, method, proMethod, target };
+}
 function buildPlan(p) {
   const plan = [], add = (id, t, s, act) => plan.push({ id, t, s, ...act });
   const m = METHODS.find(x => x.id === (p.method || p.proMethod)) || METHODS[0];
@@ -1111,7 +1142,7 @@ function buildPlan(p) {
   return plan;
 }
 function drawCourse() {
-  const p = store.get('profile', null), box = $('#planBox');
+  const p = readProfile(), box = $('#planBox');
   if (!p) { box.innerHTML = `<p class="sub">${bi(T('Answer three quick questions and we will build your course.', 'Trả lời vài câu hỏi ngắn, mình sẽ tạo lộ trình cho bạn.'))}</p><button class="btn go cta" data-act="wiz">${bi(T('Get Started', 'Bắt đầu'))}</button>`; return; }
   const plan = buildPlan(p), done = store.get('lessons', {}), count = plan.filter(l => done[l.id]).length;
   const m = METHODS.find(x => x.id === (p.method || p.proMethod)) || METHODS[0];
@@ -1125,8 +1156,8 @@ $('#planBox').addEventListener('click', e => {
   const act = e.target.closest('[data-act]');
   if (act) {
     if (act.dataset.act === 'wiz') openWizard();
-    else if (act.dataset.act === 'go') { const plan = buildPlan(store.get('profile', {})), d = store.get('lessons', {}), i = plan.findIndex(l => !d[l.id]); startCoach(i < 0 ? 0 : i); }
-    else { const p = store.get('profile', {}); p.method = 'beginner'; store.set('profile', p); drawCourse(); }
+    else if (act.dataset.act === 'go') { const plan = buildPlan((readProfile() || {})), d = store.get('lessons', {}), i = plan.findIndex(l => !d[l.id]); startCoach(i < 0 ? 0 : i); }
+    else { const p = (readProfile() || {}); p.method = 'beginner'; store.set('profile', p); drawCourse(); }
     return;
   }
   const b = e.target.closest('[data-i]'); if (!b) return;
@@ -1135,6 +1166,7 @@ $('#planBox').addEventListener('click', e => {
 $('#planBox').addEventListener('change', e => {
   const id = e.target.dataset.id; if (!id) return;
   const done = store.get('lessons', {}); done[id] = e.target.checked; store.set('lessons', done); drawCourse();
+  $(`.chk[data-id="${id}"]`)?.focus();
 });
 refreshStart();
 /* ---------- coach ---------- */
@@ -1142,7 +1174,6 @@ const coach = { i: -1, plan: [], seen: [], advancing: false, reload: false, time
 const BEGINNER_STAGES = [[0, 1], [1, 5], [5, 9], [5, 9], [9, 10], [10, 11], [11, 12], [12, 13]];
 const markDone = id => { const d = store.get('lessons', {}); d[id] = true; store.set('lessons', d); };
 const isSolved = () => { const s = readState(); return [0, 1, 2, 3, 4, 5].every(f => { const cols = SLOT.map((sl, i) => sl.f === f ? s[i] : -1).filter(c => c >= 0); return cols.every(c => c === cols[0]); }); };
-const taskBtn = l => !['read'].includes(l.k);
 function showLesson() {
   const l = coach.plan[coach.i];
   Object.assign(coach, { seen: [], advancing: false, reload: false, timerBase: times.length, fin: !l });
@@ -1156,8 +1187,8 @@ function showLesson() {
   $('#cTitle').innerHTML = bi(l.t);
   $('#cText').innerHTML = bi(l.s) + (l.more ? '<br><br>' + bi(l.more) : '');
   $('#cShow').hidden = !(l.alg || l.stage);
-  $('#cNext').className = 'btn' + (taskBtn(l) ? '' : ' go');
-  $('#cNext').innerHTML = bi(taskBtn(l) ? T('Skip', 'Bỏ qua') : T('Next ▶', 'Tiếp ▶'));
+  $('#cNext').className = 'btn' + (l.k !== 'read' ? '' : ' go');
+  $('#cNext').innerHTML = bi(l.k !== 'read' ? T('Skip', 'Bỏ qua') : T('Next ▶', 'Tiếp ▶'));
   if (l.filter) { filter = l.filter; $$('.chip').forEach(c => c.setAttribute('aria-pressed', c.dataset.f === filter)); drawLib(); }
   if (l.alg) loadAlg(l.alg, l.alg);
   else if (l.go === 'sim') { resetCube(); Object.assign(P, { steps: [], done: 0, queued: 0, label: 'Free play' }); P.gen++; drawHud(); }
@@ -1191,18 +1222,18 @@ function nextLesson() {
   coach.i++; showLesson();
 }
 function quitCoach() { coach.i = -1; $('#coach').hidden = true; document.body.classList.remove('coaching'); }
-function startCoach(i) { const p = store.get('profile', null); if (!p) return; coach.plan = buildPlan(p); coach.i = i; showLesson(); }
+function startCoach(i) { const p = readProfile(); if (!p) return; coach.plan = buildPlan(p); coach.i = i; showLesson(); }
 function demoStage([a, b]) {
   resetCube();
   Array.from({ length: 22 }, () => MOVE_NAMES[Math.random() * 18 | 0]).forEach(turnNow);
   const raw = solveBeginner(readState()), cut = k => k ? raw.marks[k - 1] : 0;
   raw.slice(0, cut(a)).forEach(turnNow);
   P.gen++; Object.assign(P, { steps: raw.slice(cut(a), cut(b)), done: 0, queued: 0, label: document.body.dataset.l === 'vi' ? 'Minh hoạ' : 'Demo' });
-  drawHud(); $('#bPlay').click();
+  drawHud(); playAll();
 }
 $('#cShow').onclick = () => {
   const l = coach.plan[coach.i]; if (!l) return;
-  if (l.alg) { loadAlg(l.alg, l.alg); $('#bPlay').click(); coach.reload = true; } else if (l.stage) demoStage(l.stage);
+  if (l.alg) { loadAlg(l.alg, l.alg); playAll(); coach.reload = true; } else if (l.stage) demoStage(l.stage);
 };
 $('#cNext').onclick = nextLesson;
 $('#cQuit').onclick = quitCoach;
@@ -1212,15 +1243,12 @@ const setPanel = (cls, on) => { document.body.classList.toggle(cls, on); store.s
 $('#helpX').onclick = () => setPanel('nohelp', true); $('#helpOpen').onclick = () => setPanel('nohelp', false);
 $('#noteX').onclick = () => setPanel('nonote', true); $('#noteOpen').onclick = () => setPanel('nonote', false);
 
-function afterMove() {
+function afterMove(silent) {
   const solved = isSolved();
-  if (solved) { if (!wasSolved && moveCount >= 3) celebrate(); moveCount = 0; } else moveCount++;
+  if (solved) { if (!silent && !wasSolved && moveCount >= 3) celebrate(); moveCount = 0; } else moveCount++;
   wasSolved = solved;
 }
-function celebrate() {
-  launchConfetti();
-  const banner = $('#cheer'); banner.classList.remove('show'); void banner.offsetWidth; banner.classList.add('show');
-}
+function celebrate() { launchGlow(); }
 addEventListener('pointermove', e => {
   const tile = e.target.closest && e.target.closest('.tile'); if (!tile) return;
   const r = tile.getBoundingClientRect();
@@ -1236,9 +1264,24 @@ function route() {
   if (view === 'course') drawCourse();
   $$('nav a').forEach(a => a.classList.toggle('on', a.getAttribute('href') === '#' + view));
   scrollTo(0, 0);
+  movePill();
 }
+function movePill() {
+  const link = $('nav a.on'), pill = $('.navpill');
+  if (!link) { pill.style.opacity = 0; return; }
+  pill.style.opacity = 1; pill.style.setProperty('--c', getComputedStyle(link).getPropertyValue('--c'));
+  pill.style.width = link.offsetWidth + 'px'; pill.style.height = link.offsetHeight + 'px';
+  pill.style.transform = `translate(${link.offsetLeft}px, ${link.offsetTop}px)`;
+  requestAnimationFrame(() => requestAnimationFrame(() => pill.classList.add('ready')));
+}
+addEventListener('resize', movePill);
+$('nav').addEventListener('pointerdown', e => {
+  const link = e.target.closest('a'); if (!link || REDUCED) return;
+  const box = link.getBoundingClientRect(), dot = document.createElement('i');
+  dot.className = 'ripple'; dot.style.left = `${e.clientX - box.left}px`; dot.style.top = `${e.clientY - box.top}px`;
+  link.appendChild(dot); dot.addEventListener('animationend', () => dot.remove());
+});
 addEventListener('hashchange', route);
-$('#simBack').onclick = () => { history.replaceState(null, '', location.pathname + location.search); route(); };
 initGL();
 route();
 drawHud(); drawMethod(); drawLib(); drawStats(); newScramble();
