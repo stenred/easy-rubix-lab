@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>CUBE 3×3 — Field Guide</title>
+<title>easy-rubix-lab</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito:wght@600;700;800;900&family=JetBrains+Mono:wght@500;700&display=swap">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 <style>
@@ -85,8 +85,8 @@ footer{margin-top:120px;padding-top:20px;border-top:1px solid var(--line);color:
 #nogl{display:none;position:absolute;inset:0;place-items:center;text-align:center;padding:24px;color:var(--dim)}
 @media (max-width:900px){.sim{grid-template-columns:1fr}#stage{min-height:52vh;border-right:0;border-bottom:1px solid var(--line)}
 .mv{grid-template-columns:2.4rem 1fr}.mv small{grid-column:1/-1}.row{grid-template-columns:4.5rem 1fr}.row .go,.row .play{grid-column:2}}
-@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{transition:none!important}}
-:root{--bg:#302e2b;--panel:#262421;--card:#34322f;--ink:#fff;--dim:#a7a6a2;--line:#3d3b38;--acid:#81b64c;--sig:#fa412d;--shade:#45753c;--disp:Nunito,system-ui,sans-serif;--body:Nunito,system-ui,sans-serif}
+@media (prefers-reduced-motion:reduce){html:not([data-motion=full]){scroll-behavior:auto}html:not([data-motion=full]) *{transition:none!important}}
+:root{--bg:#302e2b;--panel:#262421;--card:#34322f;--ink:#fff;--dim:#a7a6a2;--line:#3d3b38;--acid:#7fb685;--sig:#fa412d;--shade:#4f8a5a;--disp:Nunito,system-ui,sans-serif;--body:Nunito,system-ui,sans-serif}
 @media (prefers-color-scheme:light){:root{--bg:#edece9;--panel:#fff;--card:#f4f3f0;--ink:#262421;--dim:#6b6a67;--line:#dcdad6;--acid:#5b8a2b;--sig:#d92d1a;--shade:#3f6b1d}}
 body{font:600 16px/1.6 var(--body);background:var(--bg)}
 header{background:var(--panel);border:0;border-radius:16px;padding:10px 18px;margin-top:16px}
@@ -205,16 +205,16 @@ main{margin:0;padding:14px 14px 96px}
 
 nav a::before{display:none}
 .ic{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round;flex:none}
-nav a[href="#home"]{--c:var(--ink)}nav a[href="#sim"]{--c:#4fc36e}nav a[href="#methods"]{--c:#3d9bf0}nav a[href="#library"]{--c:#f5922b}nav a[href="#timer"]{--c:#f0584c}
+nav a[href="#home"]{--c:var(--ink)}nav a[href="#sim"]{--c:#6dbb85}nav a[href="#methods"]{--c:#6aa7e0}nav a[href="#library"]{--c:#eda35a}nav a[href="#timer"]{--c:#e8776b}
 nav a .ic{color:var(--c);transition:transform .2s}nav a:hover .ic{transform:rotate(-8deg) scale(1.12)}
 nav a.on{box-shadow:inset 4px 0 0 var(--c)}
 nav a{transition:background .2s,color .2s}
-.brand::after{content:"";display:block;height:5px;margin-top:8px;border-radius:3px;background:linear-gradient(90deg,#ff5a4e 0 16.6%,#ff9f1c 0 33.3%,#ffd500 0 50%,#4fc36e 0 66.6%,#3d9bf0 0 83.3%,#f4f4ee 0)}
-body[data-view=methods]{--acid:#3d9bf0;--shade:#2468a8}
-body[data-view=library]{--acid:#f5922b;--shade:#b4611a}
-body[data-view=timer]{--acid:#f0584c;--shade:#a8352c}
+.brand::after{content:"";display:block;height:5px;margin-top:8px;border-radius:3px;background:linear-gradient(90deg,#e8776b 0 16.6%,#eda35a 0 33.3%,#e9c25a 0 50%,#6dbb85 0 66.6%,#6aa7e0 0 83.3%,#f3f2ed 0)}
+body[data-view=methods]{--acid:#6aa7e0;--shade:#41789f}
+body[data-view=library]{--acid:#eda35a;--shade:#b0702f}
+body[data-view=timer]{--acid:#e8776b;--shade:#a9483f}
 main>section:not(#sim){box-shadow:inset 0 5px 0 var(--acid)}
-h1 .a{background:linear-gradient(90deg,#ff5a4e,#ff9f1c,#ffd500,#4fc36e,#3d9bf0);-webkit-background-clip:text;background-clip:text;color:transparent}
+h1 .a{background:linear-gradient(90deg,#e8776b,#eda35a,#e9c25a,#6dbb85,#6aa7e0);-webkit-background-clip:text;background-clip:text;color:transparent}
 #home{position:relative;overflow:hidden}
 .stk{position:absolute;right:clamp(24px,7vw,110px);top:clamp(48px,9vw,110px);display:grid;grid-template-columns:repeat(3,clamp(48px,6vw,78px));gap:10px;transform:rotate(-8deg)}
 .stk i{aspect-ratio:1;border-radius:14px;background:var(--c);box-shadow:0 5px 0 rgba(0,0,0,.3);animation:pop 3.6s ease-in-out infinite}
@@ -224,8 +224,8 @@ h1 .a{background:linear-gradient(90deg,#ff5a4e,#ff9f1c,#ffd500,#4fc36e,#3d9bf0);
 .tile:hover .ti{transform:rotate(-8deg) scale(1.1)}
 .tile{border-top:4px solid var(--c)}
 .row .t{padding:2px 10px;border-radius:999px;background:color-mix(in srgb,currentColor 16%,transparent)}
-.t.OLL{color:#f5922b}.t.PLL{color:#3d9bf0}.t.Trigger{color:#4fc36e}
-.stats div:nth-child(1) b{color:#4fc36e}.stats div:nth-child(2) b{color:#3d9bf0}.stats div:nth-child(3) b{color:#f5922b}
+.t.OLL{color:#eda35a}.t.PLL{color:#6aa7e0}.t.Trigger{color:#6dbb85}
+.stats div:nth-child(1) b{color:#6dbb85}.stats div:nth-child(2) b{color:#6aa7e0}.stats div:nth-child(3) b{color:#eda35a}
 .step h3::first-letter{color:var(--acid)}
 footer{display:none}body[data-view=home] footer{display:block}
 @keyframes rise{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
@@ -236,22 +236,24 @@ body.simpage #sim{animation:fade .35s both}
 h1 span{animation:rise .7s cubic-bezier(.2,.7,.2,1) both}h1 span:nth-child(2){animation-delay:.1s}h1 span:nth-child(3){animation-delay:.2s}
 .tile,.step,.row{animation:rise .5s cubic-bezier(.2,.7,.2,1) both}
 .tile:nth-child(2){animation-delay:.08s}.tile:nth-child(3){animation-delay:.16s}.tile:nth-child(4){animation-delay:.24s}
-@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important}}
+@media (prefers-reduced-motion:reduce){html:not([data-motion=full]) *,html:not([data-motion=full]) *::before,html:not([data-motion=full]) *::after{animation:none!important}}
+html[data-motion=off] *,html[data-motion=off] *::before,html[data-motion=off] *::after{animation:none!important;transition:none!important}html[data-motion=off]{scroll-behavior:auto}
+#motionNote[hidden]{display:none}
 
 :root{--side:84px}
 header{padding:16px 10px calc(14px + env(safe-area-inset-bottom,0px));align-items:center;gap:14px;overflow:visible}
-.brand{padding:0;display:grid;justify-items:center}.brand .ic{width:40px;height:40px;color:#81b64c;stroke-width:2}.brand::after{width:40px}
+.brand{padding:0;display:grid;justify-items:center}.brand .ic{width:40px;height:40px;color:#7fb685;stroke-width:2}.brand::after{width:40px}
 nav{align-items:center;width:100%}
 nav a{position:relative;justify-content:center;width:100%;padding:0;min-height:54px}
 nav a .ic{width:27px;height:27px}
 nav a>span{position:absolute;left:calc(100% + 12px);top:50%;transform:translateY(-50%);white-space:nowrap;padding:8px 14px;border-radius:10px;background:var(--ink);color:var(--bg);font:800 14px var(--body);opacity:0;pointer-events:none;transition:opacity .15s;z-index:70}
 nav a:hover>span,nav a:focus-visible>span{opacity:1}
-nav a[href="#course"]{--c:#ffd500}
+nav a[href="#course"]{--c:#e9c25a}
 #lang{font-size:12px;padding:0;width:100%;min-width:0}
-body[data-view=course]{--acid:#e0a21b;--shade:#9b6f0a}
+body[data-view=course]{--acid:#dbb04d;--shade:#a1801f}
 body[data-view=course] #course{display:block;animation:rise .45s cubic-bezier(.2,.7,.2,1) both}
 .hero{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:clamp(24px,5vw,80px);align-items:center;min-height:min(66vh,540px)}
-.stk{display:grid;position:static;transform:rotate(-3deg);padding:14px;background:#0d0d0b;border-radius:22px;grid-template-columns:repeat(3,1fr);gap:12px;justify-self:center;width:min(100%,440px)}
+.stk{display:grid;position:static;transform:rotate(-3deg);padding:14px;background:#181a1e;border-radius:22px;grid-template-columns:repeat(3,1fr);gap:12px;justify-self:center;width:min(100%,440px)}
 .hcopy{text-align:center}
 .hcopy h1{font:900 clamp(2.3rem,4.6vw,3.8rem)/1.08 var(--disp);letter-spacing:-.02em;margin:0 0 16px}
 .hcopy .lead{margin:0 auto 26px;max-width:34ch}
@@ -303,6 +305,56 @@ body.nohelp #helpOpen,body.nonote #noteOpen{display:inline-flex;align-items:cent
 #cTasks li::before{content:"";width:18px;height:18px;border-radius:50%;border:2px solid var(--dim);flex:none}
 #cTasks li.ok{color:var(--acid)}#cTasks li.ok::before{background:var(--acid);border-color:var(--acid);box-shadow:inset 0 0 0 3px var(--card)}
 @media (max-width:900px){#coach{top:auto;left:10px;right:10px;width:auto;bottom:calc(72px + env(safe-area-inset-bottom,0px));max-height:46vh}}
+
+:root{--bg:#23262b;--panel:#1d2025;--card:#2b2f36;--ink:#ecebe6;--dim:#9ba1a9;--line:#363b43;--acid:#7fb685;--shade:#4f8a5a;--sig:#e8776b}
+@media (prefers-color-scheme:light){:root{--bg:#eceae3;--panel:#f7f5ef;--card:#ffffff;--ink:#2a2d33;--dim:#6b7078;--line:#dedbd2;--acid:#4f8a5a;--shade:#3a6a44;--sig:#d0564a}}
+body{background:radial-gradient(1100px 560px at 75% -8%,color-mix(in srgb,var(--acid) 11%,transparent),transparent) fixed,var(--bg)}
+.btn,.key,.opt,.tile,.ti{box-shadow:0 3px 0 rgba(0,0,0,.16)}
+main>section:not(#sim){border-radius:24px}
+.sim,#sim #stage{border-radius:22px}
+#stage{background:radial-gradient(circle at 50% 46%,color-mix(in srgb,var(--acid) 13%,var(--card)),var(--panel) 72%)}
+nav a[href="#prefs"]{--c:#9fb0c7;margin-top:auto}#lang{margin-top:8px}
+body[data-view=prefs]{--acid:#8fa3bf;--shade:#5f7391}
+body[data-view=prefs] #prefs{display:block;animation:rise .45s cubic-bezier(.2,.7,.2,1) both}
+.rad{display:flex;gap:14px;align-items:flex-start;padding:16px 18px;margin-bottom:10px;border-radius:16px;background:var(--card);cursor:pointer;transition:transform .15s,outline-color .15s;outline:2px solid transparent;box-shadow:0 3px 0 rgba(0,0,0,.16)}
+.rad:hover{transform:translateY(-2px)}.rad:has(input:checked){outline-color:var(--acid)}
+.rad input{accent-color:var(--acid);width:22px;height:22px;margin:2px 0 0;flex:none}
+.rad b{display:block;font:800 1.1rem var(--body)}.rad small{display:block;color:var(--dim);font-size:14.5px;font-weight:600}
+
+#orient{position:absolute;right:12px;bottom:12px;z-index:2;display:grid;grid-template-columns:repeat(3,46px);grid-template-rows:repeat(2,46px);gap:6px}
+#orient .btn{min-width:0;padding:0;font-size:20px;line-height:1}
+#orient [data-r="x"]{grid-column:2;grid-row:1}#orient [data-r="y"]{grid-column:1;grid-row:2}
+#orient [data-r="x'"]{grid-column:2;grid-row:2}#orient [data-r="y'"]{grid-column:3;grid-row:2}
+.wordmark{display:inline-block;margin:0 0 14px;padding:6px 16px;border-radius:999px;background:var(--card);color:var(--acid);font:800 14px var(--mono);letter-spacing:.04em}
+
+body::before{content:"";position:fixed;inset:-20%;z-index:-1;pointer-events:none;background:radial-gradient(40% 40% at 20% 30%,color-mix(in srgb,#6dbb85 16%,transparent),transparent 70%),radial-gradient(35% 35% at 80% 20%,color-mix(in srgb,#6aa7e0 14%,transparent),transparent 70%),radial-gradient(45% 45% at 60% 85%,color-mix(in srgb,#eda35a 12%,transparent),transparent 70%);animation:drift 26s ease-in-out infinite alternate}
+h1 .a{background-image:linear-gradient(90deg,#e8776b,#eda35a,#e9c25a,#6dbb85,#6aa7e0,#e8776b);background-size:200% 100%;animation:rise .7s cubic-bezier(.2,.7,.2,1) .2s both,shimmer 7s linear infinite}
+.stk{animation:float 6s ease-in-out infinite}
+#start{position:relative;overflow:hidden;animation:glow 2.8s ease-in-out infinite}
+#start::after{content:"";position:absolute;inset:0;background:linear-gradient(110deg,transparent 35%,rgba(255,255,255,.35) 50%,transparent 65%);transform:translateX(-120%);animation:shine 3.4s ease-in-out infinite;pointer-events:none}
+.tile{position:relative;overflow:hidden}
+.tile::before{content:"";position:absolute;inset:0;background:radial-gradient(190px circle at var(--mx,50%) var(--my,50%),color-mix(in srgb,var(--c) 24%,transparent),transparent 70%);opacity:0;transition:opacity .25s;pointer-events:none}
+.tile:hover::before{opacity:1}
+nav a.on .ic{animation:bounce .6s cubic-bezier(.3,1.6,.5,1)}
+.prog i{background-image:linear-gradient(135deg,rgba(255,255,255,.22) 25%,transparent 25% 50%,rgba(255,255,255,.22) 50% 75%,transparent 75%);background-size:28px 28px;animation:stripes 1s linear infinite}
+.lesson.ok .chk{animation:popin .45s cubic-bezier(.3,1.7,.5,1)}
+.tok.next{animation:blink 1.2s ease-in-out infinite}
+#pad[data-s=running] #time{animation:tick 1s ease-in-out infinite}
+#pad[data-s=ready]{animation:ready 1s ease-in-out infinite}
+#cheer{position:absolute;left:50%;top:16%;z-index:3;transform:translateX(-50%) scale(.5);opacity:0;pointer-events:none;white-space:nowrap;font:900 clamp(2.2rem,5vw,3.8rem) var(--disp);background-image:linear-gradient(90deg,#e8776b,#eda35a,#e9c25a,#6dbb85,#6aa7e0);-webkit-background-clip:text;background-clip:text;color:transparent;filter:drop-shadow(0 4px 18px rgba(0,0,0,.35))}
+#cheer.show{animation:cheer 2s cubic-bezier(.2,.8,.2,1) both}
+@keyframes drift{from{transform:translate3d(-2%,-1%,0) scale(1)}to{transform:translate3d(3%,2%,0) scale(1.12)}}
+@keyframes shimmer{from{background-position:0 0}to{background-position:200% 0}}
+@keyframes float{0%,100%{transform:rotate(-3deg) translateY(0)}50%{transform:rotate(-1deg) translateY(-12px)}}
+@keyframes glow{0%,100%{box-shadow:0 4px 0 var(--shade),0 0 0 0 color-mix(in srgb,var(--acid) 45%,transparent)}50%{box-shadow:0 4px 0 var(--shade),0 0 0 12px transparent}}
+@keyframes shine{0%,55%{transform:translateX(-120%)}100%{transform:translateX(120%)}}
+@keyframes bounce{0%{transform:scale(.6) rotate(-12deg)}100%{transform:scale(1) rotate(0)}}
+@keyframes stripes{to{background-position:28px 0}}
+@keyframes popin{0%{transform:scale(.5)}100%{transform:scale(1)}}
+@keyframes blink{50%{filter:brightness(1.3)}}
+@keyframes tick{50%{text-shadow:0 0 26px color-mix(in srgb,var(--acid) 60%,transparent)}}
+@keyframes ready{50%{box-shadow:0 0 0 8px color-mix(in srgb,var(--acid) 22%,transparent)}}
+@keyframes cheer{0%{opacity:0;transform:translateX(-50%) scale(.5)}18%{opacity:1;transform:translateX(-50%) scale(1.1)}30%{transform:translateX(-50%) scale(1)}80%{opacity:1}100%{opacity:0;transform:translateX(-50%) translateY(-24px) scale(1)}}
 </style>
 </head>
 <body data-l="en">
@@ -310,7 +362,7 @@ body.nohelp #helpOpen,body.nonote #noteOpen{display:inline-flex;align-items:cent
 
 <main>
 <header>
-  <a class="brand" href="#home" aria-label="CUBE 3x3"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l8.5 4.5v9L12 21l-8.5-4.5v-9z"/><path d="M12 12l8.5-4.5M12 12 3.5 7.5M12 12v9"/></svg></a>
+  <a class="brand" href="#home" aria-label="easy-rubix-lab" title="easy-rubix-lab"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l8.5 4.5v9L12 21l-8.5-4.5v-9z"/><path d="M12 12l8.5-4.5M12 12 3.5 7.5M12 12v9"/></svg></a>
   <nav>
     <a href="#home"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 11.5 12 4l9 7.5"/><path d="M5.5 10v9.5h5v-5h3v5h5V10"/></svg><span class="en">Home</span><span class="vi">Trang chủ</span></a>
     <a href="#course"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 21V4"/><path d="M5 4h12l-2.5 4L17 12H5"/></svg><span class="en">Course</span><span class="vi">Lộ trình</span></a>
@@ -318,19 +370,22 @@ body.nohelp #helpOpen,body.nonote #noteOpen{display:inline-flex;align-items:cent
     <a href="#methods"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l9 5-9 5-9-5z"/><path d="M3 12.5l9 5 9-5"/><path d="M3 17l9 5 9-5"/></svg><span class="en">Methods</span><span class="vi">Phương pháp</span></a>
     <a href="#library"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M8.5 7l-5 5 5 5M15.5 7l5 5-5 5"/></svg><span class="en">Algorithms</span><span class="vi">Thuật toán</span></a>
     <a href="#timer"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="13.5" r="7.5"/><path d="M12 9.5v4.2l2.8 1.8M9.5 2.5h5"/></svg><span class="en">Timer</span><span class="vi">Đồng hồ</span></a>
+    <a href="#prefs"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M12 2.5v3M12 18.5v3M2.5 12h3M18.5 12h3M5.3 5.3l2.1 2.1M16.6 16.6l2.1 2.1M18.7 5.3l-2.1 2.1M7.4 16.6l-2.1 2.1"/></svg><span class="en">Settings</span><span class="vi">Cài đặt</span></a>
     <button class="btn" id="lang" aria-label="Switch language">EN · VI</button>
   </nav>
 </header>
 
 <section id="home">
+<div class="tip" id="motionNote" hidden><span><span class="en">Your device has animations switched off, so the effects are hidden.</span><span class="vi">Thiết bị của bạn đang tắt hiệu ứng chuyển động nên các hiệu ứng bị ẩn.</span></span><button class="play" id="motionOn"><span class="en">TURN ON</span><span class="vi">BẬT LẠI</span></button></div>
 <div class="hero">
-<div class="stk" aria-hidden="true"><i style="--c:#d62a1e"></i><i style="--c:#f4f4ee"></i><i style="--c:#1859d6"></i><i style="--c:#ffd500"></i><i style="--c:#00a84f"></i><i style="--c:#ff7a00"></i><i style="--c:#1859d6"></i><i style="--c:#d62a1e"></i><i style="--c:#f4f4ee"></i></div>
+<div class="stk" aria-hidden="true"><i style="--c:#e5534b"></i><i style="--c:#f3f2ed"></i><i style="--c:#3d7fd9"></i><i style="--c:#f5c84a"></i><i style="--c:#3fae6a"></i><i style="--c:#f28c3a"></i><i style="--c:#3d7fd9"></i><i style="--c:#e5534b"></i><i style="--c:#f3f2ed"></i></div>
 <div class="hcopy">
+<div class="wordmark">easy-rubix-lab</div>
 <h1><span class="en">Learn to solve the</span><span class="vi">Học giải khối</span> <span class="a">Rubik’s Cube</span></h1>
 <p class="lead"><span class="en">Step-by-step lessons, a 3D simulator and a solver that shows every move.</span><span class="vi">Bài học từng bước, mô phỏng 3D và máy giải chỉ rõ từng nước đi.</span></p>
 <button class="btn go cta" id="start"></button>
 </div></div>
-<div class="tiles"><a class="tile" href="#sim" style="--c:#4fc36e"><span class="ti"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l8.5 4.5v9L12 21l-8.5-4.5v-9z"/><path d="M12 12l8.5-4.5M12 12 3.5 7.5M12 12v9"/></svg></span><b><span class="en">Simulator</span><span class="vi">Mô phỏng 3D</span></b><small><span class="en">Turn the cube, press Solve</span><span class="vi">Xoay khối, bấm Giải</span></small></a><a class="tile" href="#methods" style="--c:#3d9bf0"><span class="ti"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l9 5-9 5-9-5z"/><path d="M3 12.5l9 5 9-5"/><path d="M3 17l9 5 9-5"/></svg></span><b><span class="en">Methods</span><span class="vi">Phương pháp</span></b><small><span class="en">Beginner to Petrus, step by step</span><span class="vi">Từ Beginner tới Petrus, từng bước</span></small></a><a class="tile" href="#library" style="--c:#f5922b"><span class="ti"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M8.5 7l-5 5 5 5M15.5 7l5 5-5 5"/></svg></span><b><span class="en">Algorithms</span><span class="vi">Thuật toán</span></b><small><span class="en">OLL, PLL and triggers</span><span class="vi">OLL, PLL và công thức nhỏ</span></small></a><a class="tile" href="#timer" style="--c:#f0584c"><span class="ti"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="13.5" r="7.5"/><path d="M12 9.5v4.2l2.8 1.8M9.5 2.5h5"/></svg></span><b><span class="en">Timer</span><span class="vi">Đồng hồ</span></b><small><span class="en">Scrambles, ao5, ao12</span><span class="vi">Scramble, ao5, ao12</span></small></a></div>
+<div class="tiles"><a class="tile" href="#sim" style="--c:#6dbb85"><span class="ti"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l8.5 4.5v9L12 21l-8.5-4.5v-9z"/><path d="M12 12l8.5-4.5M12 12 3.5 7.5M12 12v9"/></svg></span><b><span class="en">Simulator</span><span class="vi">Mô phỏng 3D</span></b><small><span class="en">Turn the cube, press Solve</span><span class="vi">Xoay khối, bấm Giải</span></small></a><a class="tile" href="#methods" style="--c:#6aa7e0"><span class="ti"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l9 5-9 5-9-5z"/><path d="M3 12.5l9 5 9-5"/><path d="M3 17l9 5 9-5"/></svg></span><b><span class="en">Methods</span><span class="vi">Phương pháp</span></b><small><span class="en">Beginner to Petrus, step by step</span><span class="vi">Từ Beginner tới Petrus, từng bước</span></small></a><a class="tile" href="#library" style="--c:#eda35a"><span class="ti"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M8.5 7l-5 5 5 5M15.5 7l5 5-5 5"/></svg></span><b><span class="en">Algorithms</span><span class="vi">Thuật toán</span></b><small><span class="en">OLL, PLL and triggers</span><span class="vi">OLL, PLL và công thức nhỏ</span></small></a><a class="tile" href="#timer" style="--c:#e8776b"><span class="ti"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="13.5" r="7.5"/><path d="M12 9.5v4.2l2.8 1.8M9.5 2.5h5"/></svg></span><b><span class="en">Timer</span><span class="vi">Đồng hồ</span></b><small><span class="en">Scrambles, ao5, ao12</span><span class="vi">Scramble, ao5, ao12</span></small></a></div>
 </section>
 
 <section id="course"><h2><span class="en">Your course</span><span class="vi">Lộ trình của bạn</span></h2><div id="planBox"></div></section>
@@ -338,12 +393,19 @@ body.nohelp #helpOpen,body.nonote #noteOpen{display:inline-flex;align-items:cent
 <section id="sim" aria-label="3D simulator">
   <button class="btn" id="simBack">← <span class="en">Back to guide</span><span class="vi">Về trang hướng dẫn</span></button>
   <details class="help" open><summary tabindex="-1"><span class="en">How to use</span><span class="vi">Cách dùng</span></summary><button class="x" id="helpX" aria-label="Hide">×</button>
-  <p class="sub"><span class="en">Type moves while the cube is in view. Hold several keys together, say R then U, and they stack up on screen as you press; let go of everything and the cube runs the whole sequence. Shift + a letter turns it counter-clockwise (R'). Tap ' or 2 to change the last move; Esc cancels.</span><span class="vi">Gõ nước đi khi khối đang trong tầm nhìn. Giữ nhiều phím cùng lúc, ví dụ R rồi U, các nước hiện ngay trên màn hình khi bạn bấm; thả hết phím thì khối chạy cả chuỗi. Shift + chữ là xoay ngược (R'). Bấm ' hoặc 2 để đổi nước vừa nhập; Esc để huỷ.</span></p>
+  <p class="sub"><span class="en">Instant mode: every key turns the cube at once. Stack mode: keys pile up on screen, Enter runs them, Backspace removes the last one. Shift + a letter is the reverse (R'); in Stack mode tap ' or 2 to change the last move. Esc clears. Switch mode in Settings. The arrow keys or the arrow pad turn the whole cube to bring another face to the front.</span><span class="vi">Chế độ xoay ngay: bấm phím nào khối xoay luôn. Chế độ xếp hàng: các phím hiện trên màn hình, Enter để chạy, Backspace để xoá nước cuối. Shift + chữ là xoay ngược (R'); ở chế độ xếp hàng bấm ' hoặc 2 để đổi nước vừa nhập. Esc để xoá hết. Đổi chế độ trong Cài đặt. Phím mũi tên hoặc bảng mũi tên xoay cả khối để đưa mặt khác ra phía trước.</span></p>
   </details>
   <div class="sim">
     <div id="stage">
       <canvas id="gl" aria-label="Interactive cube. Drag to orbit."></canvas>
-      <button class="btn" id="noteOpen" aria-label="Notation">R U F</button><button class="btn" id="helpOpen" aria-label="How to use">?</button><div id="nogl"><span>WebGL unavailable — the guides and timer still work.</span></div>
+      <button class="btn" id="noteOpen" aria-label="Notation">R U F</button><button class="btn" id="helpOpen" aria-label="How to use">?</button><div id="cheer" aria-live="polite"><span class="en">Solved!</span><span class="vi">Đã giải xong!</span></div>
+      <div id="orient" role="group" aria-label="Rotate whole cube · Xoay cả khối" title="Rotate whole cube · Xoay cả khối">
+        <button class="btn" data-r="x" aria-label="Up · Lên">↑</button>
+        <button class="btn" data-r="y" aria-label="Left · Trái">←</button>
+        <button class="btn" data-r="x'" aria-label="Down · Xuống">↓</button>
+        <button class="btn" data-r="y'" aria-label="Right · Phải">→</button>
+      </div>
+      <div id="nogl"><span>WebGL unavailable — the guides and timer still work.</span></div>
     </div>
     <div id="hud">
       <div id="hudLabel">Free play</div>
@@ -401,6 +463,17 @@ body.nohelp #helpOpen,body.nonote #noteOpen{display:inline-flex;align-items:cent
   <p id="hist"></p>
 </section>
 
+<section id="prefs"><h2><span class="en">Settings</span><span class="vi">Cài đặt</span></h2>
+<h3 class="nt"><span class="en">How the cube turns</span><span class="vi">Cách xoay khối</span></h3>
+<p class="sub"><span class="en">Applies to the keyboard in the simulator. The Notation keys always turn at once.</span><span class="vi">Áp dụng cho bàn phím trong mô phỏng. Các phím ở mục Ký hiệu luôn xoay ngay.</span></p>
+<label class="rad"><input type="radio" name="mode" value="instant"><span><b><span class="en">Instant</span><span class="vi">Xoay ngay</span></b><small><span class="en">Press R and the cube turns right away. Hold Shift for R'.</span><span class="vi">Bấm R là khối xoay luôn. Giữ Shift để xoay ngược R'.</span></small></span></label>
+<label class="rad"><input type="radio" name="mode" value="stack"><span><b><span class="en">Stack, then Enter</span><span class="vi">Xếp hàng rồi Enter</span></b><small><span class="en">Keys pile up on screen like R U F'. Press Enter to run them, Backspace to remove the last, Esc to clear.</span><span class="vi">Các phím xếp hàng trên màn hình như R U F'. Bấm Enter để xoay, Backspace để xoá nước cuối, Esc để xoá hết.</span></small></span></label>
+<h3 class="nt"><span class="en">Animations</span><span class="vi">Hiệu ứng chuyển động</span></h3>
+<p class="sub"><span class="en">If your device asks apps to reduce motion, effects start switched off. You can turn them on here.</span><span class="vi">Nếu thiết bị của bạn yêu cầu giảm chuyển động, các hiệu ứng sẽ mặc định tắt. Bạn có thể bật lại ở đây.</span></p>
+<label class="rad"><input type="radio" name="motion" value="full"><span><b><span class="en">On</span><span class="vi">Bật</span></b><small><span class="en">Floating cube, particles, confetti and motion across the pages.</span><span class="vi">Khối lơ lửng, hạt sáng, pháo hoa giấy và chuyển động trên các trang.</span></small></span></label>
+<label class="rad"><input type="radio" name="motion" value="off"><span><b><span class="en">Off</span><span class="vi">Tắt</span></b><small><span class="en">Calm and still. Cube turns stay quick.</span><span class="vi">Tĩnh và nhẹ. Khối vẫn xoay nhanh.</span></small></span></label>
+</section>
+
 <footer><span class="en">Colour scheme: white up, green front. Algorithms are standard community notations; the setup state is computed by inverting each one.</span><span class="vi">Màu chuẩn: trắng trên, xanh lá trước. Thuật toán theo ký hiệu cộng đồng; trạng thái ban đầu được tính bằng cách đảo ngược chính thuật toán.</span></footer>
 </main>
 <aside id="coach" aria-live="polite" hidden>
@@ -425,17 +498,27 @@ const store = {
   get(k, fallback) { try { const raw = localStorage.getItem('rg.' + k); return raw ? JSON.parse(raw) : fallback; } catch (err) { return fallback; } },
   set(k, v) { try { localStorage.setItem('rg.' + k, JSON.stringify(v)); return true; } catch (err) { return false; } }
 };
-const REDUCED = matchMedia('(prefers-reduced-motion:reduce)').matches;
+const OS_REDUCED = matchMedia('(prefers-reduced-motion:reduce)').matches;
+let REDUCED = false;
+const motionPref = () => store.get('motion', OS_REDUCED ? 'off' : 'full');
+function applyMotion() {
+  const mode = motionPref(); REDUCED = mode === 'off'; document.documentElement.dataset.motion = mode;
+  $('#motionNote').hidden = !(OS_REDUCED && store.get('motion', null) === null);
+  $$('input[name=motion]').forEach(r => { r.checked = r.value === mode; });
+}
+$$('input[name=motion]').forEach(r => { r.onchange = () => { store.set('motion', r.value); applyMotion(); }; });
+$('#motionOn').onclick = () => { store.set('motion', 'full'); applyMotion(); };
+applyMotion();
 const BASE_MS = 340, QUARTER = Math.PI / 2;
 
 /* ---------- cube ---------- */
-const MOVES = { R: ['x', 1, -1], L: ['x', -1, 1], U: ['y', 1, -1], D: ['y', -1, 1], F: ['z', 1, -1], B: ['z', -1, 1], M: ['x', 0, 1] };
-const FACES = [['x', 1, 0xd62a1e], ['x', -1, 0xff7a00], ['y', 1, 0xf4f4ee], ['y', -1, 0xffd500], ['z', 1, 0x00a84f], ['z', -1, 0x1859d6]];
+const MOVES = { R: ['x', 1, -1], L: ['x', -1, 1], U: ['y', 1, -1], D: ['y', -1, 1], F: ['z', 1, -1], B: ['z', -1, 1], M: ['x', 0, 1], x: ['x', 'all', -1], y: ['y', 'all', -1], z: ['z', 'all', -1] };
+const FACES = [['x', 1, 0xe5534b], ['x', -1, 0xf28c3a], ['y', 1, 0xf3f2ed], ['y', -1, 0xf5c84a], ['z', 1, 0x3fae6a], ['z', -1, 0x3d7fd9]];
 const invert = alg => alg.split(/\s+/).filter(Boolean).reverse().map(t => t.endsWith("'") ? t.slice(0, -1) : t.endsWith('2') ? t : t + "'").join(' ');
 const ease = p => p < .5 ? 4 * p ** 3 : 1 - (-2 * p + 2) ** 3 / 2;
 
-let speed = 1, active = null, yaw = -.62, pitch = .5, dragging = false;
-const queue = [], cubies = [];
+let speed = 1, active = null, yaw = -.62, pitch = .5, dragging = false, pulse = 0, wasSolved = true, moveCount = 0, launchConfetti = () => {};
+const queue = [], cubies = [], rotLog = [];
 let renderer, scene, camera, cube;
 
 function initGL() {
@@ -446,12 +529,47 @@ function initGL() {
   renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
   scene = new THREE.Scene();
   camera = new THREE.PerspectiveCamera(32, 1, .1, 100);
-  scene.add(new THREE.AmbientLight(0xffffff, .75));
-  const key = new THREE.DirectionalLight(0xffffff, .7); key.position.set(4, 7, 6); scene.add(key);
+  scene.add(new THREE.HemisphereLight(0xffffff, 0x6b7280, .85));
+  const key = new THREE.DirectionalLight(0xffffff, .75), fill = new THREE.DirectionalLight(0xdfe8ff, .25);
+  key.position.set(4, 7, 6); fill.position.set(-6, -3, 4); scene.add(key, fill);
   cube = new THREE.Group(); scene.add(cube);
-  const box = new THREE.BoxGeometry(.97, .97, .97), plane = new THREE.PlaneGeometry(.8, .8);
-  const body = new THREE.MeshStandardMaterial({ color: 0x0d0d0b, roughness: .55 });
-  const mats = FACES.map(f => new THREE.MeshStandardMaterial({ color: f[2], roughness: .38 }));
+  const dotTex = (() => { const c = document.createElement('canvas'); c.width = c.height = 32; const g = c.getContext('2d'); g.fillStyle = '#fff'; g.beginPath(); g.arc(16, 16, 14, 0, 7); g.fill(); return new THREE.CanvasTexture(c); })();
+  const palette = FACES.map(f => new THREE.Color(f[2])), pieces = [], MOTES = innerWidth < 700 ? 36 : 80;
+  const moteGeo = new THREE.BufferGeometry(), moteArr = new Float32Array(MOTES * 3), moteCol = new Float32Array(MOTES * 3);
+  for (let i = 0; i < MOTES; i++) { moteArr.set([(Math.random() - .5) * 20, (Math.random() - .5) * 13, -3 - Math.random() * 5], i * 3); palette[i % 6].toArray(moteCol, i * 3); }
+  moteGeo.setAttribute('position', new THREE.BufferAttribute(moteArr, 3)); moteGeo.setAttribute('color', new THREE.BufferAttribute(moteCol, 3));
+  const motes = new THREE.Points(moteGeo, new THREE.PointsMaterial({ size: .16, map: dotTex, vertexColors: true, transparent: true, opacity: .55, depthWrite: false }));
+  scene.add(motes);
+  launchConfetti = () => {
+    const N = 120, geo = new THREE.BufferGeometry(), pos = new Float32Array(N * 3), col = new Float32Array(N * 3), vel = [];
+    for (let i = 0; i < N; i++) {
+      palette[i % 6].toArray(col, i * 3);
+      const a = Math.random() * Math.PI * 2, s = .03 + Math.random() * .07;
+      vel.push([Math.cos(a) * s, .07 + Math.random() * .12, Math.sin(a) * s]);
+    }
+    geo.setAttribute('position', new THREE.BufferAttribute(pos, 3)); geo.setAttribute('color', new THREE.BufferAttribute(col, 3));
+    const pts = new THREE.Points(geo, new THREE.PointsMaterial({ size: .24, map: dotTex, vertexColors: true, transparent: true, depthWrite: false }));
+    scene.add(pts); pieces.push({ pts, vel, life: 1 });
+  };
+  const roundedBox = (size, radius, seg) => {
+    const g = new THREE.BoxGeometry(size, size, size, seg, seg, seg), edge = size / 2 - radius;
+    const pos = g.attributes.position, nrm = g.attributes.normal, v = new THREE.Vector3(), inner = new THREE.Vector3(), d = new THREE.Vector3();
+    const clamp = x => Math.max(-edge, Math.min(edge, x));
+    for (let i = 0; i < pos.count; i++) {
+      v.fromBufferAttribute(pos, i); inner.set(clamp(v.x), clamp(v.y), clamp(v.z)); d.subVectors(v, inner);
+      if (d.lengthSq() > 1e-12) { d.normalize(); nrm.setXYZ(i, d.x, d.y, d.z); v.copy(inner).addScaledVector(d, radius); pos.setXYZ(i, v.x, v.y, v.z); }
+    }
+    return g;
+  };
+  const roundedTile = (w, r) => {
+    const h = w / 2, s = new THREE.Shape();
+    s.moveTo(-h + r, -h); s.lineTo(h - r, -h); s.quadraticCurveTo(h, -h, h, -h + r); s.lineTo(h, h - r); s.quadraticCurveTo(h, h, h - r, h);
+    s.lineTo(-h + r, h); s.quadraticCurveTo(-h, h, -h, h - r); s.lineTo(-h, -h + r); s.quadraticCurveTo(-h, -h, -h + r, -h);
+    return new THREE.ShapeGeometry(s, 6);
+  };
+  const box = roundedBox(.97, .13, 8), plane = roundedTile(.7, .12);
+  const body = new THREE.MeshStandardMaterial({ color: 0x1b1d22, roughness: .42, metalness: .05 });
+  const mats = FACES.map(f => new THREE.MeshPhysicalMaterial({ color: f[2], roughness: .3, clearcoat: .6, clearcoatRoughness: .25, polygonOffset: true, polygonOffsetFactor: -2, polygonOffsetUnits: -2 }));
   const up = new THREE.Vector3(0, 0, 1);
   for (let x = -1; x <= 1; x++) for (let y = -1; y <= 1; y++) for (let z = -1; z <= 1; z++) {
     if (!x && !y && !z) continue;
@@ -492,6 +610,20 @@ function initGL() {
     if (!active && queue.length) begin(queue.shift());
     if (!dragging && !REDUCED && !active && !queue.length) yaw += dt * .00012;
     cube.rotation.set(pitch, yaw, 0);
+    cube.position.y = REDUCED ? 0 : Math.sin(now * .0011) * .08;
+    pulse = Math.max(0, pulse - dt * .005); cube.scale.setScalar(1 + pulse * .04);
+    if (!REDUCED) {
+      const m = moteGeo.attributes.position.array;
+      for (let i = 1; i < m.length; i += 3) { m[i] += dt * .0004 * (1 + (i % 4) * .3); if (m[i] > 6.5) m[i] = -6.5; }
+      moteGeo.attributes.position.needsUpdate = true; motes.rotation.y = yaw * .15;
+    }
+    for (let k = pieces.length - 1; k >= 0; k--) {
+      const p = pieces[k], arr = p.pts.geometry.attributes.position.array, s = dt / 16;
+      p.vel.forEach((v, i) => { v[1] -= .0035 * s; arr[i * 3] += v[0] * s; arr[i * 3 + 1] += v[1] * s; arr[i * 3 + 2] += v[2] * s; });
+      p.pts.geometry.attributes.position.needsUpdate = true; p.life -= dt * .0006;
+      p.pts.material.opacity = Math.max(0, Math.min(1, p.life * 1.6));
+      if (p.life <= 0) { scene.remove(p.pts); p.pts.geometry.dispose(); p.pts.material.dispose(); pieces.splice(k, 1); }
+    }
     renderer.render(scene, camera);
     requestAnimationFrame(frame);
   };
@@ -500,12 +632,12 @@ function initGL() {
 }
 
 function begin(job) {
-  const m = /^([RLUDFBM])(2|')?$/.exec(job.tok);
+  const m = /^([RLUDFBMxyz])(2|')?$/.exec(job.tok);
   if (!m) { if (job.cb) job.cb(); return; }
   const [axis, layer, dir] = MOVES[m[1]];
   const total = dir * QUARTER * (m[2] === "'" ? -1 : 1) * (m[2] === '2' ? 2 : 1);
   const pivot = new THREE.Group(); cube.add(pivot);
-  const members = cubies.filter(c => Math.round(c.position[axis]) === layer);
+  const members = layer === 'all' ? cubies.slice() : cubies.filter(c => Math.round(c.position[axis]) === layer);
   members.forEach(c => pivot.attach(c));
   active = { pivot, axis, total, members, t0: performance.now(), dur: job.dur, cb: job.cb };
   if (!job.dur) finish();
@@ -514,13 +646,13 @@ function finish() {
   const a = active;
   a.pivot.rotation[a.axis] = a.total; a.pivot.updateMatrixWorld(true);
   a.members.forEach(c => { cube.attach(c); c.position.set(Math.round(c.position.x), Math.round(c.position.y), Math.round(c.position.z)); });
-  cube.remove(a.pivot); active = null;
+  cube.remove(a.pivot); active = null; pulse = 1; afterMove();
   if (a.cb) a.cb();
 }
 const flush = () => { queue.length = 0; if (active) { active.cb = null; finish(); } };
 const turnNow = tok => { if (cube) { flush(); begin({ tok, dur: 0 }); } };
 const turn = (tok, cb) => { if (cube) queue.push({ tok, cb, dur: BASE_MS / speed / (REDUCED ? 3 : 1) }); };
-const resetCube = () => { if (!cube) return; flush(); cubies.forEach(c => { c.position.copy(c.userData.home); c.quaternion.identity(); }); };
+const resetCube = () => { if (!cube) return; flush(); rotLog.length = 0; wasSolved = true; moveCount = 0; cubies.forEach(c => { c.position.copy(c.userData.home); c.quaternion.identity(); }); };
 
 /* ---------- solver ---------- */
 const SLOT = [], SLOT_AT = new Map();
@@ -666,8 +798,7 @@ function readState() {
   });
   return s;
 }
-$('#bSolve').onclick = () => {
-  if (!cube) return;
+const solveNow = () => {
   flush();
   const s = readState(), vi = document.body.dataset.l === 'vi';
   const say = text => { P.gen++; Object.assign(P, { steps: [], done: 0, queued: 0, label: text }); drawHud(); };
@@ -679,6 +810,16 @@ $('#bSolve').onclick = () => {
   Object.assign(P, { steps: moves, done: 0, queued: 0, label: `${vi ? 'Giải từng lớp' : 'Layer by layer'} · ${moves.length} ${vi ? 'nước' : 'moves'}` });
   drawHud(); $('#bPlay').click();
 };
+$('#bSolve').onclick = () => {
+  if (!cube) return;
+  flush();
+  if (!rotLog.length) { solveNow(); return; }
+  const back = rotLog.splice(0).reverse().map(r => r.endsWith("'") ? r[0] : r[0] + "'");
+  back.forEach((tok, i) => turn(tok, i === back.length - 1 ? solveNow : undefined));
+};
+const ROTATE = { ArrowUp: 'x', ArrowDown: "x'", ArrowLeft: 'y', ArrowRight: "y'" };
+const turnWhole = r => { rotLog.push(r); turn(r); };
+$('#orient').addEventListener('click', e => { const b = e.target.closest('[data-r]'); if (b) turnWhole(b.dataset.r); });
 
 /* ---------- player ---------- */
 const P = { steps: [], done: 0, queued: 0, label: 'Free play', gen: 0 };
@@ -856,24 +997,33 @@ const keyKind = e => {
   return m && MOVES[m[1]] ? m[1] : null;
 };
 new IntersectionObserver(([en]) => { simInView = en.isIntersecting; }, { threshold: .35 }).observe($('#stage'));
+const getMode = () => store.get('mode', 'stack');
+const setPh = () => {
+  const vi = document.body.dataset.l === 'vi', stack = getMode() === 'stack';
+  $('#pend').dataset.ph = stack ? (vi ? 'GÕ R U F… RỒI BẤM ENTER' : 'TYPE R U F… THEN PRESS ENTER') : (vi ? 'BẤM R U F… KHỐI XOAY NGAY' : 'PRESS R U F… THE CUBE TURNS AT ONCE');
+};
+$$('input[name=mode]').forEach(r => {
+  r.checked = r.value === getMode();
+  r.onchange = () => { store.set('mode', r.value); pend.length = 0; drawPend(); setPh(); };
+});
 addEventListener('keydown', e => {
   if (e.code === 'Space') { if (document.body.dataset.view !== 'timer') return; if (tState === 'running' || !typing(e)) { e.preventDefault(); if (!e.repeat) press(); } return; }
   if (e.key === 'Escape') { pend.length = 0; drawPend(); return; }
+  if (ROTATE[e.key] && simInView && !e.target.closest('input,select,textarea')) { e.preventDefault(); if (!e.repeat) turnWhole(ROTATE[e.key]); return; }
   if (!simInView || e.metaKey || e.ctrlKey || e.altKey || e.target.closest('input,select,textarea')) return;
+  const stack = getMode() === 'stack';
+  if (stack && e.key === 'Enter') { e.preventDefault(); runPending(); return; }
+  if (stack && e.key === 'Backspace') { e.preventDefault(); pend.pop(); drawPend(); return; }
   const kind = keyKind(e); if (!kind) return;
   e.preventDefault(); if (e.repeat) return;
-  held.add(e.code);
   if (kind === 'prime' || kind === 'double') {
-    const i = pend.length - 1; if (i < 0) return;
+    const i = pend.length - 1; if (!stack || i < 0) return;
     pend[i] = kind === 'double' ? pend[i][0] + '2' : pend[i].endsWith("'") ? pend[i][0] : pend[i][0] + "'";
   } else pend.push(kind + (e.shiftKey ? "'" : ''));
   drawPend();
+  if (!stack) runPending();
 });
-addEventListener('keyup', e => {
-  if (e.code === 'Space' && !typing(e)) release();
-  if (held.delete(e.code) && !held.size) runPending();
-});
-addEventListener('blur', () => { held.clear(); runPending(); });
+addEventListener('keyup', e => { if (e.code === 'Space' && !typing(e)) release(); });
 $('#bNew').onclick = newScramble;
 $('#bShow').onclick = showScramble;
 $('#bDel').onclick = () => { times.pop(); store.set('times', times); drawStats(); };
@@ -883,7 +1033,7 @@ $('#bClr').onclick = () => { if (times.length && confirm($('#lang').dataset.l ==
 function setLang(l) {
   document.body.dataset.l = l; document.documentElement.lang = l; $('#lang').dataset.l = l; store.set('lang', l);
   $('#q').placeholder = l === 'vi' ? 'Tìm thuật toán' : 'Search algorithms';
-  $('#pend').dataset.ph = l === 'vi' ? 'GIỮ PHÍM R U F… RỒI THẢ' : 'HOLD KEYS R U F… THEN RELEASE';
+  setPh();
 }
 $('#lang').onclick = () => setLang(document.body.dataset.l === 'en' ? 'vi' : 'en');
 setLang(store.get('lang', /^vi/i.test(navigator.language) ? 'vi' : 'en'));
@@ -892,15 +1042,15 @@ if (METHODS.some(m => m.id === hash)) { current = hash; }
 /* ---------- onboarding & course ---------- */
 const icon = k => $(`nav a[href="#${k}"] .ic`).outerHTML;
 const T = (e, v) => ({ e, v });
-const METHOD_COLORS = ['#4fc36e', '#3d9bf0', '#f5922b', '#f0584c', '#ffd500'];
+const METHOD_COLORS = ['#6dbb85', '#6aa7e0', '#eda35a', '#e8776b', '#e9c25a'];
 const methodOpts = recommend => METHODS.map((m, i) => ({
   v: m.id, c: METHOD_COLORS[i], ic: 'methods', s: recommend ? m.d : null,
   t: m.id === 'beginner' ? T('Layer by Layer' + (recommend ? ' (Recommended)' : ''), 'Giải từng tầng' + (recommend ? ' (Khuyên dùng)' : '')) : m.n
 }));
 const WIZ = {
   goal: { q: T('What brings you here?', 'Bạn muốn làm gì?'), next: a => a.goal === 'learn' ? 'heard' : 'proMethod', opts: [
-    { v: 'learn', t: T('I want to learn how to solve the cube', 'Tôi muốn học cách giải Rubik'), s: T('Start from zero, one step at a time', 'Bắt đầu từ con số 0, từng bước một'), ic: 'course', c: '#4fc36e' },
-    { v: 'speed', t: T('I can solve it and want to get faster', 'Tôi đã biết giải, muốn giải nhanh hơn'), s: T('Algorithm drills and the timer', 'Luyện công thức và đồng hồ'), ic: 'timer', c: '#f0584c' }] },
+    { v: 'learn', t: T('I want to learn how to solve the cube', 'Tôi muốn học cách giải Rubik'), s: T('Start from zero, one step at a time', 'Bắt đầu từ con số 0, từng bước một'), ic: 'course', c: '#6dbb85' },
+    { v: 'speed', t: T('I can solve it and want to get faster', 'Tôi đã biết giải, muốn giải nhanh hơn'), s: T('Algorithm drills and the timer', 'Luyện công thức và đồng hồ'), ic: 'timer', c: '#e8776b' }] },
   heard: { q: T('Have you heard of any solving method?', 'Bạn đã từng nghe về phương pháp giải nào chưa?'), next: () => 'method', opts: [
     { v: 'none', t: T('Not yet', 'Chưa'), s: T('No problem, we begin with the basics', 'Không sao, mình bắt đầu từ cơ bản'), ic: 'home', c: '#9a9a8e' },
     ...methodOpts(false).map(o => ({ ...o, ic: 'sim' }))] },
@@ -939,10 +1089,10 @@ function buildPlan(p) {
   const m = METHODS.find(x => x.id === (p.method || p.proMethod)) || METHODS[0];
   if (p.goal === 'learn') {
     add('not', T('Learn the notation', 'Học ký hiệu'),
-      T(`Each letter turns one face a quarter clockwise as you look straight at it: R right, L left, U up, D down, F front, B back. Hold Shift for the reverse (R'), and tap 2 while holding a letter for a half turn.`, `Mỗi chữ xoay một mặt 90° theo chiều kim đồng hồ khi bạn nhìn thẳng vào: R phải, L trái, U trên, D dưới, F trước, B sau. Giữ Shift để xoay ngược (R'), bấm 2 khi đang giữ một chữ để xoay 180°.`),
+      T(`Each letter turns one face a quarter clockwise as you look straight at it: R right, L left, U up, D down, F front, B back. Hold Shift for the reverse (R'). For a half turn use the 2 keys under Notation, or tap 2 after the letter in Stack mode.`, `Mỗi chữ xoay một mặt 90° theo chiều kim đồng hồ khi bạn nhìn thẳng vào: R phải, L trái, U trên, D dưới, F trước, B sau. Giữ Shift để xoay ngược (R'). Muốn xoay 180° hãy bấm phím 2 ở mục Ký hiệu, hoặc bấm 2 sau chữ khi dùng chế độ xếp hàng.`),
       { k: 'moves', go: 'sim', need: ['R', "R'", 'U2', 'F'], more: T('Click the keys under Notation, or type on your keyboard.', 'Bấm các phím ở mục Ký hiệu, hoặc gõ trên bàn phím.') });
     add('feel', T('Get comfortable with the cube', 'Làm quen với khối'),
-      T(`Hold R and U together, then let go: the cube runs them in order. Now try the four-move trigger R U R' U'. It is fine to type it in two goes.`, `Giữ R và U cùng lúc rồi thả ra: khối chạy theo thứ tự. Giờ thử chuỗi bốn nước R U R' U'. Gõ làm hai lần cũng được.`),
+      T(`Type R then U and watch them run (in Stack mode press Enter). Now try the four-move trigger R U R' U'. Use Shift for the primes; typing it in two goes is fine.`, `Gõ R rồi U và xem khối chạy (chế độ xếp hàng thì bấm Enter). Giờ thử chuỗi bốn nước R U R' U'. Dùng Shift cho nước ngược; gõ làm hai lần cũng được.`),
       { k: 'seq', go: 'sim', seq: "R U R' U'", more: T('The trigger shows up in almost every method.', 'Chuỗi này xuất hiện trong gần như mọi phương pháp.') });
     m.steps.forEach((s, i) => {
       const act = s.alg ? { k: 'solved', go: 'sim', alg: s.alg } : m.id === 'beginner' ? { k: 'read', go: 'sim', stage: BEGINNER_STAGES[i] } : { k: 'read', method: m.id };
@@ -991,7 +1141,7 @@ refreshStart();
 const coach = { i: -1, plan: [], seen: [], advancing: false, reload: false, timerBase: 0, fin: false };
 const BEGINNER_STAGES = [[0, 1], [1, 5], [5, 9], [5, 9], [9, 10], [10, 11], [11, 12], [12, 13]];
 const markDone = id => { const d = store.get('lessons', {}); d[id] = true; store.set('lessons', d); };
-const isSolved = () => readState().every((v, i) => v === SOLVED[i]);
+const isSolved = () => { const s = readState(); return [0, 1, 2, 3, 4, 5].every(f => { const cols = SLOT.map((sl, i) => sl.f === f ? s[i] : -1).filter(c => c >= 0); return cols.every(c => c === cols[0]); }); };
 const taskBtn = l => !['read'].includes(l.k);
 function showLesson() {
   const l = coach.plan[coach.i];
@@ -1062,7 +1212,21 @@ const setPanel = (cls, on) => { document.body.classList.toggle(cls, on); store.s
 $('#helpX').onclick = () => setPanel('nohelp', true); $('#helpOpen').onclick = () => setPanel('nohelp', false);
 $('#noteX').onclick = () => setPanel('nonote', true); $('#noteOpen').onclick = () => setPanel('nonote', false);
 
-const VIEWS = ['home', 'course', 'sim', 'methods', 'library', 'timer'];
+function afterMove() {
+  const solved = isSolved();
+  if (solved) { if (!wasSolved && moveCount >= 3) celebrate(); moveCount = 0; } else moveCount++;
+  wasSolved = solved;
+}
+function celebrate() {
+  launchConfetti();
+  const banner = $('#cheer'); banner.classList.remove('show'); void banner.offsetWidth; banner.classList.add('show');
+}
+addEventListener('pointermove', e => {
+  const tile = e.target.closest && e.target.closest('.tile'); if (!tile) return;
+  const r = tile.getBoundingClientRect();
+  tile.style.setProperty('--mx', `${e.clientX - r.left}px`); tile.style.setProperty('--my', `${e.clientY - r.top}px`);
+});
+const VIEWS = ['home', 'course', 'sim', 'methods', 'library', 'timer', 'prefs'];
 function route() {
   const h = location.hash.slice(1), isMethod = METHODS.some(m => m.id === h);
   const view = VIEWS.includes(h) ? h : isMethod ? 'methods' : 'home';
