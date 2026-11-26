@@ -85,7 +85,6 @@ footer{margin-top:120px;padding-top:20px;border-top:1px solid var(--line);color:
 #nogl{display:none;position:absolute;inset:0;place-items:center;text-align:center;padding:24px;color:var(--dim)}
 @media (max-width:900px){.sim{grid-template-columns:1fr}#stage{min-height:52vh;border-right:0;border-bottom:1px solid var(--line)}
 .mv{grid-template-columns:2.4rem 1fr}.mv small{grid-column:1/-1}.row{grid-template-columns:4.5rem 1fr}.row .go,.row .play{grid-column:2}}
-@media (prefers-reduced-motion:reduce){html:not([data-motion=full]){scroll-behavior:auto}html:not([data-motion=full]) *{transition:none!important}}
 :root{--bg:#302e2b;--panel:#262421;--card:#34322f;--ink:#fff;--dim:#a7a6a2;--line:#3d3b38;--acid:#7fb685;--sig:#fa412d;--shade:#4f8a5a;--disp:Nunito,system-ui,sans-serif;--body:Nunito,system-ui,sans-serif}
 @media (prefers-color-scheme:light){:root{--bg:#edece9;--panel:#fff;--card:#f4f3f0;--ink:#262421;--dim:#6b6a67;--line:#dcdad6;--acid:#5b8a2b;--sig:#d92d1a;--shade:#3f6b1d}}
 body{font:600 16px/1.6 var(--body);background:var(--bg)}
@@ -236,9 +235,7 @@ body.simpage #sim{animation:fade .35s both}
 h1 span{animation:rise .7s cubic-bezier(.2,.7,.2,1) both}h1 span:nth-child(2){animation-delay:.1s}h1 span:nth-child(3){animation-delay:.2s}
 .tile,.step,.row{animation:rise .5s cubic-bezier(.2,.7,.2,1) both}
 .tile:nth-child(2){animation-delay:.08s}.tile:nth-child(3){animation-delay:.16s}.tile:nth-child(4){animation-delay:.24s}
-@media (prefers-reduced-motion:reduce){html:not([data-motion=full]) *,html:not([data-motion=full]) *::before,html:not([data-motion=full]) *::after{animation:none!important}}
 html[data-motion=off] *,html[data-motion=off] *::before,html[data-motion=off] *::after{animation:none!important;transition:none!important}html[data-motion=off]{scroll-behavior:auto}
-#motionNote[hidden]{display:none}
 
 :root{--side:84px}
 header{padding:16px 10px calc(14px + env(safe-area-inset-bottom,0px));align-items:center;gap:14px;overflow:visible}
@@ -395,7 +392,6 @@ nav a:hover>span,nav a:focus-visible>span{transform:translate(0,-50%)}
 </header>
 
 <section id="home">
-<div class="tip" id="motionNote" hidden><span><span class="en">Your device has animations switched off, so the effects are hidden.</span><span class="vi">Thiết bị của bạn đang tắt hiệu ứng chuyển động nên các hiệu ứng bị ẩn.</span></span><button class="play" id="motionOn"><span class="en">TURN ON</span><span class="vi">BẬT LẠI</span></button></div>
 <div class="hero">
 <div class="stk" aria-hidden="true"><i style="--c:#e5534b"></i><i style="--c:#f3f2ed"></i><i style="--c:#3d7fd9"></i><i style="--c:#f5c84a"></i><i style="--c:#3fae6a"></i><i style="--c:#f28c3a"></i><i style="--c:#3d7fd9"></i><i style="--c:#e5534b"></i><i style="--c:#f3f2ed"></i></div>
 <div class="hcopy">
@@ -483,7 +479,7 @@ nav a:hover>span,nav a:focus-visible>span{transform:translate(0,-50%)}
 <label class="rad"><input type="radio" name="mode" value="instant"><span><b><span class="en">Instant</span><span class="vi">Xoay ngay</span></b><small><span class="en">Press R and the cube turns right away. Hold Shift for R'.</span><span class="vi">Bấm R là khối xoay luôn. Giữ Shift để xoay ngược R'.</span></small></span></label>
 <label class="rad"><input type="radio" name="mode" value="stack"><span><b><span class="en">Stack, then Enter</span><span class="vi">Xếp hàng rồi Enter</span></b><small><span class="en">Keys pile up on screen like R U F'. Press Enter to run them, Backspace to remove the last, Esc to clear.</span><span class="vi">Các phím xếp hàng trên màn hình như R U F'. Bấm Enter để xoay, Backspace để xoá nước cuối, Esc để xoá hết.</span></small></span></label>
 <h3 class="nt"><span class="en">Animations</span><span class="vi">Hiệu ứng chuyển động</span></h3>
-<p class="sub"><span class="en">If your device asks apps to reduce motion, effects start switched off. You can turn them on here.</span><span class="vi">Nếu thiết bị của bạn yêu cầu giảm chuyển động, các hiệu ứng sẽ mặc định tắt. Bạn có thể bật lại ở đây.</span></p>
+<p class="sub"><span class="en">Effects are on by default. Switch them off here if you prefer a calmer page.</span><span class="vi">Hiệu ứng mặc định được bật. Hãy tắt ở đây nếu bạn muốn trang tĩnh hơn.</span></p>
 <label class="rad"><input type="radio" name="motion" value="full"><span><b><span class="en">On</span><span class="vi">Bật</span></b><small><span class="en">Floating cube, particles, confetti and motion across the pages.</span><span class="vi">Khối lơ lửng, hạt sáng, pháo hoa giấy và chuyển động trên các trang.</span></small></span></label>
 <label class="rad"><input type="radio" name="motion" value="off"><span><b><span class="en">Off</span><span class="vi">Tắt</span></b><small><span class="en">Calm and still. Cube turns stay quick.</span><span class="vi">Tĩnh và nhẹ. Khối vẫn xoay nhanh.</span></small></span></label>
 </section>
@@ -518,18 +514,15 @@ const store = {
   },
   set(k, v) { try { localStorage.setItem('rg.' + k, JSON.stringify(v)); return true; } catch (err) { return false; } }
 };
-const OS_REDUCED = matchMedia('(prefers-reduced-motion:reduce)').matches;
 let REDUCED = false;
-const motionPref = () => store.get('motion', OS_REDUCED ? 'off' : 'full');
+const motionPref = () => store.get('motion', 'full');
 function applyMotion() {
   const mode = motionPref(); REDUCED = mode === 'off'; document.documentElement.dataset.motion = mode;
-  $('#motionNote').hidden = !(OS_REDUCED && store.get('motion', null) === null);
   $$('input[name=motion]').forEach(r => { r.checked = r.value === mode; });
 }
 $$('input[name=motion]').forEach(r => { r.onchange = () => { store.set('motion', r.value); applyMotion(); }; });
-$('#motionOn').onclick = () => { store.set('motion', 'full'); applyMotion(); };
 applyMotion();
-const BASE_MS = 340, QUARTER = Math.PI / 2;
+const BASE_MS = 140, QUARTER = Math.PI / 2;
 
 /* ---------- cube ---------- */
 const MOVES = { R: ['x', 1, -1], L: ['x', -1, 1], U: ['y', 1, -1], D: ['y', -1, 1], F: ['z', 1, -1], B: ['z', -1, 1], M: ['x', 0, 1], x: ['x', 'all', -1], y: ['y', 'all', -1], z: ['z', 'all', -1] };
@@ -537,7 +530,7 @@ const FACES = [['x', 1, 0xe5534b], ['x', -1, 0xf28c3a], ['y', 1, 0xf3f2ed], ['y'
 const invert = alg => alg.split(/\s+/).filter(Boolean).reverse().map(t => t.endsWith("'") ? t.slice(0, -1) : t.endsWith('2') ? t : t + "'").join(' ');
 const ease = p => { const q = p - 1; return 1 + 2.2 * q ** 3 + 1.2 * q ** 2; };
 
-let speed = 1, active = null, yaw = -.62, pitch = .5, dragging = false, wasSolved = true, moveCount = 0, spinLeft = 0, floatMix = 1, launchGlow = () => {};
+let speed = 1, active = null, yaw = -.62, pitch = .5, dragging = false, wasSolved = true, moveCount = 0, floatMix = 1, launchGlow = () => {};
 const queue = [], cubies = [], rotLog = [];
 let renderer, scene, camera, cube;
 
@@ -570,7 +563,6 @@ function initGL() {
     const mat = new THREE.SpriteMaterial({ map: ringTex, color: 0x6dbb85, transparent: true, depthWrite: false, blending: THREE.AdditiveBlending, opacity: .7 });
     const sprite = new THREE.Sprite(mat); sprite.position.z = -1.5; sprite.scale.setScalar(2);
     scene.add(sprite); glows.push({ sprite, life: 1 });
-    if (!REDUCED) spinLeft = Math.PI * 2;
   };
   const roundedBox = (size, radius, seg) => {
     const g = new THREE.BoxGeometry(size, size, size, seg, seg, seg), edge = size / 2 - radius;
@@ -629,7 +621,6 @@ function initGL() {
       if (p >= 1) finish();
     }
     if (!active && queue.length) begin(queue.shift());
-    if (!dragging && !REDUCED && !active && !queue.length) yaw += dt * .00012;
     cube.rotation.set(pitch, yaw, 0);
     floatMix += ((active || queue.length || dragging ? 0 : 1) - floatMix) * Math.min(1, dt * .004);
     cube.position.y = REDUCED ? 0 : Math.sin(now * .0011) * .07 * floatMix;
@@ -642,10 +633,6 @@ function initGL() {
       const g = glows[k]; g.life -= dt * .0009;
       g.sprite.scale.setScalar(2 + (1 - g.life) * 7); g.sprite.material.opacity = Math.max(0, g.life) * .7;
       if (g.life <= 0) { scene.remove(g.sprite); g.sprite.material.dispose(); glows.splice(k, 1); }
-    }
-    if (spinLeft > 0) {
-      const step = spinLeft * (1 - Math.exp(-dt * .0035)); yaw += step; spinLeft -= step;
-      if (spinLeft < .002) { yaw += spinLeft; spinLeft = 0; }
     }
     renderer.render(scene, camera);
     requestAnimationFrame(frame);
