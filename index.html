@@ -370,10 +370,32 @@ nav a:hover>span,nav a:focus-visible>span{transform:translate(0,-50%)}
 @keyframes iconpop{0%{transform:scale(.6) rotate(-18deg)}55%{transform:scale(1.25) rotate(8deg)}100%{transform:scale(1) rotate(0)}}
 
 .step,.row,.lesson{animation:none}
+
+#toast{position:fixed;z-index:120;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);max-width:calc(100vw - 32px);padding:12px 20px;border-radius:14px;background:var(--ink);color:var(--bg);font:700 14px var(--body);box-shadow:0 10px 30px rgba(0,0,0,.35)}
+#toast[hidden]{display:none}
+.tiles{grid-template-columns:1.5fr 1fr;grid-template-rows:repeat(3,auto)}
+.tile:first-child{grid-row:1/4;display:flex;flex-direction:column;justify-content:flex-end;min-height:280px}
+.tile:first-child .ti{width:64px;height:64px;margin-bottom:auto}
+.tile:first-child b{font-size:2rem}
+.tile:not(:first-child){display:grid;grid-template-columns:auto 1fr;column-gap:16px;align-items:center}
+.tile:not(:first-child) .ti{grid-row:1/3;margin:0}
+@media (max-width:900px){#toast{bottom:calc(76px + env(safe-area-inset-bottom,0px))}}
+@media (max-width:700px){.tiles{grid-template-columns:1fr;grid-template-rows:auto}.tile:first-child{grid-row:auto;min-height:0}}
+
+body.drilling #orient{display:none}
+#cText p{margin:0 0 10px}#cText code{font:700 13px var(--mono);color:var(--acid);overflow-wrap:anywhere}#cText b{color:var(--ink)}
+#cFocus{display:flex;gap:8px;flex-wrap:wrap;margin:0 0 12px}#cFocus[hidden],#cQuiz[hidden]{display:none}
+#cQuiz{margin:0 0 12px}.qq{margin:0 0 8px;font-weight:800;color:var(--ink)}
+.qo{min-height:44px;padding:8px 14px;margin-bottom:6px;font-size:14.5px;font-weight:700}
+.qo.good{outline:2px solid var(--acid)}.qo.bad{opacity:.45}
+.why{margin:6px 0 0;min-height:1.2em;color:var(--dim);font-size:14px}
+.mod{margin:26px 0 10px;font:900 1.25rem var(--disp);text-transform:none;color:var(--acid)}
+.lesson{grid-template-columns:3rem 1fr auto auto}
+.kind{padding:3px 10px;border-radius:999px;background:var(--panel);color:var(--dim);font:800 12px var(--body)}
+@media (max-width:900px){.lesson{grid-template-columns:3rem 1fr}.lesson .kind{grid-column:2;justify-self:start;margin-top:6px}}
 </style>
 </head>
 <body data-l="en">
-
 
 <main>
 <header>
@@ -425,6 +447,7 @@ nav a:hover>span,nav a:focus-visible>span{transform:translate(0,-50%)}
       <div id="pend" data-ph="" aria-live="polite"></div>
       <div id="hudSteps" aria-live="polite"></div>
       <div class="ctl">
+        <button class="btn" id="bUndo"><span class="en">Undo</span><span class="vi">Hoàn tác</span></button>
         <button class="btn" id="bReset">Reset</button>
         <button class="btn" id="bStep">Step</button>
         <button class="btn go" id="bSolve"><span class="en">Solve</span><span class="vi">Giải</span></button><select class="btn" id="bMethod" aria-label="Method"><option value="beginner">Beginner (LBL)</option><option disabled>CFOP · sắp có / coming soon</option><option disabled>Roux · sắp có / coming soon</option><option disabled>ZZ · sắp có / coming soon</option><option disabled>Petrus · sắp có / coming soon</option></select>
@@ -486,10 +509,11 @@ nav a:hover>span,nav a:focus-visible>span{transform:translate(0,-50%)}
 
 <footer><span class="en">Colour scheme: white up, green front. Algorithms are standard community notations; the setup state is computed by inverting each one.</span><span class="vi">Màu chuẩn: trắng trên, xanh lá trước. Thuật toán theo ký hiệu cộng đồng; trạng thái ban đầu được tính bằng cách đảo ngược chính thuật toán.</span></footer>
 </main>
+<div id="toast" role="status" aria-live="polite" hidden></div>
 <aside id="coach" aria-live="polite" hidden>
   <div class="ch"><span class="pill" id="cStep"></span><button class="x" id="cQuit" aria-label="Close">×</button></div>
-  <h3 id="cTitle"></h3><p id="cText"></p><ul id="cTasks"></ul>
-  <div class="ctl"><button class="btn" id="cShow"><span class="en">Show me</span><span class="vi">Xem mẫu</span></button><button class="btn" id="cNext"></button></div>
+  <h3 id="cTitle"></h3><div id="cText"></div><div id="cFocus" hidden><button class="btn" data-f="1"><span class="en">Centres</span><span class="vi">Tâm</span></button><button class="btn" data-f="2"><span class="en">Edges</span><span class="vi">Cạnh</span></button><button class="btn" data-f="3"><span class="en">Corners</span><span class="vi">Góc</span></button></div><div id="cQuiz" hidden></div><ul id="cTasks"></ul>
+  <div class="ctl"><button class="btn" id="cHint" hidden><span class="en">Hint</span><span class="vi">Gợi ý</span></button><button class="btn" id="cShow"><span class="en">Show me</span><span class="vi">Xem mẫu</span></button><button class="btn" id="cNext"></button></div>
 </aside>
 <div id="wiz" role="dialog" aria-modal="true" aria-labelledby="wizQ" hidden>
   <div class="wbox">
@@ -504,15 +528,21 @@ nav a:hover>span,nav a:focus-visible>span{transform:translate(0,-50%)}
 const $ = (s, r = document) => r.querySelector(s);
 const $$ = (s, r = document) => [...r.querySelectorAll(s)];
 const bi = o => `<span class="en">${o.e}</span><span class="vi">${o.v}</span>`;
+const STORE_PREFIX = 'rg.v1.', TOAST_MS = 5000;
+let toastTimer = 0;
+function notify(message) {
+  const box = $('#toast'); box.innerHTML = bi(message); box.hidden = false;
+  clearTimeout(toastTimer); toastTimer = setTimeout(() => { box.hidden = true; }, TOAST_MS);
+}
 const store = {
   get(k, fallback) {
     try {
-      const raw = localStorage.getItem('rg.' + k); if (!raw) return fallback;
+      const raw = localStorage.getItem(STORE_PREFIX + k) ?? localStorage.getItem('rg.' + k); if (!raw) return fallback;
       const v = JSON.parse(raw);
       return fallback === null || (v !== null && typeof v === typeof fallback && Array.isArray(v) === Array.isArray(fallback)) ? v : fallback;
     } catch (err) { return fallback; }
   },
-  set(k, v) { try { localStorage.setItem('rg.' + k, JSON.stringify(v)); return true; } catch (err) { return false; } }
+  set(k, v) { try { localStorage.setItem(STORE_PREFIX + k, JSON.stringify(v)); return true; } catch (err) { notify({ e: 'Could not save your progress: browser storage is full or blocked.', v: 'Không lưu được tiến độ: bộ nhớ trình duyệt đã đầy hoặc bị chặn.' }); return false; } }
 };
 let REDUCED = false;
 const motionPref = () => store.get('motion', 'full');
@@ -522,16 +552,19 @@ function applyMotion() {
 }
 $$('input[name=motion]').forEach(r => { r.onchange = () => { store.set('motion', r.value); applyMotion(); }; });
 applyMotion();
+addEventListener('offline', () => notify({ e: 'You are offline. Saved progress still works.', v: 'Bạn đang ngoại tuyến. Tiến độ đã lưu vẫn dùng được.' }));
+addEventListener('online', () => notify({ e: 'Back online.', v: 'Đã có mạng trở lại.' }));
+if (!navigator.onLine) notify({ e: 'You are offline. Saved progress still works.', v: 'Bạn đang ngoại tuyến. Tiến độ đã lưu vẫn dùng được.' });
 const BASE_MS = 140, QUARTER = Math.PI / 2;
 
-/* ---------- cube ---------- */
 const MOVES = { R: ['x', 1, -1], L: ['x', -1, 1], U: ['y', 1, -1], D: ['y', -1, 1], F: ['z', 1, -1], B: ['z', -1, 1], M: ['x', 0, 1], x: ['x', 'all', -1], y: ['y', 'all', -1], z: ['z', 'all', -1] };
 const FACES = [['x', 1, 0xe5534b], ['x', -1, 0xf28c3a], ['y', 1, 0xf3f2ed], ['y', -1, 0xf5c84a], ['z', 1, 0x3fae6a], ['z', -1, 0x3d7fd9]];
 const invert = alg => alg.split(/\s+/).filter(Boolean).reverse().map(t => t.endsWith("'") ? t.slice(0, -1) : t.endsWith('2') ? t : t + "'").join(' ');
 const ease = p => { const q = p - 1; return 1 + 2.2 * q ** 3 + 1.2 * q ** 2; };
 
-let speed = 1, active = null, yaw = -.62, pitch = .5, dragging = false, wasSolved = true, moveCount = 0, floatMix = 1, launchGlow = () => {};
-const queue = [], cubies = [], rotLog = [];
+let speed = 1, active = null, yaw = -.62, pitch = .5, dragging = false, wasSolved = true, moveCount = 0, floatMix = 1, focusKind = 0, launchGlow = () => {};
+const MOVE_LOG_LIMIT = 300, FOCUS_SCALE = 1.1, FOCUS_DIM = .86;
+const queue = [], cubies = [], rotLog = [], moveLog = [];
 let renderer, scene, camera, cube;
 
 function initGL() {
@@ -622,6 +655,11 @@ function initGL() {
     }
     if (!active && queue.length) begin(queue.shift());
     cube.rotation.set(pitch, yaw, 0);
+    cubies.forEach(c => {
+      const kind = Math.abs(Math.round(c.position.x)) + Math.abs(Math.round(c.position.y)) + Math.abs(Math.round(c.position.z));
+      const target = focusKind ? (kind === focusKind ? FOCUS_SCALE : FOCUS_DIM) : 1;
+      c.scale.setScalar(c.scale.x + (target - c.scale.x) * Math.min(1, dt * .012));
+    });
     floatMix += ((active || queue.length || dragging ? 0 : 1) - floatMix) * Math.min(1, dt * .004);
     cube.position.y = REDUCED ? 0 : Math.sin(now * .0011) * .07 * floatMix;
     if (!REDUCED) {
@@ -662,9 +700,8 @@ function finish(silent) {
 const flush = () => { queue.length = 0; if (active) { active.cb = null; finish(true); } };
 const turnNow = tok => { if (cube) { flush(); begin({ tok, dur: 0 }); } };
 const turn = (tok, cb) => { if (cube) queue.push({ tok, cb, dur: BASE_MS / speed / (REDUCED ? 3 : 1) }); };
-const resetCube = () => { if (!cube) return; flush(); rotLog.length = 0; wasSolved = true; moveCount = 0; cubies.forEach(c => { c.position.copy(c.userData.home); c.quaternion.identity(); }); };
+const resetCube = () => { if (!cube) return; flush(); rotLog.length = 0; moveLog.length = 0; wasSolved = true; moveCount = 0; cubies.forEach(c => { c.position.copy(c.userData.home); c.quaternion.identity(); }); };
 
-/* ---------- solver ---------- */
 const SLOT = [], SLOT_AT = new Map();
 const slotKey = (p, n) => p.join() + '|' + n.join();
 const nonZero = p => p.filter(c => c !== 0).length;
@@ -749,7 +786,7 @@ const MACROS = {
   mids: withU(["U R U' R' U' F' U F", "U' L' U L U F U' F'"]),
   llCross: withU(["F R U R' U' F'"]),
   llOrient: withU(["R U R' U R U2 R'", "R U2 R' U' R U' R'"]),
-  llCorners: withU(["U R U' L' U R' U' L"]),
+  llCorners: withU(["R' F R' B2 R F' R' B2 R2"]),
   llEdges: withU(["R U' R U R U R U' R' U' R2", "R2 U R U R' U' R' U' R' U R'"])
 };
 function findMacros(s, macros, ok, maxDepth) {
@@ -765,23 +802,26 @@ function findMacros(s, macros, ok, maxDepth) {
   for (let d = 0; d <= maxDepth; d++) { const hit = dive(s, d, false); if (hit) return hit.flatMap(i => macros[i]); }
   return null;
 }
-function solveBeginner(start) {
-  let s = start; const out = [], marks = [], goals = [GOAL.cross];
-  const take = toks => { s = runToks(s, toks); out.push(...toks); };
-  const stage = (macros, goal, depth) => {
-    goals.push(goal);
-    const toks = findMacros(s, macros, st => goals.every(g => g.every(i => st[i] === SOLVED[i])), depth);
-    if (!toks) throw new Error('stage failed');
-    take(toks); marks.push(out.length);
-  };
-  take(solveCross(s)); marks.push(out.length);
-  GOAL.dCorners.forEach(g => stage(MACROS.corners, g, 4));
-  GOAL.mids.forEach(g => stage(MACROS.mids, g, 4));
-  stage(MACROS.llCross, GOAL.llCross, 6);
-  stage(MACROS.llOrient, GOAL.llFace, 5);
-  stage(MACROS.llCorners, GOAL.topCorners, 5);
-  stage(MACROS.llEdges, GOAL.all, 5);
-  out.marks = marks;
+const STAGES = [
+  { goal: GOAL.cross },
+  ...GOAL.dCorners.map(goal => ({ goal, macros: MACROS.corners, depth: 4 })),
+  ...GOAL.mids.map(goal => ({ goal, macros: MACROS.mids, depth: 4 })),
+  { goal: GOAL.llCross, macros: MACROS.llCross, depth: 6 },
+  { goal: GOAL.llFace, macros: MACROS.llOrient, depth: 5 },
+  { goal: GOAL.topCorners, macros: MACROS.llCorners, depth: 5 },
+  { goal: GOAL.all, macros: MACROS.llEdges, depth: 5 }
+];
+const goalsUpTo = k => STAGES.slice(0, k + 1).map(stage => stage.goal);
+const meets = (st, goals) => goals.every(g => g.every(i => st[i] === SOLVED[i]));
+function stageMoves(state, k) {
+  if (k === 0) return solveCross(state);
+  const toks = findMacros(state, STAGES[k].macros, st => meets(st, goalsUpTo(k)), STAGES[k].depth);
+  if (!toks) throw new Error('stage failed');
+  return toks;
+}
+function solveBeginner(start, upTo = STAGES.length) {
+  let s = start; const out = [];
+  for (let k = 0; k < upTo; k++) { const toks = stageMoves(s, k); s = runToks(s, toks); out.push(...toks); }
   return out;
 }
 const quarters = t => t.endsWith('2') ? 2 : t.endsWith("'") ? 3 : 1;
@@ -831,10 +871,10 @@ const ROTATE = { ArrowUp: 'x', ArrowDown: "x'", ArrowLeft: 'y', ArrowRight: "y'"
 const turnWhole = r => { rotLog.push(r); turn(r); };
 $('#orient').addEventListener('click', e => { const b = e.target.closest('[data-r]'); if (b) turnWhole(b.dataset.r); });
 
-/* ---------- player ---------- */
 const P = { steps: [], done: 0, queued: 0, label: 'Free play', gen: 0 };
+const HUD_VI = { 'Free play': 'Chơi tự do', Hint: 'Gợi ý', Demo: 'Minh hoạ' };
 function drawHud() {
-  $('#hudLabel').textContent = document.body.dataset.l === 'vi' && P.label === 'Free play' ? 'Chơi tự do' : P.label;
+  $('#hudLabel').textContent = (document.body.dataset.l === 'vi' && HUD_VI[P.label]) || P.label;
   $('#hudSteps').innerHTML = P.steps.map((t, i) => `<span class="tok ${i < P.done ? 'done' : i === P.done ? 'next' : ''}">${t}</span>`).join(' ');
   const box = $('#hudSteps'), nx = $('.next', box);
   if (nx) box.scrollTop = nx.offsetTop - 28;
@@ -846,15 +886,17 @@ function loadAlg(alg, label) {
 function stepOnce() {
   if (P.queued >= P.steps.length) return;
   const gen = P.gen;
-  turn(P.steps[P.queued++], () => { if (P.gen === gen) { P.done++; drawHud(); } });
+  const tok = P.steps[P.queued++];
+  moveLog.push(tok); if (moveLog.length > MOVE_LOG_LIMIT) moveLog.shift();
+  turn(tok, () => { if (P.gen === gen) { P.done++; drawHud(); } });
 }
 const showSim = () => { if (location.hash !== '#sim') location.hash = 'sim'; };
 $('#bStep').onclick = stepOnce;
+$('#bUndo').onclick = () => { const last = moveLog.pop(); if (last) turn(invert(last)); };
 function playAll() { while (P.queued < P.steps.length) stepOnce(); }
 $('#bReset').onclick = () => { resetCube(); P.gen++; Object.assign(P, { steps: [], done: 0, queued: 0, label: 'Free play' }); drawHud(); };
 $('#bSpeed').onchange = e => { speed = +e.target.value; };
 
-/* ---------- notation ---------- */
 const NOTES = [
   ['R', 'Right face', 'Mặt phải'], ['L', 'Left face', 'Mặt trái'], ['U', 'Up face', 'Mặt trên'],
   ['D', 'Down face', 'Mặt dưới'], ['F', 'Front face', 'Mặt trước'], ['B', 'Back face', 'Mặt sau'],
@@ -863,7 +905,6 @@ const NOTES = [
 $('#mvList').innerHTML = NOTES.map(([k, e, v]) => `<div class="mv"><i>${k}</i><div class="keys">${[k, k + "'", k + '2'].map(t => `<button class="key" data-m="${t}" aria-label="${t}">${t}</button>`).join('')}</div><small>${bi({ e, v })}</small></div>`).join('');
 $('#mvList').addEventListener('click', e => { const b = e.target.closest('[data-m]'); if (b) { pend.push(b.dataset.m); runPending(); } });
 
-/* ---------- methods ---------- */
 const S = (te, tv, de, dv, alg) => ({ t: { e: te, v: tv }, d: { e: de, v: dv }, alg });
 const METHODS = [
   { id: 'beginner', lv: '01', n: { e: 'Beginner', v: 'Người mới' }, d: { e: 'Layer by layer. About 7 steps, about 120 moves per solve, no speed needed.', v: 'Giải từng lớp. Khoảng 7 bước, ~120 nước mỗi lần giải, không cần nhanh.' }, steps: [
@@ -873,7 +914,7 @@ const METHODS = [
     S('Middle layer, edge to the left', 'Lớp giữa, cạnh sang trái', 'Mirror of the previous case.', 'Đối xứng của trường hợp trên.', "U' L' U L U F U' F'"),
     S('Top cross', 'Chữ thập mặt trên', 'Repeat until the white cross appears on top: dot, then L-shape, then line.', 'Lặp tới khi hiện chữ thập trắng ở mặt trên: chấm, rồi chữ L, rồi đường thẳng.', "F R U R' U' F'"),
     S('Top face', 'Mặt trên', 'Hold the cube so a single white corner faces you at front-left; repeat until the whole top is white.', 'Cầm khối sao cho một góc trắng duy nhất hướng về bạn ở trước-trái; lặp tới khi cả mặt trên trắng.', "R U R' U R U2 R'"),
-    S('Place corners', 'Xếp góc', 'Find a corner already in its right place, hold it at front-right, repeat until all four corners are correct.', 'Tìm góc đã đúng chỗ, đặt nó ở trước-phải, lặp tới khi cả 4 góc đúng.', "U R U' L' U R' U' L"),
+    S('Place corners', 'Xếp góc', 'Find a corner already in its right place and hold it at the front-left, then run the algorithm until all four corners are correct. If none is in place, run it once from any side first.', 'Tìm góc đã đúng chỗ và đặt nó ở trước-trái, rồi chạy công thức tới khi cả 4 góc đúng. Nếu chưa có góc nào đúng chỗ thì chạy một lần ở phía bất kỳ trước.', "R' F R' B2 R F' R' B2 R2"),
     S('Place last edges', 'Xếp cạnh cuối', 'Solved edge at the back, then cycle the other three. Do it once or twice.', 'Cạnh đã đúng ở phía sau, rồi hoán đổi vòng ba cạnh còn lại. Làm một hoặc hai lần.', "R U' R U R U R U' R' U' R2")
   ] },
   { id: 'cfop', lv: '02', n: { e: 'CFOP', v: 'CFOP' }, d: { e: 'The dominant speedsolving method. Four stages, about 55 moves, needs 78 last-layer algorithms to be complete.', v: 'Phương pháp speedcubing phổ biến nhất. Bốn giai đoạn, ~55 nước, cần 78 công thức lớp cuối để đầy đủ.' }, steps: [
@@ -912,6 +953,11 @@ function drawMethod() {
 }
 $('#tabs').innerHTML = METHODS.map(m => `<button class="tab" role="tab" data-id="${m.id}">${bi(m.n)} <sup style="font:700 11px var(--mono)"></sup></button>`).join('');
 $('#tabs').addEventListener('click', e => { const t = e.target.closest('.tab'); if (!t) return; current = t.dataset.id; history.replaceState(null, '', '#' + current); drawMethod(); });
+$('#tabs').addEventListener('keydown', e => {
+  const step = { ArrowRight: 1, ArrowLeft: -1 }[e.key]; if (!step) return;
+  const tabs = $$('.tab'), next = tabs[(tabs.indexOf(document.activeElement) + step + tabs.length) % tabs.length];
+  e.preventDefault(); next.focus(); next.click();
+});
 $('#method').addEventListener('change', e => {
   if (!e.target.dataset.k) return;
   done[e.target.dataset.k] = e.target.checked; store.set('done', done); drawMethod();
@@ -919,7 +965,6 @@ $('#method').addEventListener('change', e => {
 });
 $('#method').addEventListener('click', e => { const b = e.target.closest('.play'); if (b) { loadAlg(b.dataset.alg, b.dataset.lb); showSim(); setTimeout(() => playAll(), REDUCED ? 0 : 700); } });
 
-/* ---------- library ---------- */
 const LIB = [
   ['Trigger', 'Trigger', "R U R' U'", 'The building block of F2L and Sune.', 'Viên gạch nền của F2L và Sune.'],
   ['Sune', 'OLL', "R U R' U R U2 R'", 'Three twisted corners; the first OLL to learn.', 'Ba góc xoay sai; OLL đầu tiên nên học.'],
@@ -931,8 +976,8 @@ const LIB = [
   ['Ua-perm', 'PLL', "R U' R U R U R U' R' U' R2", 'Cycles three edges.', 'Hoán vị vòng ba cạnh.'],
   ['Ub-perm', 'PLL', "R2 U R U R' U' R' U' R' U R'", 'Cycles three edges the other way.', 'Hoán vị vòng ba cạnh theo chiều ngược lại.'],
   ['H-perm', 'PLL', "M2 U M2 U2 M2 U M2", 'Swaps two opposite pairs of edges.', 'Đổi hai cặp cạnh đối diện.'],
-  ['Z-perm', 'PLL', "M' U M2 U M2 U M' U2 M2", 'Swaps two adjacent pairs of edges.', 'Đổi hai cặp cạnh kề nhau.'],
-  ['Corner swap', 'PLL', "U R U' L' U R' U' L", 'Beginner corner cycle.', 'Hoán vị góc cho người mới.']
+  ['Z-perm', 'PLL', "M2 U M2 U M' U2 M2 U2 M' U2", 'Swaps two adjacent pairs of edges.', 'Đổi hai cặp cạnh kề nhau.'],
+  ['A-perm', 'PLL', "R' F R' B2 R F' R' B2 R2", 'Cycles three corners without twisting them.', 'Hoán vị vòng ba góc mà không làm xoay góc.']
 ];
 let filter = 'all';
 function drawLib() {
@@ -944,7 +989,6 @@ $('#q').oninput = drawLib;
 $$('.chip').forEach(b => b.onclick = () => { filter = b.dataset.f; $$('.chip').forEach(c => c.setAttribute('aria-pressed', c === b)); drawLib(); });
 $('#lib').addEventListener('click', e => { const b = e.target.closest('.play'); if (b) { loadAlg(b.dataset.alg, b.dataset.lb); showSim(); } });
 
-/* ---------- timer ---------- */
 const HOLD_MS = 300, AXIS = { R: 0, L: 0, U: 1, D: 1, F: 2, B: 2 };
 let times = store.get('times', []).filter(Number.isFinite), scr = '', tState = 'idle', tStart = 0, holdTimer = 0, raf = 0;
 const fmt = ms => { const s = ms / 1000; return s >= 60 ? `${Math.floor(s / 60)}:${(s % 60).toFixed(2).padStart(5, '0')}` : s.toFixed(2); };
@@ -1018,7 +1062,7 @@ $$('input[name=mode]').forEach(r => {
 addEventListener('keydown', e => {
   if (e.code === 'Space') { if (document.body.dataset.view !== 'timer') return; if (tState === 'running' || !typing(e)) { e.preventDefault(); if (!e.repeat) press(); } return; }
   if (e.key === 'Escape') { pend.length = 0; drawPend(); return; }
-  if (ROTATE[e.key] && simInView && !e.target.closest('input,select,textarea')) { e.preventDefault(); if (!e.repeat) turnWhole(ROTATE[e.key]); return; }
+  if (ROTATE[e.key] && simInView && !document.body.classList.contains('drilling') && !e.target.closest('input,select,textarea')) { e.preventDefault(); if (!e.repeat) turnWhole(ROTATE[e.key]); return; }
   if (!simInView || e.metaKey || e.ctrlKey || e.altKey || e.target.closest('input,select,textarea')) return;
   const stack = getMode() === 'stack';
   if (stack && e.key === 'Enter' && pend.length) { e.preventDefault(); runPending(); return; }
@@ -1038,7 +1082,6 @@ $('#bShow').onclick = showScramble;
 $('#bDel').onclick = () => { times.pop(); store.set('times', times); drawStats(); };
 $('#bClr').onclick = () => { if (times.length && confirm($('#lang').dataset.l === 'vi' ? 'Xoá toàn bộ thời gian?' : 'Delete all times?')) { times = []; store.set('times', times); drawStats(); } };
 
-/* ---------- language, boot ---------- */
 function setLang(l) {
   document.body.dataset.l = l; document.documentElement.lang = l; $('#lang').dataset.l = l; store.set('lang', l);
   $('#q').placeholder = l === 'vi' ? 'Tìm thuật toán' : 'Search algorithms';
@@ -1049,7 +1092,6 @@ $('#lang').onclick = () => setLang(document.body.dataset.l === 'en' ? 'vi' : 'en
 setLang(store.get('lang', /^vi/i.test(navigator.language) ? 'vi' : 'en'));
 const hash = location.hash.slice(1);
 if (METHODS.some(m => m.id === hash)) { current = hash; }
-/* ---------- onboarding & course ---------- */
 const icon = k => $(`nav a[href="#${k}"] .ic`).outerHTML;
 const T = (e, v) => ({ e, v });
 const METHOD_COLORS = ['#6dbb85', '#6aa7e0', '#eda35a', '#e8776b', '#e9c25a'];
@@ -1090,6 +1132,12 @@ $('#wOpts').onclick = e => {
 };
 $('#wBack').onclick = () => { if (wizStack.length > 1) { wizStack.pop(); wizShow(wizStack.pop()); } };
 $('#wClose').onclick = closeWizard;
+$('#wiz').addEventListener('keydown', e => {
+  if (e.key !== 'Tab') return;
+  const items = $$('button', $('#wiz')), first = items[0], last = items[items.length - 1];
+  if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+  else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+});
 addEventListener('keydown', e => { if (e.key === 'Escape' && !$('#wiz').hidden) closeWizard(); });
 const refreshStart = () => { $('#start').innerHTML = bi(readProfile() ? T('Continue my course', 'Tiếp tục lộ trình') : T('Get Started', 'Bắt đầu')); };
 $('#start').onclick = () => { if (readProfile()) location.hash = 'course'; else openWizard(); };
@@ -1102,41 +1150,109 @@ function readProfile() {
   if (p.goal === 'learn' ? !method : !proMethod || !target) return null;
   return { goal: p.goal, method, proMethod, target };
 }
+function beginnerLessons(add) {
+  const BOTTOM = T('Bottom layer', 'Tầng đáy'), MIDDLE = T('Middle layer', 'Tầng giữa'), TOP = T('Top layer', 'Tầng trên'), ALL = T('Put it together', 'Ghép lại');
+  add('plan', BOTTOM, T('The plan', 'Kế hoạch giải'), [
+    T(`Beginners solve a cube in layers: the bottom layer, then the middle, then the top. Seven short steps, and each one has a goal you can see.`, `Người mới giải khối theo từng tầng: tầng đáy, rồi tầng giữa, rồi tầng trên. Bảy bước ngắn, mỗi bước có một mục tiêu nhìn thấy được.`),
+    T(`<b>Bottom:</b> a yellow cross, then four yellow corners. <b>Middle:</b> four edges. <b>Top:</b> a white cross, the white face, then place the corners and the edges.`, `<b>Đáy:</b> chữ thập vàng, rồi bốn góc vàng. <b>Giữa:</b> bốn cạnh. <b>Trên:</b> chữ thập trắng, mặt trắng, rồi xếp góc và xếp cạnh.`),
+    T(`You never memorise everything at once. Each practice starts from a cube where the earlier steps are already done, so you work on one idea at a time.`, `Bạn không cần thuộc hết cùng lúc. Mỗi bài luyện bắt đầu từ một khối đã xong các bước trước, nên bạn chỉ làm một ý tại một thời điểm.`),
+    T(`Stuck? <b>Hint</b> shows the next moves for your exact cube. <b>Show me</b> plays them, then gives you a fresh cube to try.`, `Bí? <b>Gợi ý</b> cho bạn thấy các nước tiếp theo đúng với khối của bạn. <b>Xem mẫu</b> chạy các nước đó rồi đưa bạn một khối mới để thử.`)
+  ], [], { go: 'sim' });
+  add('cross', BOTTOM, T('Bottom cross', 'Chữ thập tầng đáy'), [
+    T(`Goal: four yellow edges on the bottom face. Each one must also match the centre of the side it touches: yellow-green under the green centre, and so on. Drag the cube to look at the bottom.`, `Mục tiêu: bốn cạnh vàng ở mặt đáy. Mỗi cạnh còn phải khớp màu với tâm của mặt bên nó chạm vào: cạnh vàng-xanh lá nằm dưới tâm xanh lá, v.v. Kéo khối để nhìn mặt đáy.`),
+    T(`The idea: bring an edge up to the top layer, turn the top layer until the edge's side colour sits right above its matching centre, then turn that face a half turn (<code>F2</code>, <code>R2</code>, <code>B2</code> or <code>L2</code>) to drop it in.`, `Ý tưởng: đưa một cạnh lên tầng trên, xoay tầng trên cho màu bên hông của cạnh nằm ngay trên tâm cùng màu, rồi xoay mặt đó 180° (<code>F2</code>, <code>R2</code>, <code>B2</code> hoặc <code>L2</code>) để thả nó xuống.`),
+    T(`Nobody gets this on the first try. Press <b>Hint</b> whenever you are lost.`, `Không ai làm đúng ngay lần đầu. Bí thì bấm <b>Gợi ý</b>.`)
+  ], [{ type: 'drill', from: 0, to: 0, len: 6, goal: T('Make the yellow cross on the bottom', 'Tạo chữ thập vàng ở đáy') }], { go: 'sim' });
+  add('trigger', BOTTOM, T('The trigger', 'Chuỗi nền tảng'), [
+    T(`Most of the next steps use one tiny sequence called the trigger: <code>R U R' U'</code>. It lifts a corner out of its slot and lets you bring it back from another angle.`, `Hầu hết các bước sau dùng một chuỗi rất ngắn gọi là chuỗi nền tảng: <code>R U R' U'</code>. Nó nhấc một góc ra khỏi ô rồi cho bạn đưa nó về từ một góc nhìn khác.`),
+    T(`The cube is set to the state this sequence fixes. Type it: R, U, R' (hold Shift), U'.`, `Khối đã được đặt về trạng thái mà chuỗi này giải. Hãy gõ: R, U, R' (giữ Shift), U'.`)
+  ], [{ type: 'solved', alg: "R U R' U'" }], { go: 'sim' });
+  add('corners', BOTTOM, T('Bottom corners', 'Góc tầng đáy'), [
+    T(`Goal: four yellow corners in the bottom layer, each matching the two side centres next to it.`, `Mục tiêu: bốn góc vàng ở tầng đáy, mỗi góc khớp với hai tâm bên cạnh nó.`),
+    T(`Find a corner with yellow in the top layer. Turn the top layer until it sits directly above its slot, the gap between its two side colours. Then repeat the trigger and watch: stop the moment yellow faces down and the corner is in. At most five repeats.`, `Tìm một góc có màu vàng ở tầng trên. Xoay tầng trên cho nó nằm ngay phía trên ô của nó, tức khe giữa hai màu bên hông. Rồi lặp chuỗi nền tảng và quan sát: dừng ngay khi màu vàng hướng xuống và góc đã vào ô. Lặp tối đa năm lần.`),
+    T(`The trigger uses the face on the right of the slot: front-right slot <code>R U R' U'</code>, back-right <code>B U B' U'</code>, back-left <code>L U L' U'</code>, front-left <code>F U F' U'</code>. A corner stuck in the wrong bottom slot? Run the trigger once to pop it up, then start again.`, `Chuỗi nền tảng dùng mặt bên phải của ô: ô trước-phải <code>R U R' U'</code>, sau-phải <code>B U B' U'</code>, sau-trái <code>L U L' U'</code>, trước-trái <code>F U F' U'</code>. Góc kẹt sai ô ở đáy? Chạy chuỗi một lần để đẩy nó lên rồi làm lại.`)
+  ], [{ type: 'drill', from: 1, to: 4, len: 14, goal: T('Put all four yellow corners in', 'Đưa cả bốn góc vàng vào đúng chỗ') }], { go: 'sim' });
+  add('middle', MIDDLE, T('Middle layer edges', 'Cạnh tầng giữa'), [
+    T(`Goal: the four edges of the middle layer, the ones with no yellow and no white.`, `Mục tiêu: bốn cạnh của tầng giữa, tức những cạnh không có vàng và không có trắng.`),
+    T(`Find such an edge in the top layer. Turn the top layer until its front colour matches the centre in front of it. If its top colour belongs to the right, run <code>U R U' R' U' F' U F</code>. If it belongs to the left, run <code>U' L' U L U F U' F'</code>.`, `Tìm một cạnh như vậy ở tầng trên. Xoay tầng trên cho màu mặt trước của nó khớp với tâm đang ở phía trước. Nếu màu mặt trên của nó thuộc về bên phải, chạy <code>U R U' R' U' F' U F</code>. Nếu thuộc về bên trái, chạy <code>U' L' U L U F U' F'</code>.`),
+    T(`An edge stuck in the middle layer in the wrong place? Run either formula once on it to push it out, then insert it properly.`, `Cạnh kẹt sai chỗ ở tầng giữa? Chạy một trong hai công thức lên nó để đẩy ra, rồi đưa vào đúng chỗ.`)
+  ], [{ type: 'drill', from: 5, to: 8, len: 16, goal: T('Fill the middle layer', 'Hoàn thành tầng giữa') }], { go: 'sim' });
+  add('topcross', TOP, T('White cross on top', 'Chữ thập trắng ở trên'), [
+    T(`Now the top layer. Look at the white stickers facing up: you will see a dot, an L, a line, or already a cross.`, `Giờ là tầng trên. Nhìn các ô trắng hướng lên: bạn sẽ thấy một chấm, một chữ L, một đường thẳng, hoặc đã là chữ thập.`),
+    T(`Run <code>F R U R' U' F'</code>. A dot becomes an L, an L becomes a line, a line becomes a cross. Hold the line left-to-right, or the L pointing to the back-left, before you start. <b>Hint</b> gives you the right version for your cube.`, `Chạy <code>F R U R' U' F'</code>. Chấm thành chữ L, chữ L thành đường thẳng, đường thẳng thành chữ thập. Cầm đường thẳng nằm ngang, hoặc chữ L hướng về sau-trái, rồi mới bắt đầu. <b>Gợi ý</b> cho bạn đúng phiên bản dành cho khối của bạn.`)
+  ], [{ type: 'drill', from: 9, to: 9, len: 16, goal: T('Make the white cross on top', 'Tạo chữ thập trắng ở trên') }], { go: 'sim' });
+  add('topface', TOP, T('The whole top face', 'Cả mặt trên'), [
+    T(`Goal: all nine top stickers white. Count how many white corners already face up.`, `Mục tiêu: cả chín ô mặt trên đều trắng. Đếm xem có bao nhiêu góc trắng đã hướng lên.`),
+    T(`With exactly one, hold it at the front-left and run Sune: <code>R U R' U R U2 R'</code>. With none or two, run Sune once from any side, then count again. Repeat until the top is white.`, `Nếu có đúng một góc, đặt nó ở trước-trái rồi chạy Sune: <code>R U R' U R U2 R'</code>. Nếu không có góc nào hoặc có hai góc, chạy Sune một lần ở phía bất kỳ rồi đếm lại. Lặp tới khi mặt trên trắng hết.`)
+  ], [{ type: 'drill', from: 10, to: 10, len: 18, goal: T('Make the whole top face white', 'Làm cả mặt trên trắng') }], { go: 'sim' });
+  add('topcorners', TOP, T('Place the top corners', 'Xếp các góc tầng trên'), [
+    T(`Goal: every top corner sits between the two side centres it matches. Ignore the edges for now.`, `Mục tiêu: mọi góc tầng trên nằm giữa hai tâm bên cạnh mà nó khớp màu. Tạm thời bỏ qua các cạnh.`),
+    T(`Find a corner that is already in its right place and hold it at the front-left. Run <code>R' F R' B2 R F' R' B2 R2</code>: it cycles the other three corners. Repeat if needed. If no corner is right, run it once from anywhere, then look again.`, `Tìm một góc đã đúng chỗ và đặt nó ở trước-trái. Chạy <code>R' F R' B2 R F' R' B2 R2</code>: công thức này hoán vị vòng ba góc còn lại. Lặp nếu cần. Nếu chưa có góc nào đúng, chạy một lần ở phía bất kỳ rồi nhìn lại.`)
+  ], [{ type: 'drill', from: 11, to: 11, len: 20, goal: T('Put the four top corners in place', 'Đưa bốn góc tầng trên vào đúng chỗ') }], { go: 'sim' });
+  add('topedges', TOP, T('Place the top edges', 'Xếp các cạnh tầng trên'), [
+    T(`Last step. Turn the top layer until at least one edge matches its side centre, and hold that solved edge at the back.`, `Bước cuối. Xoay tầng trên cho ít nhất một cạnh khớp tâm bên hông, rồi đặt cạnh đã đúng đó ở phía sau.`),
+    T(`Run <code>R U' R U R U R U' R' U' R2</code>: it cycles the other three edges. If they are still wrong, run it once more. Finally turn the top layer to line everything up.`, `Chạy <code>R U' R U R U R U' R' U' R2</code>: công thức này hoán vị vòng ba cạnh còn lại. Nếu vẫn sai, chạy thêm một lần. Cuối cùng xoay tầng trên cho mọi thứ thẳng hàng.`)
+  ], [{ type: 'drill', from: 12, to: 12, len: 20, goal: T('Solve the cube', 'Giải xong khối') }], { go: 'sim' });
+  add('full', ALL, T('Your first full solve', 'Lần giải trọn vẹn đầu tiên'), [
+    T(`A fully scrambled cube. Work through the seven steps in order. <b>Hint</b> always points at the step your cube needs next, and <b>Show me</b> plays it and then hands you a new scramble.`, `Một khối xáo hoàn toàn. Hãy đi qua bảy bước theo thứ tự. <b>Gợi ý</b> luôn chỉ ra bước tiếp theo khối của bạn cần, còn <b>Xem mẫu</b> chạy bước đó rồi đưa bạn một khối xáo mới.`)
+  ], [{ type: 'drill', from: 0, to: 12, len: 20, goal: T('Solve the whole cube', 'Giải cả khối') }], { go: 'sim' });
+  add('timed', ALL, T('Solve it on your own', 'Tự giải một mình'), [
+    T(`Use the scramble shown on the timer, solve it with your own cube hands or the simulator, and stop the timer. Three solves, no hints.`, `Dùng scramble hiện trên đồng hồ, tự giải bằng khối thật hoặc bằng mô phỏng rồi dừng đồng hồ. Ba lần giải, không dùng gợi ý.`)
+  ], [{ type: 'timer', n: 3 }], { go: 'timer' });
+}
 function buildPlan(p) {
-  const plan = [], add = (id, t, s, act) => plan.push({ id, t, s, ...act });
+  const plan = [], add = (id, module, t, body, parts, extra) => plan.push({ id, module, t, body, parts, ...extra });
   const m = METHODS.find(x => x.id === (p.method || p.proMethod)) || METHODS[0];
   if (p.goal === 'learn') {
-    add('not', T('Learn the notation', 'Học ký hiệu'),
-      T(`Each letter turns one face a quarter clockwise as you look straight at it: R right, L left, U up, D down, F front, B back. Hold Shift for the reverse (R'). For a half turn use the 2 keys under Notation, or tap 2 after the letter in Stack mode.`, `Mỗi chữ xoay một mặt 90° theo chiều kim đồng hồ khi bạn nhìn thẳng vào: R phải, L trái, U trên, D dưới, F trước, B sau. Giữ Shift để xoay ngược (R'). Muốn xoay 180° hãy bấm phím 2 ở mục Ký hiệu, hoặc bấm 2 sau chữ khi dùng chế độ xếp hàng.`),
-      { k: 'moves', go: 'sim', need: ['R', "R'", 'U2', 'F'], more: T('Click the keys under Notation, or type on your keyboard.', 'Bấm các phím ở mục Ký hiệu, hoặc gõ trên bàn phím.') });
-    add('feel', T('Get comfortable with the cube', 'Làm quen với khối'),
-      T(`Type R then U and watch them run (in Stack mode press Enter). Now try the four-move trigger R U R' U'. Use Shift for the primes; typing it in two goes is fine.`, `Gõ R rồi U và xem khối chạy (chế độ xếp hàng thì bấm Enter). Giờ thử chuỗi bốn nước R U R' U'. Dùng Shift cho nước ngược; gõ làm hai lần cũng được.`),
-      { k: 'seq', go: 'sim', seq: "R U R' U'", more: T('The trigger shows up in almost every method.', 'Chuỗi này xuất hiện trong gần như mọi phương pháp.') });
-    m.steps.forEach((s, i) => {
-      const act = s.alg ? { k: 'solved', go: 'sim', alg: s.alg } : m.id === 'beginner' ? { k: 'read', go: 'sim', stage: BEGINNER_STAGES[i] } : { k: 'read', method: m.id };
-      const more = s.alg ? T('Press Show me to watch it, then type it yourself.', 'Bấm Xem mẫu để xem, rồi tự gõ lại.') : m.id === 'beginner' ? T('Press Show me to watch this stage on a scrambled cube.', 'Bấm Xem mẫu để xem bước này trên một khối đã xáo.') : null;
-      add(m.id + i, T(`${i + 1}. ${s.t.e}`, `${i + 1}. ${s.t.v}`), s.d, { ...act, more });
-    });
-    [...new Set(m.steps.filter(s => s.alg).map(s => s.alg))].forEach((alg, i) => add('drill' + i, T('Drill: ' + alg, 'Luyện: ' + alg),
-      T('The cube is set to the state this algorithm fixes. Type it to solve the cube.', 'Khối được đặt về trạng thái mà công thức này giải. Hãy gõ nó để giải khối.'), { k: 'solved', go: 'sim', alg }));
-    add('t5', T('Solve it five times on the timer', 'Tự giải 5 lần với đồng hồ'), T('Slow is fine. Use the scramble shown, hold space until green, release to start, press space to stop.', 'Chậm cũng được. Làm theo scramble đã cho, giữ phím cách tới khi xanh, thả để bắt đầu, bấm phím cách để dừng.'), { k: 'timer', go: 'timer', n: 5 });
+    const BASICS = T('Know your cube', 'Làm quen khối');
+    add('pieces', BASICS, T('Meet the pieces', 'Làm quen các mảnh'), [
+      T(`A 3×3 cube is made of 26 small pieces of three kinds. Learning to tell them apart is half of solving it.`, `Khối 3×3 gồm 26 mảnh nhỏ thuộc ba loại. Nhận ra từng loại là một nửa việc giải.`),
+      T(`<b>Centres</b> (6) show one colour. They never change place relative to each other, so a centre tells you which colour its face must end up with.`, `<b>Mảnh tâm</b> (6) có một màu. Chúng không bao giờ đổi vị trí so với nhau, nên mảnh tâm cho biết mặt đó cuối cùng phải mang màu gì.`),
+      T(`<b>Edges</b> (12) show two colours and <b>corners</b> (8) show three. Press the buttons to light each kind up on the cube.`, `<b>Mảnh cạnh</b> (12) có hai màu và <b>mảnh góc</b> (8) có ba màu. Bấm các nút để làm sáng từng loại trên khối.`)
+    ], [{ type: 'quiz', items: [
+      { q: T('How many colours does an edge piece show?', 'Một mảnh cạnh có bao nhiêu màu?'), opts: [T('One', 'Một'), T('Two', 'Hai'), T('Three', 'Ba')], a: 1, why: T('An edge sits between two faces, so it shows two colours.', 'Mảnh cạnh nằm giữa hai mặt nên có hai màu.') },
+      { q: T('Which pieces never change place relative to each other?', 'Loại mảnh nào không bao giờ đổi vị trí so với nhau?'), opts: [T('Centres', 'Mảnh tâm'), T('Edges', 'Mảnh cạnh'), T('Corners', 'Mảnh góc')], a: 0, why: T('Turning a face spins its centre but never moves it away from the others.', 'Xoay một mặt chỉ làm tâm quay tại chỗ, không đưa nó rời khỏi các tâm khác.') },
+      { q: T('A piece shows green, red and white. What is it?', 'Một mảnh có xanh lá, đỏ và trắng. Đó là mảnh gì?'), opts: [T('A centre', 'Mảnh tâm'), T('An edge', 'Mảnh cạnh'), T('A corner', 'Mảnh góc')], a: 2, why: T('Three colours means a corner.', 'Ba màu nghĩa là mảnh góc.') }
+    ] }], { go: 'sim', focus: true });
+    add('notation', BASICS, T('Turning faces', 'Xoay các mặt'), [
+      T(`Every move is named after a face: <b>R</b> right, <b>L</b> left, <b>U</b> up, <b>D</b> down, <b>F</b> front, <b>B</b> back.`, `Mỗi nước đi được đặt tên theo một mặt: <b>R</b> phải, <b>L</b> trái, <b>U</b> trên, <b>D</b> dưới, <b>F</b> trước, <b>B</b> sau.`),
+      T(`A letter alone is a quarter turn clockwise, as if you were looking straight at that face. An apostrophe (<code>R'</code>) reverses it and a 2 (<code>R2</code>) is a half turn.`, `Một chữ đứng một mình là xoay 90° theo chiều kim đồng hồ khi bạn nhìn thẳng vào mặt đó. Dấu nháy (<code>R'</code>) là xoay ngược và số 2 (<code>R2</code>) là xoay 180°.`),
+      T(`Try the keys under Notation, or your keyboard. Made a mess? Press <b>Undo</b> or <b>Reset</b> any time.`, `Hãy thử các phím ở mục Ký hiệu hoặc bàn phím. Lỡ làm rối? Bấm <b>Hoàn tác</b> hoặc <b>Reset</b> bất cứ lúc nào.`)
+    ], [{ type: 'moves', need: ['R', "R'", 'U2', 'F'] }, { type: 'quiz', items: [
+      { q: T("What does L' mean?", "L' nghĩa là gì?"), opts: [T('Left face, quarter turn clockwise', 'Mặt trái, xoay 90° theo chiều kim đồng hồ'), T('Left face, quarter turn counter-clockwise', 'Mặt trái, xoay 90° ngược chiều kim đồng hồ'), T('Left face, half turn', 'Mặt trái, xoay 180°')], a: 1, why: T('The apostrophe reverses the turn.', 'Dấu nháy đảo chiều xoay.') },
+      { q: T('Which move is a half turn of the top face?', 'Nước nào là xoay 180° mặt trên?'), opts: [T('U', 'U'), T('U2', 'U2'), T("U'", "U'")], a: 1, why: T('A 2 always means two quarter turns.', 'Số 2 luôn nghĩa là hai lần xoay 90°.') }
+    ] }], { go: 'sim' });
+    if (m.id === 'beginner') beginnerLessons(add);
+    else {
+      const steps = T(`${m.n.e} steps`, `Các bước ${m.n.v}`);
+      m.steps.forEach((s, i) => add(m.id + i, steps, T(`${i + 1}. ${s.t.e}`, `${i + 1}. ${s.t.v}`), [s.d], s.alg ? [{ type: 'solved', alg: s.alg }] : [], s.alg ? { go: 'sim' } : { method: m.id }));
+      add('t5', steps, T('Solve it five times on the timer', 'Tự giải 5 lần với đồng hồ'), [T('Slow is fine. Use the scramble shown, hold space until green, release to start, press space to stop.', 'Chậm cũng được. Làm theo scramble đã cho, giữ phím cách tới khi xanh, thả để bắt đầu, bấm phím cách để dừng.')], [{ type: 'timer', n: 5 }], { go: 'timer' });
+    }
   } else {
-    add('rev', T('Review ' + m.n.e, 'Ôn lại ' + m.n.v), m.d, { k: 'read', method: m.id });
-    add('pll', T('Drill the PLL algorithms', 'Luyện công thức PLL'), T('Pick one in the library, press LOAD, and type it until your fingers know it.', 'Chọn một công thức trong thư viện, bấm LOAD và gõ tới khi tay thuộc.'), { k: 'read', go: 'library', filter: 'PLL' });
-    add('oll', T('Drill the OLL algorithms', 'Luyện công thức OLL'), T('Start with the 2-look cases, then add the rest one at a time.', 'Bắt đầu với các trường hợp 2-look rồi thêm dần từng cái.'), { k: 'read', go: 'library', filter: 'OLL' });
-    add('time', T(`Get under ${p.target} seconds`, `Đạt dưới ${p.target} giây`), T('Solve on the timer until a single solve beats your goal.', 'Giải với đồng hồ tới khi có một lần nhanh hơn mục tiêu.'), { k: 'goal', go: 'timer', target: +p.target });
+    const drills = T('Get faster', 'Giải nhanh hơn');
+    add('rev', drills, T('Review ' + m.n.e, 'Ôn lại ' + m.n.v), [m.d], [], { method: m.id });
+    add('pll', drills, T('Drill the PLL algorithms', 'Luyện công thức PLL'), [T('Pick one in the library, press LOAD, and type it until your fingers know it.', 'Chọn một công thức trong thư viện, bấm LOAD và gõ tới khi tay thuộc.')], [], { go: 'library', filter: 'PLL' });
+    add('oll', drills, T('Drill the OLL algorithms', 'Luyện công thức OLL'), [T('Start with the 2-look cases, then add the rest one at a time.', 'Bắt đầu với các trường hợp 2-look rồi thêm dần từng cái.')], [], { go: 'library', filter: 'OLL' });
+    add('time', drills, T(`Get under ${p.target} seconds`, `Đạt dưới ${p.target} giây`), [T('Solve on the timer until a single solve beats your goal.', 'Giải với đồng hồ tới khi có một lần nhanh hơn mục tiêu.')], [{ type: 'goal', target: +p.target }], { go: 'timer' });
   }
   return plan;
 }
+const kindOf = l => l.parts.some(x => ['drill', 'solved', 'moves'].includes(x.type)) ? T('Practice', 'Luyện tập') : l.parts.length ? T('Quiz', 'Câu hỏi') : T('Read', 'Đọc');
 function drawCourse() {
   const p = readProfile(), box = $('#planBox');
   if (!p) { box.innerHTML = `<p class="sub">${bi(T('Answer three quick questions and we will build your course.', 'Trả lời vài câu hỏi ngắn, mình sẽ tạo lộ trình cho bạn.'))}</p><button class="btn go cta" data-act="wiz">${bi(T('Get Started', 'Bắt đầu'))}</button>`; return; }
   const plan = buildPlan(p), done = store.get('lessons', {}), count = plan.filter(l => done[l.id]).length;
   const m = METHODS.find(x => x.id === (p.method || p.proMethod)) || METHODS[0];
-  const tip = p.goal === 'learn' && m.id !== 'beginner' ? `<div class="tip"><span>${bi(T('New to cubing? Layer by Layer is the gentlest start.', 'Mới chơi Rubik? Giải từng tầng là cách dễ vào nhất.'))}</span><button class="play" data-act="beginner">${bi(T('SWITCH', 'ĐỔI'))}</button></div>` : '';
+  const tip = p.goal === 'learn' && m.id !== 'beginner' ? `<div class="tip"><span>${bi(T('New to cubing? Layer by Layer has the full guided course. Other methods only have reading and algorithm practice.', 'Mới chơi Rubik? Giải từng tầng có khoá học hướng dẫn đầy đủ. Các phương pháp khác mới có phần đọc và luyện công thức.'))}</span><button class="play" data-act="beginner">${bi(T('SWITCH', 'ĐỔI'))}</button></div>` : '';
+  let lastModule = '';
+  const rows = plan.map((l, i) => {
+    const heading = l.module.e !== lastModule ? `<h3 class="mod">${bi(l.module)}</h3>` : '';
+    lastModule = l.module.e;
+    return `${heading}<div class="lesson ${done[l.id] ? 'ok' : ''}"><input class="chk" type="checkbox" data-id="${l.id}" ${done[l.id] ? 'checked' : ''} aria-label="Done"><div><b>${bi(l.t)}</b><p>${bi(l.body[0])}</p></div><span class="kind">${bi(kindOf(l))}</span><button class="play" data-i="${i}">${bi(T('START ▶', 'BẮT ĐẦU ▶'))}</button></div>`;
+  }).join('');
   box.innerHTML = `<div class="chips"><span class="pill">${bi(p.goal === 'learn' ? T('Learning from scratch', 'Học từ đầu') : T('Speedsolving', 'Giải nhanh'))}</span><span class="pill">${bi(m.id === 'beginner' ? T('Layer by Layer', 'Giải từng tầng') : m.n)}</span>${p.target ? `<span class="pill">Sub-${p.target}s</span>` : ''}</div>
-    <div class="ctl" style="margin:0 0 14px"><button class="btn go" data-act="go">${bi(T('Continue', 'Tiếp tục'))} ▶</button></div><div class="prog"><i style="width:${count / plan.length * 100}%"></i></div><p class="sub">${count} / ${plan.length}</p>${tip}
-    ${plan.map((l, i) => `<div class="lesson ${done[l.id] ? 'ok' : ''}"><input class="chk" type="checkbox" data-id="${l.id}" ${done[l.id] ? 'checked' : ''} aria-label="Done"><div><b>${bi(l.t)}</b><p>${bi(l.s)}</p></div><button class="play" data-i="${i}">${bi(T('START ▶', 'BẮT ĐẦU ▶'))}</button></div>`).join('')}
+    <div class="ctl" style="margin:0 0 14px"><button class="btn go" data-act="go">${bi(T('Continue', 'Tiếp tục'))} ▶</button></div>
+    <div class="prog"><i style="width:${count / plan.length * 100}%"></i></div><p class="sub">${count} / ${plan.length}</p>${tip}${rows}
     <div class="ctl"><button class="btn" data-act="wiz">${bi(T('Change my answers', 'Đổi câu trả lời'))}</button></div>`;
 }
 $('#planBox').addEventListener('click', e => {
@@ -1156,29 +1272,71 @@ $('#planBox').addEventListener('change', e => {
   $(`.chk[data-id="${id}"]`)?.focus();
 });
 refreshStart();
-/* ---------- coach ---------- */
-const coach = { i: -1, plan: [], seen: [], advancing: false, reload: false, timerBase: 0, fin: false };
-const BEGINNER_STAGES = [[0, 1], [1, 5], [5, 9], [5, 9], [9, 10], [10, 11], [11, 12], [12, 13]];
+const coach = { i: -1, plan: [], seen: [], advancing: false, reload: false, watching: false, timerBase: 0, fin: false, q: { i: 0, ok: false, locked: false } };
+const QUIZ_PAUSE_MS = 1400, AUTO_NEXT_MS = 1600, COACH_POLL_MS = 350, HINT_LENGTH = 30;
 const markDone = id => { const d = store.get('lessons', {}); d[id] = true; store.set('lessons', d); };
 const isSolved = () => { const s = readState(); return [0, 1, 2, 3, 4, 5].every(f => { const cols = SLOT.map((sl, i) => sl.f === f ? s[i] : -1).filter(c => c >= 0); return cols.every(c => c === cols[0]); }); };
+const partOf = (lesson, type) => lesson && lesson.parts.find(x => x.type === type);
+function drawQuiz() {
+  const part = partOf(coach.plan[coach.i], 'quiz'), box = $('#cQuiz');
+  if (!part || coach.q.ok) { box.hidden = true; box.innerHTML = ''; return; }
+  const item = part.items[coach.q.i];
+  box.hidden = false;
+  box.innerHTML = `<p class="qq">${bi(item.q)}</p>${item.opts.map((o, k) => `<button class="opt qo" data-k="${k}">${bi(o)}</button>`).join('')}<p class="why" id="cWhy"></p>`;
+}
+$('#cQuiz').addEventListener('click', e => {
+  const b = e.target.closest('.qo'); if (!b || coach.q.locked) return;
+  const part = partOf(coach.plan[coach.i], 'quiz'), item = part.items[coach.q.i];
+  if (+b.dataset.k === item.a) {
+    coach.q.locked = true; b.classList.add('good'); $('#cWhy').innerHTML = bi(item.why);
+    setTimeout(() => { coach.q.i++; coach.q.locked = false; if (coach.q.i >= part.items.length) coach.q.ok = true; drawQuiz(); }, QUIZ_PAUSE_MS);
+  } else { b.classList.add('bad'); b.disabled = true; $('#cWhy').innerHTML = bi(T('Not quite, try another answer.', 'Chưa đúng, thử đáp án khác.')); }
+});
+function setupDrill(d) {
+  Object.assign(P, { steps: [], done: 0, queued: 0, label: 'Free play' }); P.gen++;
+  for (let tries = 0; tries < 6; tries++) {
+    resetCube();
+    Array.from({ length: d.len }, () => MOVE_NAMES[Math.random() * 18 | 0]).forEach(turnNow);
+    solveBeginner(readState(), d.from).forEach(turnNow);
+    if (!meets(readState(), goalsUpTo(d.to))) break;
+  }
+  drawHud();
+}
+function drillMoves(d) {
+  const st = readState(), k = STAGES.findIndex((stage, i) => i >= d.from && !meets(st, goalsUpTo(i)));
+  if (k < 0 || k > d.to) return [];
+  try { return stageMoves(st, k); } catch (err) { return []; }
+}
+function practiceAgain(lesson) {
+  const drill = partOf(lesson, 'drill'), alg = partOf(lesson, 'solved');
+  if (drill) setupDrill(drill); else if (alg) loadAlg(alg.alg, alg.alg);
+  coach.seen = [];
+}
 function showLesson() {
   const l = coach.plan[coach.i];
-  Object.assign(coach, { seen: [], advancing: false, reload: false, timerBase: times.length, fin: !l });
+  Object.assign(coach, { seen: [], advancing: false, reload: false, watching: false, timerBase: times.length, fin: !l, q: { i: 0, ok: false, locked: false } });
+  focusKind = 0;
   $('#coach').hidden = false; document.body.classList.add('coaching');
   if (!l) {
     $('#cStep').textContent = '✓'; $('#cTitle').innerHTML = bi(T('Course complete', 'Hoàn thành lộ trình'));
-    $('#cText').innerHTML = bi(T('Keep the habit going on the timer and in the library.', 'Hãy giữ thói quen luyện với đồng hồ và thư viện.'));
-    $('#cTasks').innerHTML = ''; $('#cShow').hidden = true; $('#cNext').className = 'btn go'; $('#cNext').innerHTML = bi(T('Back to course', 'Về lộ trình')); return;
+    $('#cText').innerHTML = `<p>${bi(T('Keep the habit going on the timer and in the library.', 'Hãy giữ thói quen luyện với đồng hồ và thư viện.'))}</p>`;
+    ['#cTasks', '#cQuiz'].forEach(sel => { $(sel).innerHTML = ''; }); $('#cQuiz').hidden = true;
+    ['#cShow', '#cHint', '#cFocus'].forEach(sel => { $(sel).hidden = true; });
+    $('#cNext').className = 'btn go'; $('#cNext').innerHTML = bi(T('Back to course', 'Về lộ trình')); return;
   }
+  const drill = partOf(l, 'drill'), alg = partOf(l, 'solved'), reading = !l.parts.length;
   $('#cStep').textContent = `${coach.i + 1} / ${coach.plan.length}`;
   $('#cTitle').innerHTML = bi(l.t);
-  $('#cText').innerHTML = bi(l.s) + (l.more ? '<br><br>' + bi(l.more) : '');
-  $('#cShow').hidden = !(l.alg || l.stage);
-  $('#cNext').className = 'btn' + (l.k !== 'read' ? '' : ' go');
-  $('#cNext').innerHTML = bi(l.k !== 'read' ? T('Skip', 'Bỏ qua') : T('Next ▶', 'Tiếp ▶'));
+  $('#cText').innerHTML = l.body.map(x => `<p>${bi(x)}</p>`).join('');
+  $('#cFocus').hidden = !l.focus; $('#cHint').hidden = !drill; $('#cShow').hidden = !(drill || alg);
+  $('#cNext').className = 'btn' + (reading ? ' go' : '');
+  $('#cNext').innerHTML = bi(reading ? T('Next ▶', 'Tiếp ▶') : T('Skip', 'Bỏ qua'));
+  document.body.classList.toggle('drilling', !!drill);
   if (l.filter) { filter = l.filter; $$('.chip').forEach(c => c.setAttribute('aria-pressed', c.dataset.f === filter)); drawLib(); }
-  if (l.alg) loadAlg(l.alg, l.alg);
+  if (drill) setupDrill(drill);
+  else if (alg) loadAlg(alg.alg, alg.alg);
   else if (l.go === 'sim') { resetCube(); Object.assign(P, { steps: [], done: 0, queued: 0, label: 'Free play' }); P.gen++; drawHud(); }
+  drawQuiz();
   const dest = l.method || l.go;
   if (location.hash.slice(1) !== dest) location.hash = dest; else route();
   evaluate();
@@ -1186,45 +1344,49 @@ function showLesson() {
 function evaluate() {
   const l = coach.plan[coach.i];
   if (!l || coach.fin || $('#coach').hidden) return;
-  const idle = !!cube && !active && !queue.length, run = coach.seen.join(' ');
-  const since = times.slice(coach.timerBase);
-  let list = [];
-  if (l.k === 'moves') list = l.need.map(t => ({ t: T('Turn ' + t, 'Xoay ' + t), ok: coach.seen.includes(t) }));
-  else if (l.k === 'seq') list = [{ t: T('Type ' + l.seq, 'Gõ ' + l.seq), ok: run.includes(l.seq) }];
-  else if (l.k === 'solved') list = [{ t: T('Type the algorithm so the cube is solved again', 'Gõ công thức để khối về trạng thái đã giải'), ok: idle && coach.seen.length > 0 && isSolved() }];
-  else if (l.k === 'timer') list = [{ t: T(`Finish ${l.n} solves on the timer (${Math.min(since.length, l.n)}/${l.n})`, `Hoàn thành ${l.n} lần giải trên đồng hồ (${Math.min(since.length, l.n)}/${l.n})`), ok: since.length >= l.n }];
-  else if (l.k === 'goal') list = [{ t: T(`Get one solve under ${l.target} seconds`, `Có một lần giải dưới ${l.target} giây`), ok: since.some(x => x < l.target * 1000) }];
-  $('#cTasks').innerHTML = list.map(x => `<li class="${x.ok ? 'ok' : ''}">${bi(x.t)}</li>`).join('');
-  if (coach.reload && idle) { coach.reload = false; loadAlg(l.alg, l.alg); coach.seen = []; }
-  if (list.length && list.every(x => x.ok) && !coach.advancing) {
+  const idle = !!cube && !active && !queue.length;
+  if (coach.reload && idle) { coach.reload = false; coach.watching = false; practiceAgain(l); }
+  const run = coach.seen.join(' '), since = times.slice(coach.timerBase);
+  const tasks = l.parts.flatMap(part => {
+    if (part.type === 'moves') return part.need.map(m => ({ t: T('Turn ' + m, 'Xoay ' + m), ok: coach.seen.includes(m) }));
+    if (part.type === 'seq') return [{ t: T('Type ' + part.seq, 'Gõ ' + part.seq), ok: run.includes(part.seq) }];
+    if (part.type === 'quiz') return [{ t: T(`Answer the questions (${coach.q.i}/${part.items.length})`, `Trả lời các câu hỏi (${coach.q.i}/${part.items.length})`), ok: coach.q.ok }];
+    if (part.type === 'solved') return [{ t: T('Type the algorithm so the cube is solved again', 'Gõ công thức để khối về trạng thái đã giải'), ok: idle && !coach.watching && coach.seen.length > 0 && isSolved() }];
+    if (part.type === 'drill') return [{ t: part.goal, ok: idle && !coach.watching && meets(readState(), goalsUpTo(part.to)) }];
+    if (part.type === 'timer') return [{ t: T(`Finish ${part.n} solves on the timer (${Math.min(since.length, part.n)}/${part.n})`, `Hoàn thành ${part.n} lần giải trên đồng hồ (${Math.min(since.length, part.n)}/${part.n})`), ok: since.length >= part.n }];
+    return [{ t: T(`Get one solve under ${part.target} seconds`, `Có một lần giải dưới ${part.target} giây`), ok: since.some(x => x < part.target * 1000) }];
+  });
+  $('#cTasks').innerHTML = tasks.map(x => `<li class="${x.ok ? 'ok' : ''}">${bi(x.t)}</li>`).join('');
+  if (tasks.length && tasks.every(x => x.ok) && !coach.advancing) {
     coach.advancing = true; markDone(l.id);
     $('#cNext').className = 'btn go'; $('#cNext').innerHTML = bi(T('✓ Great, next ▶', '✓ Tốt lắm, tiếp ▶'));
-    setTimeout(() => { if (coach.advancing && coach.plan[coach.i] === l) nextLesson(); }, 1600);
+    setTimeout(() => { if (coach.advancing && coach.plan[coach.i] === l) nextLesson(); }, AUTO_NEXT_MS);
   }
 }
 function nextLesson() {
   const l = coach.plan[coach.i];
   if (coach.fin) { quitCoach(); location.hash = 'course'; return; }
-  if (l && l.k === 'read') markDone(l.id);
+  if (l && !l.parts.length) markDone(l.id);
   coach.i++; showLesson();
 }
-function quitCoach() { coach.i = -1; $('#coach').hidden = true; document.body.classList.remove('coaching'); }
+function quitCoach() { coach.i = -1; focusKind = 0; $('#coach').hidden = true; document.body.classList.remove('coaching', 'drilling'); }
 function startCoach(i) { const p = readProfile(); if (!p) return; coach.plan = buildPlan(p); coach.i = i; showLesson(); }
-function demoStage([a, b]) {
-  resetCube();
-  Array.from({ length: 22 }, () => MOVE_NAMES[Math.random() * 18 | 0]).forEach(turnNow);
-  const raw = solveBeginner(readState()), cut = k => k ? raw.marks[k - 1] : 0;
-  raw.slice(0, cut(a)).forEach(turnNow);
-  P.gen++; Object.assign(P, { steps: raw.slice(cut(a), cut(b)), done: 0, queued: 0, label: document.body.dataset.l === 'vi' ? 'Minh hoạ' : 'Demo' });
-  drawHud(); playAll();
-}
+$('#cHint').onclick = () => {
+  const d = partOf(coach.plan[coach.i], 'drill'); if (!d) return;
+  P.gen++; Object.assign(P, { steps: drillMoves(d).slice(0, HINT_LENGTH), done: 0, queued: 0, label: 'Hint' }); drawHud();
+};
 $('#cShow').onclick = () => {
   const l = coach.plan[coach.i]; if (!l) return;
-  if (l.alg) { loadAlg(l.alg, l.alg); playAll(); coach.reload = true; } else if (l.stage) demoStage(l.stage);
+  const d = partOf(l, 'drill'), a = partOf(l, 'solved');
+  if (d) { P.gen++; Object.assign(P, { steps: drillMoves(d), done: 0, queued: 0, label: 'Demo' }); drawHud(); }
+  else if (a) loadAlg(a.alg, a.alg);
+  else return;
+  playAll(); coach.watching = true; coach.reload = true;
 };
+$('#cFocus').addEventListener('click', e => { const b = e.target.closest('[data-f]'); if (b) focusKind = focusKind === +b.dataset.f ? 0 : +b.dataset.f; });
 $('#cNext').onclick = nextLesson;
 $('#cQuit').onclick = quitCoach;
-setInterval(evaluate, 350);
+setInterval(evaluate, COACH_POLL_MS);
 const setPanel = (cls, on) => { document.body.classList.toggle(cls, on); store.set(cls, on); };
 ['nohelp', 'nonote'].forEach(c => document.body.classList.toggle(c, store.get(c, false)));
 $('#helpX').onclick = () => setPanel('nohelp', true); $('#helpOpen').onclick = () => setPanel('nohelp', false);
